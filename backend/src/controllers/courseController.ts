@@ -27,12 +27,11 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
             console.log("Instructor not found in the database! Skipping row.");
         } else {
             const course = new Course({ 
-                courseName: record[0],
-                courseDesc: record[1],
-                term: record[2],
-                year: record[3],
-                courseNumber: record[4],
-                courseInstructor: courseInstructor
+                course_name: record[0],
+                course_description: record[1],
+                term_year: record[2]+" "+record[3],
+                course_number: record[4],
+                course_instructor: courseInstructor
             });
             course.save(); // can be made concurrent
         }
@@ -49,23 +48,22 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
 // @Route /api/course/add
 // @Method POST
 export const addCourses = asyncHandler(async (req: Request, res: Response) => {
-    const { courseName, courseDesc, term, year, courseNumber, instructorEmail } = req.body;
-    let courseInstructor = await User.findOne({ instructorEmail }).select("-password");
-    if (!courseInstructor) {
+    const { course_name, course_description, term_year, course_number, instructorEmail } = req.body;
+    let course_instructor = await User.findOne({ instructorEmail }).select("-password");
+    if (!course_instructor) {
         res.status(404);
         throw new Error("Instructor not found in the database! Add user and continue.");
     }
   
-    const course = new Course({ courseName, courseDesc, term, year, courseNumber, courseInstructor });
+    const course = new Course({ course_name, course_description, term_year, course_number, course_instructor });
     await course.save();
     res.status(201).json({
         id: course._id,
-        courseName: course.courseName,
-        courseDesc: course.courseDesc,
-        term: course.term,
-        year: course.year,
-        courseNumber: course.courseNumber,
-        instructor: course.courseInstructor
+        course_name: course.course_name,
+        course_description: course.course_description,
+        term_year: course.term_year,
+        course_number: course.course_number,
+        course_instructor: course.course_instructor
     });
 });
 

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import {IProfessor} from "./Professor";
+import { IProfessor } from "./Professor";
 
 const Schema = mongoose.Schema;
 
@@ -9,50 +9,99 @@ enum Term {
     Summer = "summer"
 }
 
+enum CourseType {
+    Regular = "regular",
+    Seminar = "seminar",
+    Lab = "lab",
+    Other = "other"
+}
+
 export interface ICourse extends mongoose.Document {
-    courseName: string,
-    courseDesc: string,
-    term: Term,
-    year: string,
-    courseNumber: string,
-    courseInstructor: IProfessor
+    course_name: string,
+    course_description: string,
+    term_year: string,
+    course_number: string,
+    course_type: CourseType,
+    course_enrolllment_num: number,
+    TA_quota: number,
+    is_need_fix: Boolean,
+    instructor_office_hour: string,
+    lecture_hours: string,
+    course_instructor: [IProfessor]
+    // course_TA: [ITA],
+    // TA_wishlist: [ITA]
 }
 
 const CourseSchema = new mongoose.Schema({
 
-    courseName: {
+    course_name: {
         type: String,
         required: true,
     },
 
-    courseDesc: {
+    course_description: {
+        type: String,
+        // required: true,
+    },
+
+    term_year: {
         type: String,
         required: true,
     },
 
-    term: {
+    course_number: {
         type: String,
         required: true,
     },
 
-    year: {
+    course_type: {
+        type: String,
+        // required: true,
+    },
+
+    course_enrollment_num: {
         type: Number,
-        required: true,
+        default: 0
     },
-
-    courseNumber: {
-        type: String,
-        required: true,
+    TA_quota: {
+        type: Number,
+        default: 1
     },
-
-    courseInstructor: {
-        type: Schema.Types.ObjectId,
-        required: true,
-        ref: "User"
-    }
-
+    is_need_fix: {
+        type: Boolean
+    },
+    instructor_office_hour:{
+        type:String,
+    },
+    lecture_hours: {
+        type:String,
+    },
+    course_instructor: {
+        type:Array,
+        default: []
+    },
+    // course_TA:{
+    //     type:Array,
+    //     default: []
+    // },
+    // TA_wishlist:{
+    //     type:Array,
+    //     default: []
+    // }
 }, {
     timestamps: true
+})
+
+
+CourseSchema.pre('save', function (next) {
+    const TA_per_student = this.course_enrollment_num / this.TA_quota;
+    if (TA_per_student < 30 || TA_per_student > 45){
+        this.is_need_fix = true;
+    }
+    else{
+        this.is_need_fix = false;
+    }
+    next();
 })
 
 const Course = mongoose.model<ICourse>("Course", CourseSchema);
