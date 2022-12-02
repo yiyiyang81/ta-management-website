@@ -4,9 +4,10 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "dev": "ts-node-dev --respawn src/app.ts",
+        "dev": "node --respawn src/app.ts",
         "build": "tsc",
-        "start": "node -r @swc-node/register dist/src/app.js"
+        "start": "node -r @swc-node/register dist/src/app.js",
+        "run": "node -r @swc-node/register src/app.ts"
     },
     "keywords": [],
     "author": "",
