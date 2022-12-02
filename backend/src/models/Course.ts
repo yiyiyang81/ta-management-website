@@ -41,7 +41,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_description: {
         type: String,
-        // required: true,
+        required: true,
     },
 
     term_year: {
@@ -76,9 +76,10 @@ const CourseSchema = new mongoose.Schema({
     lecture_hours: {
         type:String,
     },
-    course_instructor: {
+    course_instructors: {
         type:Array,
-        default: []
+        default: [],
+        required: true
     },
     // course_TA:{
     //     type:Array,
