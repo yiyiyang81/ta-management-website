@@ -70,14 +70,14 @@ const CourseSchema = new mongoose.Schema({
     is_need_fix: {
         type: Boolean
     },
-    instructor_office_hour:{
-        type:String,
+    instructor_office_hour: {
+        type: String,
     },
     lecture_hours: {
-        type:String,
+        type: String,
     },
     course_instructors: {
-        type:Array,
+        type: Array,
         default: [],
         required: true
     },
@@ -94,12 +94,30 @@ const CourseSchema = new mongoose.Schema({
 })
 
 
+//Database Methods
+CourseSchema.statics.update_course_quota = function(){
+
+}
+
+CourseSchema.statics.get_course_TA_info = function (course_number: string, term_year: string) {
+    return this.where({ course_number: course_number, term_year: term_year })
+}
+
+CourseSchema.statics.get_list_of_need_to_fix_courses = function () {
+
+}
+
+CourseSchema.statics.get_course_ta_history = function (course_number: string) {
+
+}
+
+//setting is_need_fix variable by calculating the TA per person ratio
 CourseSchema.pre('save', function (next) {
     const TA_per_student = this.course_enrollment_num / this.TA_quota;
-    if (TA_per_student < 30 || TA_per_student > 45){
+    if (TA_per_student < 30 || TA_per_student > 45) {
         this.is_need_fix = true;
     }
-    else{
+    else {
         this.is_need_fix = false;
     }
     next();
