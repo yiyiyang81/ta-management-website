@@ -7,7 +7,7 @@
         "dev": "nodemon src/app.ts",
         "build": "tsc",
         "start": "node dist/src/app.js",
-        "run": "nodemon -r @swc-node/register src/app.ts"
+        "run": "node -r @swc-node/register src/app.ts"
     },
     "keywords": [],
     "author": "",
