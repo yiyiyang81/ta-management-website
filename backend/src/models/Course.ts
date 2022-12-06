@@ -27,7 +27,7 @@ export interface ICourse extends mongoose.Document {
     is_need_fix: Boolean,
     instructor_office_hour: string,
     lecture_hours: string,
-    course_instructor: [IProfessor]
+    course_instructors: [IProfessor]
     // course_TA: [ITA],
     // TA_wishlist: [ITA]
 }

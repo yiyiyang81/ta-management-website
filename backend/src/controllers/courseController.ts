@@ -1,8 +1,9 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Course from "../models/Course";
 import User from "../models/User";
-import { IProfessor } from "../models/Professor";
+import Professor from "../models/Professor";
+import {IProfessor} from "../models/Professor";
 import { parse } from 'csv-string';
 
 // @Desc Get all Courses
@@ -48,25 +49,31 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
 // @Desc Add Courses
 // @Route /api/course/add
 // @Method POST
-export const addCourses = asyncHandler(async (req: Request, res: Response) => {
+export const addCourses = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { course_name, course_description, term_year, course_number, course_instructors } = req.body;
     //converting the course_instructors emails to a list of IProfessor objects
-    let instuctorObjectList = (async function (course_instructors: any, res: Response) {
-        var resultObjectList: IProfessor[] = [];
-        for (var email of course_instructors) {
-            let course_instructor = await User.findOne({ email }).select("-password");
-            if (!course_instructor) {
-                res.status(404);
-                throw new Error("Instructor not found in the database! Add user and continue.");
-            }
-            else {
-                resultObjectList.push(course_instructor);
+        let instuctorObjectList = await (async function (course_instructors: any, res: Response, next: NextFunction) {
+            var resultObjectList: IProfessor[] = [];
+            for (var email of course_instructors) {
+                let userId = await User.findOne({ email }).select("_id");
+                let course_instructor = await Professor.findOne({professor: userId});
+                if (!course_instructor) {
+                    try{
+                        res.status(404);
+                        throw new Error("Instructor not found in the database! Add user and continue.");
+                    }
+                    catch(e){
+                        next(e);
+                    }
+                }
+                else {
+                    resultObjectList.push(course_instructor);
+                }
             }
             return resultObjectList;
-        }
-    })(course_instructors, res);
+    })(course_instructors, res, next);
 
-    const course = new Course({ course_name, course_description, term_year, course_number, course_instructor: instuctorObjectList });
+    const course = new Course({ course_name, course_description, term_year, course_number, course_instructors: instuctorObjectList });
     await course.save();
     res.status(201).json({
         id: course._id,
@@ -74,7 +81,7 @@ export const addCourses = asyncHandler(async (req: Request, res: Response) => {
         course_description: course.course_description,
         term_year: course.term_year,
         course_number: course.course_number,
-        course_instructor: course.course_instructor
+        course_instructors: course.course_instructors
     });
 });
 
