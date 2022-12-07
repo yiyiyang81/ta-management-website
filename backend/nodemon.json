@@ -1,0 +1,5 @@
+{
+    "execMap": {
+        "ts": "node -r @swc-node/register"
+    }
+}

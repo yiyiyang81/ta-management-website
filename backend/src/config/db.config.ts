@@ -9,7 +9,7 @@ import { ConnectionOptions } from 'tls';
 
 const connectDB = async () => {
     try {
-        const connect = await mongoose.connect("mongodb://localhost:27017/comp307" as string, {
+        const connect = await mongoose.connect("mongodb://127.0.0.1:27017/comp307" as string, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         } as ConnectionOptions);
