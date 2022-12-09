@@ -4,6 +4,7 @@ import connectDB from "./config/db.config";
 import userRoutes from './routes/userRoutes';
 import profRoutes from './routes/profRoutes';
 import courseRoutes from './routes/courseRoutes';
+import ohResponsibilitiesRoutes from './routes/ohResponsibilitiesRoutes';
 
 const app = express();
 const port = 3000;
@@ -16,6 +17,7 @@ connectDB();
 app.use("/api/users", userRoutes);
 app.use("/api/prof", profRoutes);
 app.use("/api/course", courseRoutes);
+app.use("/api/ohresps", ohResponsibilitiesRoutes);
 
 
 app.listen(port, () => {
