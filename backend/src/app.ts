@@ -5,6 +5,7 @@ import userRoutes from './routes/userRoutes';
 import profRoutes from './routes/profRoutes';
 import courseRoutes from './routes/courseRoutes';
 import ohResponsibilitiesRoutes from './routes/ohResponsibilitiesRoutes';
+import channelRoutes from './routes/channelRoutes';
 
 const app = express();
 const port = 3000;
@@ -18,6 +19,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/prof", profRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/ohresps", ohResponsibilitiesRoutes);
+app.use("/api/channel", channelRoutes);
 
 
 app.listen(port, () => {
