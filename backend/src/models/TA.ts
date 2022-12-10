@@ -1,7 +1,7 @@
 import { Schema } from 'express-validator';
 import mongoose from 'mongoose';
 import { ICourse } from './Course';
-import { IUser } from './User';
+import User, { IUser } from './User';
 const Schema = mongoose.Schema;
 
 export interface ITA extends mongoose.Document {
@@ -101,10 +101,21 @@ const TASchema = new mongoose.Schema({
 
     assigned_hours: {
         type: Number,
+        default: 0
     }
 }, {
     timestamps: true
 })
+
+TASchema.pre('save', async function(next) {
+    const user = await User.findOne({email:this.email});
+    if(user){
+        const user_id = new mongoose.Types.ObjectId(user._id);
+        this.ta = user_id;
+    }
+    next();
+})
+
 
 const TA = mongoose.model<ITA>("TA", TASchema);
 
