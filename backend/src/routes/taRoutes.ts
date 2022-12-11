@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllTAs, addTA, registerTAFromFile} from '../controllers/taController';
+import { getAllTAs, addTA, registerTAFromFile } from '../controllers/taController';
 import multer from "multer";
 
 const upload = multer();

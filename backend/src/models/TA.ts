@@ -16,12 +16,12 @@ export interface ITA extends mongoose.Document {
     hours: number,
     date_applied: string,
     location: string,
-    phone:string,
-    degree:string,
+    phone: string,
+    degree: string,
     courses_applied_for_list: Array<ICourse>,
-    open_to_other_courses:boolean,
+    open_to_other_courses: boolean,
     notes: string,
-    assigned_hours:number
+    assigned_hours: number
 }
 
 const TASchema = new mongoose.Schema({
@@ -106,9 +106,9 @@ const TASchema = new mongoose.Schema({
     timestamps: true
 })
 
-TASchema.pre('save', async function(next) {
-    const user = await User.findOne({email:this.email});
-    if(user){
+TASchema.pre('save', async function (next) {
+    const user = await User.findOne({ email: this.email });
+    if (user) {
         const user_id = new mongoose.Types.ObjectId(user._id);
         this.ta = user_id;
     }
