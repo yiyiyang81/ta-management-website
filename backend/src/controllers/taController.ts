@@ -71,7 +71,7 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
 // @Route /api/ta/add
 // @Method POST
 export const addTA = asyncHandler(async (req: Request, res: Response) => {
-    const { TA_name, student_ID, legal_name, email, grad_ugrad, supervisor_name,
+    const { term_year, TA_name, student_ID, legal_name, email, grad_ugrad, supervisor_name,
         priority, hours, date_applied, location, phone, degree, courses_applied_for_list,
         open_to_other_courses, notes } = req.body;
 
@@ -88,6 +88,7 @@ export const addTA = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const ta = new TA({
+        term_year: term_year,
         TA_name: TA_name,
         student_ID: student_ID,
         legal_name: legal_name,
