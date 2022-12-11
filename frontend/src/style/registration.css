@@ -1,0 +1,49 @@
+.registration-form-container {
+	width           : 80%;
+	background-color: #FFFFFF;
+	height          : 100vh;
+	display         : flex;
+	flex-direction  : column;
+	padding-top     : 4rem;
+	max-width       : 50rem;
+}
+
+
+.registration-form-container form {
+	padding: 0rem 3rem;
+}
+
+.logo-container {
+	display        : flex;
+	align-items    : flex-start;
+	justify-content: space-evenly;
+}
+
+.form-horizontal-container {
+	display        : flex;
+	justify-content: space-between;
+	align-items    : flex-end;
+}
+
+.form-horizontal-subcontainer {
+	width: 45%;
+}
+
+.register-courses-buttons {
+	display        : flex;
+	justify-content: space-between;
+	margin-top     : 15rem;
+}
+
+.register-account-buttons {
+	float: right;
+}
+
+@media (max-width: 768px) {
+	.register-courses-buttons {
+		display       : flex;
+		align-items   : center;
+		flex-direction: column;
+	}
+
+}

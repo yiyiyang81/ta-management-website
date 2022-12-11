@@ -1,0 +1,47 @@
+.primary-button {
+	background-color: #B71A29;
+	display         : inline-block;
+	padding         : 10px 15px;
+	border-radius   : 3px;
+	color           : #FFFFFF;
+	font-weight     : 700;
+	cursor          : pointer;
+	text-align      : center;
+	font-size       : 1rem;
+	max-width       : 100%;
+}
+
+.secondary-button {
+	background-color: #5A5A5A;
+	display         : inline-block;
+	padding         : 10px 15px;
+	border-radius   : 3px;
+	color           : #FFFFFF;
+	font-weight     : 700;
+	cursor          : pointer;
+	text-align      : center;
+	font-size       : 1rem;
+}
+
+.submit-button input[type="submit"] {
+	appearance      : none;
+	background      : none;
+	outline         : none;
+	background-color: #2769CB;
+	display         : inline-block;
+	padding         : 12px 15px;
+	border          : none;
+	border-radius   : 3px;
+	color           : #FFFFFF;
+	font-weight     : 700;
+	cursor          : pointer;
+	text-align      : center;
+	font-size       : 1rem;
+}
+
+button {
+	appearance: none;
+	background: none;
+	border    : none;
+	outline   : none;
+}
