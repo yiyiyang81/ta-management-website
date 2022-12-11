@@ -1,4 +1,3 @@
-import { Schema } from 'express-validator';
 import mongoose from 'mongoose';
 import { ICourse } from './Course';
 import User, { IUser } from './User';
