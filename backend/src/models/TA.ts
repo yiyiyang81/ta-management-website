@@ -106,6 +106,7 @@ const TASchema = new mongoose.Schema({
     timestamps: true
 })
 
+//attempt to find the User object by email and add it to TA if found
 TASchema.pre('save', async function (next) {
     const user = await User.findOne({ email: this.email });
     if (user) {

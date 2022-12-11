@@ -5,7 +5,7 @@ import Course, { ICourse } from "../models/Course";
 import User from "../models/User";
 import { parse } from 'csv-string';
 
-// @Desc Get all Profs
+// @Desc Get all TAs
 // @Route /api/ta
 // @Method GET
 export const getAllTAs = asyncHandler(async (req: Request, res: Response) => {
@@ -16,7 +16,7 @@ export const getAllTAs = asyncHandler(async (req: Request, res: Response) => {
 });
 
 
-// @Desc Save multiple profs
+// @Desc Save multiple TAs
 // @Route /api/ta/upload
 // @Method POST
 export const registerTAFromFile = asyncHandler(async (req: Request, res: Response) => {
