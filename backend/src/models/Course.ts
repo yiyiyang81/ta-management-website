@@ -30,6 +30,9 @@ export interface ICourse extends mongoose.Document {
     course_instructors: [IProfessor]
     // course_TA: [ITA],
     // TA_wishlist: [ITA]
+    update_course_quota(term_year: string, course_number: string, course_type:string,course_enrollment_num: number, TA_quota: number):Promise<string>,
+    get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
+    get_list_of_need_to_fix_courses(): Promise<Array<any>>
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -95,20 +98,24 @@ const CourseSchema = new mongoose.Schema({
 
 
 //Database Methods
-CourseSchema.statics.update_course_quota = function(){
-
+CourseSchema.methods.update_course_quota = function (term_year: string, course_number: string,
+    course_type: string, course_enrollment_num: number, TA_quota: number) {
+    return Course.updateOne({ "term_year": term_year, "course_number": course_number },
+        {$set:{course_enrollment_num: course_enrollment_num, TA_quota: TA_quota }}
+    );
 }
 
-CourseSchema.statics.get_course_TA_info = function (course_number: string, term_year: string) {
-    return this.where({ course_number: course_number, term_year: term_year })
+CourseSchema.methods.get_course_TA_info = function (course_number: string, term_year: string) {
+    return Course.findOne({ course_number: course_number, term_year: term_year }, { "course_instructors": 1, "_id": 0 });
 }
 
-CourseSchema.statics.get_list_of_need_to_fix_courses = function () {
-
+CourseSchema.methods.get_list_of_need_to_fix_courses = function () {
+    return Course.find({ is_need_fix: true });
 }
 
-CourseSchema.statics.get_course_ta_history = function (course_number: string) {
-
+// TODO: test this one when ITA is merged
+CourseSchema.methods.get_course_ta_history = function (course_number: string) {
+    return Course.find({}, { "course_TA": 1 });
 }
 
 //setting is_need_fix variable by calculating the TA per person ratio
