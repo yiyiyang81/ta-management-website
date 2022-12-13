@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import logo from "../assets/images/mcgill_logo.jpg";
+import logo from "../assets/images/mcgill-logo.png";
 import "../style/login.css";
 
 const LoggedOut: React.FC = () => {

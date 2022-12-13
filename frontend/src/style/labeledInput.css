@@ -1,0 +1,23 @@
+.label-input-container {
+	display       : flex;
+	flex-direction: column;
+	width         : 100%;
+}
+
+.required-symbol {
+	color: #B71A29
+}
+
+.label-input-container input {
+	appearance      : none;
+	background      : none;
+	outline         : none;
+	display         : block;
+	width           : 100%;
+	line-height     : 1em;
+	font-size       : 13px;
+	padding         : 10px 15px;
+	background-color: #f8f8f8;
+	border-radius   : 3px;
+	border          : 1px solid #b3b3b3;
+}

@@ -4,7 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import { User, emptyUser } from "./classes/User";
 import LoggedOut from "./pages/LoggedOut";
-
+import Registration from "./pages/Registration"
 interface UserProviderProps {
   user: User;
   setUser: Function;
@@ -23,6 +23,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/logout" element={<LoggedOut />} />
+          <Route path="/register" element={<Registration />} />
         </Routes>
       </Router>
     </UserContext.Provider>

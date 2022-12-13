@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Container, Nav, Navbar, NavDropdown, Tab, Tabs } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import LogoutIcon from "@mui/icons-material/Logout";
-import logo from "../assets/images/mcgill_logo.jpg";
+import logo from "../assets/images/mcgill-logo.png";
 import "../style/subTopbar.css";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
