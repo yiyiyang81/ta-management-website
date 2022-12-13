@@ -28,7 +28,12 @@
 
 /* prevent dropdown from shifting up when menu open */
 
-.navbar-nav .dropdown-menu {
+.top-container {
+    background-color: #EFEFEF;
+    width: 100%;
+}
+
+.dropdown-menu {
     position: absolute !important;
 }
 

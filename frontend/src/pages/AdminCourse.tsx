@@ -25,11 +25,11 @@ const AdminCourse: React.FC = () => {
     ]);
 
     const tabsPerProfile = new Map<UserTypes, Array<string>>([
-        [UserTypes.Sysop, ["Courses"]],
+        [UserTypes.Admin, ["Courses"]],
     ]);
 
     const [currentProfile, setCurrentProfile] = useState<UserTypes>(
-        UserTypes.Sysop
+        UserTypes.Admin
     );
 
     // Set the default array of tabs relative to our default profile
@@ -38,28 +38,30 @@ const AdminCourse: React.FC = () => {
     );
 
     return (
-        <div><Navbar>
-            <div className="container">
-                <div className="logo-container mb-5">
-                    <a className="stacked-logos d-sm-none d-flex flex-column" href="/">
-                        <img className="logo" src={socsLogo} alt="socs-logo" />
-                        <img className="logo" src={mcgillLogo} alt="mcgill-logo" />
-                    </a>
-                    <a className="d-none d-sm-block" href="/">
-                        <img className="logo" src={combinedLogos} alt="mcgill-logo" />
-                    </a>
-                </div>
+        <div>
+            <div className="top-container">
+                <Navbar>
+                    <div className="container">
+                        <div className="logo-container mb-5">
+                            <a className="stacked-logos d-sm-none d-flex flex-column" href="/">
+                                <img className="logo" src={socsLogo} alt="socs-logo" />
+                                <img className="logo" src={mcgillLogo} alt="mcgill-logo" />
+                            </a>
+                            <a className="d-none d-sm-block" href="/">
+                                <img className="logo" src={combinedLogos} alt="mcgill-logo" />
+                            </a>
+                        </div>
 
-                <button className="logout" onClick={() => handleLogout()}>
-                    <LogoutIcon />
-                </button>
+                        <button className="logout" onClick={() => handleLogout()}>
+                            <LogoutIcon />
+                        </button>
+                    </div>
+                </Navbar>
+                <Container>
+                    <RoleTabs>
+                    </RoleTabs>
+                </Container>
             </div>
-        </Navbar>
-            <Container>
-                <RoleTabs>
-                </RoleTabs>
-            </Container>
-
             <Container>
                 <Tabs
                     defaultActiveKey="0"
