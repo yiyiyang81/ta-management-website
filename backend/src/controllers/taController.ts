@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import TA from "../models/TA";
+import Professor from "../models/Professor";
 import Course, { ICourse } from "../models/Course";
 import User from "../models/User";
 import { parse } from 'csv-string';
@@ -21,7 +22,13 @@ export const getAllTAs = asyncHandler(async (req: Request, res: Response) => {
 // @Method POST
 export const registerTAFromFile = asyncHandler(async (req: Request, res: Response) => {
     const csv = req.file;
-    if (csv) {
+    const type = req.body;  //need to pass the file type info from frontend
+    if (!csv) {
+        res.status(500);
+        throw new Error("File upload unsuccessful.");
+    }
+
+    if (type === "tacohort") {
         const fileContent = parse(csv.buffer.toString('utf-8'));
         for (let record of fileContent) {
             const taEmail = record[4];
@@ -60,9 +67,43 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             await ta.save();
         }
 
-    } else {
+    }
+    else if (type === "coursequota") {
+        const fileContent = parse(csv.buffer.toString('utf-8'));
+        for (let record of fileContent) {
+            const term_year = record[0];
+            const course_number = record[1];
+            const course_type = record[2];
+            const course_name = record[3];
+            const instructor_name = record[4];
+            const course_enrollment_num = Number(record[5]);
+            const TA_quota = Number(record[6]);
+            let any_prof = await Professor.findOne();//need an instance to invoke schema method
+            //will exit the loop if there is no professor in the db
+            if (!any_prof) {
+                res.status(404);
+                console.log("Empty database for instructor! Cannot proceed");
+                break;
+            }
+            let instructor = any_prof.get_prof_by_name(instructor_name);
+            let course = await Course.findOne({ course_number: course_number, term_year: term_year });
+            if (!instructor) {
+                console.log("Instructor not found in the database! Skipping row.");
+                continue;
+            }
+            else if (!course) {
+                console.log("Course not found in the database! Skipping row.");
+                continue;
+            }
+            else {
+                course.update_course_quota(term_year, course_number, course_type, course_enrollment_num, TA_quota);
+            }
+        }
+    }
+    //should be removed later
+    else {
         res.status(500);
-        throw new Error("File upload unsuccessful.");
+        throw new Error("Incorrect type received.");
     }
     res.status(200).json({});
 });

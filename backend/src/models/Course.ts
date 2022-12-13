@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { IProfessor } from "./Professor";
+import { ITA } from "./TA";
 
 const Schema = mongoose.Schema;
 
@@ -27,10 +28,10 @@ export interface ICourse extends mongoose.Document {
     is_need_fix: Boolean,
     instructor_office_hour: string,
     lecture_hours: string,
-    course_instructors: [IProfessor]
-    // course_TA: [ITA],
+    course_instructors: [IProfessor],
+    course_TA: [ITA]
     // TA_wishlist: [ITA]
-    update_course_quota(term_year: string, course_number: string, course_type:string,course_enrollment_num: number, TA_quota: number):Promise<string>,
+    update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
     get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
     get_list_of_need_to_fix_courses(): Promise<Array<any>>
 }
@@ -84,10 +85,10 @@ const CourseSchema = new mongoose.Schema({
         default: [],
         required: true
     },
-    // course_TA:{
-    //     type:Array,
-    //     default: []
-    // },
+    course_TA: {
+        type: Array,
+        default: []
+    },
     // TA_wishlist:{
     //     type:Array,
     //     default: []
@@ -101,7 +102,7 @@ const CourseSchema = new mongoose.Schema({
 CourseSchema.methods.update_course_quota = function (term_year: string, course_number: string,
     course_type: string, course_enrollment_num: number, TA_quota: number) {
     return Course.updateOne({ "term_year": term_year, "course_number": course_number },
-        {$set:{course_enrollment_num: course_enrollment_num, TA_quota: TA_quota }}
+        { $set: { course_type: course_type, course_enrollment_num: course_enrollment_num, TA_quota: TA_quota } }
     );
 }
 
