@@ -7,7 +7,7 @@ import mcgillLogo from "../assets/images/mcgill-logo.png";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
 import ManageCourses from "../components/sysop/ManageCourses";
-import RoleTabs from "../components/RoleTabs";
+import RoleTabs from "../components/primaryTopbar";
 import "../App.css";
 import "../style/subTopbar.css";
 import { Container, Navbar, Tabs, Tab } from "react-bootstrap";
