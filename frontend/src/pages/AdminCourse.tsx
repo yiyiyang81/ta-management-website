@@ -12,71 +12,53 @@ import "../App.css";
 import "../style/subTopbar.css";
 import { Container, Navbar, Tabs, Tab } from "react-bootstrap";
 
-
 const AdminCourse: React.FC = () => {
+  const navigate = useNavigate();
+  function handleLogout(): void {
+    navigate("/logout");
+  }
 
-    const navigate = useNavigate();
-    function handleLogout(): void {
-        navigate("/logout");
-    }
+  const tabNamesToJSX = new Map<string, JSX.Element>([
+    ["Courses", <ManageCourses />],
+  ]);
 
-    const tabNamesToJSX = new Map<string, JSX.Element>([
-        ["Courses", <ManageCourses />],
-    ]);
+  const tabsPerProfile = new Map<UserTypes, Array<string>>([
+    [UserTypes.Admin, ["Courses"]],
+  ]);
 
-    const tabsPerProfile = new Map<UserTypes, Array<string>>([
-        [UserTypes.Admin, ["Courses"]],
-    ]);
+  const [currentProfile, setCurrentProfile] = useState<UserTypes>(
+    UserTypes.Admin
+  );
 
-    const [currentProfile, setCurrentProfile] = useState<UserTypes>(
-        UserTypes.Admin
-    );
+  // Set the default array of tabs relative to our default profile
+  const [currentTabs, setCurrentTabs] = useState<Array<string>>(
+    tabsPerProfile.get(currentProfile)!
+  );
 
-    // Set the default array of tabs relative to our default profile
-    const [currentTabs, setCurrentTabs] = useState<Array<string>>(
-        tabsPerProfile.get(currentProfile)!
-    );
-
-    return (
-        <div>
-            <div className="top-container">
-                <Navbar>
-                    <div className="container">
-                        <div className="logo-container mb-5">
-                            <a className="stacked-logos d-sm-none d-flex flex-column" href="/">
-                                <img className="logo" src={socsLogo} alt="socs-logo" />
-                                <img className="logo" src={mcgillLogo} alt="mcgill-logo" />
-                            </a>
-                            <a className="d-none d-sm-block" href="/">
-                                <img className="logo" src={combinedLogos} alt="mcgill-logo" />
-                            </a>
-                        </div>
-
-                        <button className="logout" onClick={() => handleLogout()}>
-                            <LogoutIcon />
-                        </button>
-                    </div>
-                </Navbar>
-                <Container>
-                    <RoleTabs>
-                    </RoleTabs>
-                </Container>
-            </div>
-            <Container>
-                <Tabs
-                    defaultActiveKey="0"
-                    transition={false}
-                    id="noanim-tab"
-                    className="sub"
-                >
-                    {currentTabs.map((currentTabName, i) => (
-                        <Tab className="sub" key={i} eventKey={i} title={currentTabName}>
-                            {tabNamesToJSX.get(currentTabName)}
-                        </Tab>
-                    ))}
-                </Tabs>
-            </Container></div>
-    );
-}
+  return (
+    <div>
+      <div className="top-container">
+        <Navbar></Navbar>
+        <Container>
+          <RoleTabs></RoleTabs>
+        </Container>
+      </div>
+      <Container>
+        <Tabs
+          defaultActiveKey="0"
+          transition={false}
+          id="noanim-tab"
+          className="sub"
+        >
+          {currentTabs.map((currentTabName, i) => (
+            <Tab className="sub" key={i} eventKey={i} title={currentTabName}>
+              {tabNamesToJSX.get(currentTabName)}
+            </Tab>
+          ))}
+        </Tabs>
+      </Container>
+    </div>
+  );
+};
 
 export default AdminCourse;

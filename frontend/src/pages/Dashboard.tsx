@@ -1,17 +1,20 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Container, Nav, Navbar, NavDropdown, Tab, Tabs } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import logo from "../assets/images/mcgill-logo.png";
 import "../style/subTopbar.css";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
 import ManageProfessors from "../components/sysop/ManageProfessors";
 import ManageCourses from "../components/sysop/ManageCourses";
 import ManageUsers from "../components/sysop/ManageUsers";
+import "../style/dashboard.css";
+import Tile from "../common/Tile";
+import StudentIcon from "../assets/images/student-icon.png";
+import TeachingAssitantIcon from "../assets/images/ta-icon.png";
+import InstructorIcon from "../assets/images/instructor-icon.png";
+import TeachingAssistantAdminIcon from "../assets/images/ta-admin-icon.png";
+import SysopIcon from "../assets/images/sysop-icon.png";
 
-
-export function Dashboard() {
+export const Dashboard = () => {
   const tabsPerProfile = new Map<UserTypes, Array<string>>([
     [UserTypes.Sysop, ["Professors", "Courses", "Users"]],
   ]);
@@ -19,7 +22,7 @@ export function Dashboard() {
   const tabNamesToJSX = new Map<string, JSX.Element>([
     ["Professors", <ManageProfessors />],
     ["Courses", <ManageCourses />],
-    ["Users", <ManageUsers />]
+    ["Users", <ManageUsers />],
   ]);
 
   const navigate = useNavigate();
@@ -28,7 +31,8 @@ export function Dashboard() {
    * @TODO Retrieve this information from the actual global user state
    */
   const { user, setUser } = useContext(UserContext);
-
+  const userFirstName = "Marlene";
+  const userLastName = "Liang";
   // Set a default profile
   const [currentProfile, setCurrentProfile] = useState<UserTypes>(
     UserTypes.Sysop
@@ -45,58 +49,73 @@ export function Dashboard() {
     setCurrentTabs(tabsPerProfile.get(profile)!);
   }
 
-  function handleLogout(): void {
-    navigate("/logout");
-  }
+  // useEffect(() => {
+  //   // if no user redirect to login page
+  //   if (!user.email) {
+  //     navigate("/login");
+  //   }
+  // }, [user, navigate]);
 
-  useEffect(() => {
-    // if no user redirect to login page
-    if (!user.email) {
-      navigate("/login");
-    }
-  }, [user, navigate]);
+  // PLACEHOLDER
+  // TODO: MODIFY HANDLE NAV CLICK
+  const handleNavigation = (role: string) => {
+    console.log("Logging in as", role)
+    navigate("/course");
+  }
 
   // Render nav dropdown options and nav tabs based on state above
   return (
-    <div>
-      <Navbar expand="lg">
-        <Container>
-          <img className="logo" src={logo} alt="mcgill-logo" />
-          <Nav className="me-auto">
-            <NavDropdown title={currentProfile} id="basic-nav-dropdown">              
-              {user.userType.map((profile) => (
-                <NavDropdown.Item
-                  key={profile.toString()}
-                  onClick={() => {
-                    handleNavClick(profile);
-                  }}
-                >
-                  {profile}
-                </NavDropdown.Item>
-              ))}
-            </NavDropdown>
-          </Nav>
-          <button className="logout" onClick={() => handleLogout()}>
-            <LogoutIcon />
-          </button>
-        </Container>
-      </Navbar>
-      <Container>
-        <Tabs
-          defaultActiveKey="0"
-          transition={false}
-          id="noanim-tab"
-          className="sub"
-        >
-          {currentTabs.map((currentTabName, i) => (
-            <Tab className="sub" key={i} eventKey={i} title={currentTabName}>
-              {tabNamesToJSX.get(currentTabName)}
-            </Tab>
-          ))}
-        </Tabs>
-      </Container>
-    </div>
+    <>
+      <div className="dashboard-container">
+        <div className="d-flex flex-column align-items-center pt-5">
+          <h1>
+            Welcome to your dashboard, {userFirstName} {userLastName}
+          </h1>
+          <h4>Continue viewing as:</h4>
+          <div className="top-tiles-container d-md-flex justify-content-evenly mb-md-4 mt-3">
+            <Tile
+              image={StudentIcon}
+              value="Student"
+              width="15rem"
+              margin="0rem 0rem 0.5rem 0rem"
+              onClick={() => handleNavigation("Student")}
+            ></Tile>
+            <Tile
+              image={TeachingAssitantIcon}
+              value="Teaching Assistant"
+              width="15rem"
+              margin="0rem 0rem 0.5rem 0rem"
+              onClick={() => handleNavigation("Teaching Assistant")}
+            ></Tile>
+            <Tile
+              image={InstructorIcon}
+              value="Instructor"
+              width="15rem"
+              margin="0rem 0rem 0.5rem 0rem"
+              onClick={() => handleNavigation("Instructor")}
+            ></Tile>
+          </div>
+          <div className="bottom-tiles-container d-md-flex justify-content-evenly">
+            <Tile
+              image={TeachingAssistantAdminIcon}
+              value="TA Administrator"
+              width="15rem"
+              margin="0rem 0rem 0.5rem 0rem"
+              onClick={() => handleNavigation("TA Admin")}
+
+            ></Tile>
+            <Tile
+              image={SysopIcon}
+              value="Sysop"
+              width="15rem"
+              margin="0rem 0rem 1rem 0rem"
+              onClick={() => handleNavigation("Sysop")}
+            ></Tile>
+          </div>
+        </div>
+      </div>
+    </>
   );
-}
+};
 
 export default Dashboard;
