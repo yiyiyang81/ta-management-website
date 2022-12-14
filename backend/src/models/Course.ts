@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { IProfessor } from "./Professor";
 import { ITA } from "./TA";
+import { IUser } from './User';
 
 const Schema = mongoose.Schema;
 
@@ -33,7 +34,7 @@ export interface ICourse extends mongoose.Document {
     // TA_wishlist: [ITA]
     update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
     get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
-    get_list_of_need_to_fix_courses(): Promise<Array<any>>
+    get_list_of_need_to_fix_courses(): Promise<Array<IUser>>
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -107,7 +108,7 @@ CourseSchema.methods.update_course_quota = function (term_year: string, course_n
 }
 
 CourseSchema.methods.get_course_TA_info = function (course_number: string, term_year: string) {
-    return Course.findOne({ course_number: course_number, term_year: term_year }, { "course_instructors": 1, "_id": 0 });
+    return Course.findOne({ course_number: course_number, term_year: term_year }, { "course_TA": 1, "_id": 0 });
 }
 
 CourseSchema.methods.get_list_of_need_to_fix_courses = function () {
