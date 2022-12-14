@@ -1,0 +1,15 @@
+.tile-container {
+	background-color: #FFFFFF;
+	padding         : 1rem;
+	border-radius   : 10px;
+	border          : 1px solid #EFEFEF;
+}
+
+.tile-container:hover {
+	cursor     : pointer;
+	transform: scale(1.05);
+}
+
+.zoom {
+  transition: transform .2s; 
+}

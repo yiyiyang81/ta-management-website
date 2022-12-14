@@ -1,0 +1,16 @@
+.dashboard-container {
+	background-color: #EFEFEF;
+	min-height      : 100vh;
+	height          : 100%;
+	vertical-align  : top;
+}
+
+@media (min-width: 768px) {
+	.top-tiles-container {
+		width: 50rem;
+	}
+
+	.bottom-tiles-container {
+		width: 35rem;
+	}
+}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../style/select.css";
+import "../style/common/select.css";
 
 const Select = (props: {
   label: string;
