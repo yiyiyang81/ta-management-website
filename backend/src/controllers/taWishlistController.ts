@@ -53,7 +53,7 @@ export const getInstructorWishlist = asyncHandler(async (req: Request, res: Resp
     const tawl = await TAWishlist.findOne({ next_term_year: next_term_year, instructor_email: instructor_email });
 
     if (!tawl) {
-        res.status(404).json({}); // either instructor has no wishlist or input was invalid
+        res.status(404).json({}); // instructor has no wishlist
     } else {
         res.status(200).json({ wished_TAs: tawl.TA_emails });
     }
@@ -67,7 +67,7 @@ export const getCoursesTAWishlisted = asyncHandler(async (req: Request, res: Res
     const tawls = await TAWishlist.find({ next_term_year: next_term_year});
 
     if (!tawls) {
-        res.status(404).json({}); // either no wishlist exists for next term year yet or term year is incorrect
+        res.status(404).json({}); // no wishlist exists for next term year yet
     } else {
         let courses = new Array();
         tawls.forEach(function(wl) {
