@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/button.css";
+import "../style/common/button.css";
 
 const Button = (props: {
   width?: any;
@@ -15,7 +15,7 @@ const Button = (props: {
     };
   };
 
-const generateInputWidthStyle = () => {
+  const generateInputWidthStyle = () => {
     return {
       minWidth: "100%",
       maxWidth: "100%",

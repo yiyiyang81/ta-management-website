@@ -6,6 +6,7 @@ import { User, emptyUser } from "./classes/User";
 import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration"
 import AdminCourse from "./pages/AdminCourse";
+import Header from "./components/Header";
 
 interface UserProviderProps {
   user: User;
@@ -19,7 +20,11 @@ const App = () => {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
+
       <Router>
+        <div>
+          <Header></Header>
+        </div>
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/login" element={<Login />} />

@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/checkboxList.css";
+import "../style/common/checkboxList.css";
 
 const CheckboxList = (props: {
   options: any[];

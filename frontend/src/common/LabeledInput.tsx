@@ -1,5 +1,5 @@
 import React from "react";
-import "../style/labeledInput.css";
+import "../style/common/labeledInput.css";
 
 const LabeledInput = (props: {value? : any, label?: string, required: boolean, type: string, name: string, placeholder?: string, id: string, handleChange: React.Dispatch<React.SetStateAction<any>>}) => {
 	if (props.required) {

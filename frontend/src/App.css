@@ -1,29 +1,29 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap');
 
 body {
-  margin: 0;
-  padding: 0;
+  margin     : 0;
+  padding    : 0;
   font-family: 'Lato', sans-serif;
 }
 
 h1 {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size  : 1.5rem;
   line-height: 38px;
 }
 
 h2 {
   font-family: 'Lato', sans-serif;
   font-weight: 700;
-  font-size: 1.2rem;
+  font-size  : 1.2rem;
   line-height: 38px;
 }
 
 h4 {
   font-family: 'Lato', sans-serif;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size  : 1.1rem;
 }
 
 .logo {
@@ -39,7 +39,7 @@ h4 {
 }
 
 .sign-in-button input {
-  width: 100px;
+  width    : 100px;
   font-size: 12px;
 }
 
@@ -48,23 +48,23 @@ h4 {
 }
 
 form {
-  display: block;
+  display : block;
   position: relative;
 }
 
 form .form-inner {
   position: relative;
-  display: block;
-  z-index: 2;
+  display : block;
+  z-index : 2;
 }
 
 form .form-inner p {
-  color: black;
+  color    : black;
   font-size: 13px;
 }
 
 p.top {
-  margin-top: 40px;
+  margin-top   : 40px;
   margin-bottom: 25px;
 }
 
@@ -73,24 +73,24 @@ p.bottom {
 }
 
 .error {
-  color: red;
-  font-size: 0.75rem;
+  color         : red;
+  font-size     : 0.75rem;
   padding-bottom: 5px;
 }
 
 form .form-inner .form-group {
-  display: block;
+  display      : block;
   margin-bottom: 10px;
 }
 
 .welcome {
-  width: 100%;
+  width  : 100%;
   padding: 15px 30px;
 }
 
 .welcome h2 {
-  color: #888;
-  font-size: 28px;
-  font-weight: 500;
+  color        : #888;
+  font-size    : 28px;
+  font-weight  : 500;
   margin-bottom: 30px;
 }
