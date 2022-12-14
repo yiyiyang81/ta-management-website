@@ -1,0 +1,72 @@
+select {
+	background           : none;
+	outline              : none;
+	display              : block;
+	width                : 100%;
+	line-height          : 1em;
+	font-size            : 13px;
+	padding              : 10px 15px;
+	background-color     : #f8f8f8;
+	border-radius        : 3px;
+	border               : 1px solid #b3b3b3;
+	appearance           : none;
+	background-repeat    : no-repeat;
+	background-position-x: 100%;
+	background-position-y: 5px;
+	background-image     : url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSdibGFjaycgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0JyB3aWR0aD0nMjQnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggZD0nTTcgMTBsNSA1IDUtNXonLz48cGF0aCBkPSdNMCAwaDI0djI0SDB6JyBmaWxsPSdub25lJy8+PC9zdmc+);
+}
+
+select::-ms-expand {
+	display: none;
+}
+
+.multiple-select-input {
+	height               : 38px;
+	width                : inherit;
+	border               : 1px solid #b3b3b3;
+	display              : flex;
+	flex-direction       : column;
+	border-radius        : 3px;
+	padding              : 0px 15px;
+	justify-content      : center;
+	background-color     : #f8f8f8;
+	background-repeat    : no-repeat;
+	background-position-x: 100%;
+	background-position-y: 5px;
+	background-image     : url(data:image/svg+xml;base64,PHN2ZyBmaWxsPSdibGFjaycgaGVpZ2h0PScyNCcgdmlld0JveD0nMCAwIDI0IDI0JyB3aWR0aD0nMjQnIHhtbG5zPSdodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2Zyc+PHBhdGggZD0nTTcgMTBsNSA1IDUtNXonLz48cGF0aCBkPSdNMCAwaDI0djI0SDB6JyBmaWxsPSdub25lJy8+PC9zdmc+);
+
+}
+
+.dropdown {
+	border-radius      : 3px;
+	height             : 8rem;
+	/* width           : inherit; */
+	background-color   : #FFFFFF;
+	border             : 1px solid #b3b3b3;
+	overflow-y         : scroll;
+	position           : absolute;
+	z-index            : 1000;
+	right              : 0;
+	left               : 0
+}
+
+.custom-option {
+	padding: 10px 15px;
+	width  : 100%;
+}
+
+.custom-option:hover {
+	background-color: #E9E9E9;
+	color           : #000000;
+}
+
+.active {
+	background-color: #DDDCDC;
+}
+
+.custom-selected-value {
+	background-color: #E9E9E9;
+	padding         : 0rem 0.5rem;
+	border-radius   : 3px;
+	margin-right    : 0.5rem;
+}

@@ -59,7 +59,7 @@ export const getPerformanceLogs = asyncHandler(async (req: Request, res: Respons
     const log = await PerformanceLog.find({ TA_email: TA_email });
 
     if (!log.length) {
-        res.status(404).json({}); // either email incorrect or prof didn't record any logs about this TA
+        res.status(404).json({}); // prof didn't record any logs about this TA
     } else {
         res.status(200).json({ all_performance_logs: JSON.stringify(log) });
     }
