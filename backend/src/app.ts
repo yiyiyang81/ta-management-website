@@ -6,6 +6,7 @@ import profRoutes from './routes/profRoutes';
 import courseRoutes from './routes/courseRoutes';
 import ohResponsibilitiesRoutes from './routes/ohResponsibilitiesRoutes';
 import TAWishlistRoutes from './routes/taWishlistRoutes';
+import taRoutes from './routes/taRoutes';
 
 const app = express();
 const port = 3000;
@@ -20,6 +21,7 @@ app.use("/api/prof", profRoutes);
 app.use("/api/course", courseRoutes);
 app.use("/api/ohresps", ohResponsibilitiesRoutes);
 app.use("/api/tawishlist", TAWishlistRoutes);
+app.use("/api/ta", taRoutes);
 
 
 app.listen(port, () => {
