@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
 import { IProfessor } from "./Professor";
+import { ITA } from "./TA";
+import User, { IUser } from './User';
+import TAWishlist, { ITAWishlist } from './TAWishlist';
 
 const Schema = mongoose.Schema;
 
@@ -27,9 +30,14 @@ export interface ICourse extends mongoose.Document {
     is_need_fix: Boolean,
     instructor_office_hour: string,
     lecture_hours: string,
-    course_instructors: [IProfessor]
-    // course_TA: [ITA],
-    // TA_wishlist: [ITA]
+    course_instructors: [IProfessor],
+    course_TA: [ITA],
+    TA_wishlist: [ITA]
+    update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
+    get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
+    get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
+    add_wishlist_to_course(course_number: String, term_year: String): Promise<string>
+
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -81,34 +89,56 @@ const CourseSchema = new mongoose.Schema({
         default: [],
         required: true
     },
-    // course_TA:{
-    //     type:Array,
-    //     default: []
-    // },
-    // TA_wishlist:{
-    //     type:Array,
-    //     default: []
-    // }
+    course_TA: {
+        type: Array,
+        default: []
+    },
+    TA_wishlist: {
+        type: Schema.Types.ObjectId,
+        ref: 'TAWishlist'
+    }
 }, {
     timestamps: true
 })
 
 
 //Database Methods
-CourseSchema.statics.update_course_quota = function(){
-
+CourseSchema.methods.update_course_quota = function (term_year: string, course_number: string,
+    course_type: string, course_enrollment_num: number, TA_quota: number) {
+    return Course.updateOne({ "term_year": term_year, "course_number": course_number },
+        { $set: { course_type: course_type, course_enrollment_num: course_enrollment_num, TA_quota: TA_quota } }
+    );
 }
 
-CourseSchema.statics.get_course_TA_info = function (course_number: string, term_year: string) {
-    return this.where({ course_number: course_number, term_year: term_year })
+CourseSchema.methods.get_course_TA_info = function (course_number: string, term_year: string) {
+    return Course.findOne({ course_number: course_number, term_year: term_year }, { "course_TA": 1, "_id": 0 });
 }
 
-CourseSchema.statics.get_list_of_need_to_fix_courses = function () {
-
+CourseSchema.methods.get_list_of_need_to_fix_courses = function () {
+    return Course.find({ is_need_fix: true });
 }
 
-CourseSchema.statics.get_course_ta_history = function (course_number: string) {
+// TODO: test this one when ITA is merged
+CourseSchema.methods.get_course_ta_history = function (course_number: string) {
+    return Course.find({}, { "course_TA": 1 });
+}
 
+CourseSchema.methods.add_wishlist_to_course = async function (course_number: String, term_year: String) {
+    const course = await Course.findOne({ course_number: course_number, term_year: term_year });
+    if (!course) {
+        throw new Error("Course not found!");
+    }
+    const new_wishlists: ITAWishlist[] = [];
+    const profs = course.course_instructors;
+    for (let prof of profs) {
+        let prof_email = await User.findOne({ _id: prof._id }, { "email": 1 });
+        let wishlist = await TAWishlist.findOne({ next_term_year: term_year, course_number: course_number, instructor_email: prof_email });
+        if (wishlist) {
+            new_wishlists.push(wishlist);
+        }
+    }
+    return Course.updateOne({ term_year: term_year, course_number: course_number },
+        { $set: { TA_wishlist: new_wishlists } });
 }
 
 //setting is_need_fix variable by calculating the TA per person ratio
