@@ -10,7 +10,14 @@ import { parse } from 'csv-string';
 // @Route /api/course
 // @Method GET
 export const getAllCourses = asyncHandler(async (req: Request, res: Response) => {
-    const courses = await Course.find({});
+    let any_course = await Course.findOne({});
+    if(!any_course){
+        res.status(404);
+        throw new Error("No course in the database!");
+    }
+
+    let courses = await any_course.get_list_of_need_to_fix_courses();
+
     res.status(200).json({ courses });
 });
 
@@ -83,6 +90,42 @@ export const addCourses = asyncHandler(async (req: Request, res: Response, next:
         course_number: course.course_number,
         course_instructors: course.course_instructors
     });
+});
+
+// @Desc Get Course current information
+// @Route /api/course/:id
+// @Method GET
+export const getCourse = asyncHandler(async (req: Request, res: Response) => {
+    const { course_number } = req.body;
+
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; //January is 0!
+    var yyyy = today.getFullYear();
+
+    let season:string;
+    if( mm >= 1 && mm <= 4){
+        season = "Winter";
+    }
+    else if(mm >= 5 && mm <= 8 ){
+        season = "Summer";
+    }
+    else{
+        season = "Fall";
+    }
+    let term_year = season + " " +String(yyyy);
+
+    let course = await Course.findOne({ course_number, term_year});
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found");
+    }
+
+    let current_ta = await course.get_course_TA_info(course_number,term_year);
+
+    res.status(200).json(current_ta
+    );
 });
 
 // @Desc Delete Course
