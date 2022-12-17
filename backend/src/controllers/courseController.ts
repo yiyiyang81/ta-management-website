@@ -30,7 +30,7 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
         const fileContent = parse(csv.buffer.toString('utf-8'));
         for (let record of fileContent) {
             const instructorEmail = record[5];
-            let courseInstructor = await User.findOne({ instructorEmail }).select("-password");
+            let courseInstructor = await User.findOne({email : instructorEmail }).select("-password");
             if (!courseInstructor) {
                 res.status(404);
                 console.log("Instructor not found in the database! Skipping row.");
@@ -56,14 +56,14 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
 // @Desc Add Courses
 // @Route /api/course/add
 // @Method POST
-export const addCourses = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
+export const addCourse = asyncHandler(async (req: Request, res: Response, next: NextFunction) => {
     const { course_name, course_description, term_year, course_number, course_instructors } = req.body;
     //converting the course_instructors emails to a list of IProfessor objects
         let instuctorObjectList = await (async function (course_instructors: any, res: Response, next: NextFunction) {
             var resultObjectList: IProfessor[] = [];
             for (var email of course_instructors) {
-                let userId = await User.findOne({ email }).select("_id");
-                let course_instructor = await Professor.findOne({professor: userId});
+                let userId = await User.findOne({email : email }).select("_id");
+                let course_instructor = await Professor.findOne({professor : userId});
                 if (!course_instructor) {
                     try{
                         res.status(404);
@@ -92,10 +92,10 @@ export const addCourses = asyncHandler(async (req: Request, res: Response, next:
     });
 });
 
-// @Desc Get Course current information
+// @Desc Get the course's current TA
 // @Route /api/course/:id
 // @Method GET
-export const getCourse = asyncHandler(async (req: Request, res: Response) => {
+export const getCourseCurrentTA = asyncHandler(async (req: Request, res: Response) => {
     const { course_number } = req.body;
 
     var today = new Date();
@@ -115,7 +115,7 @@ export const getCourse = asyncHandler(async (req: Request, res: Response) => {
     }
     let term_year = season + " " +String(yyyy);
 
-    let course = await Course.findOne({ course_number, term_year});
+    let course = await Course.findOne({ course_number: course_number, term_year: term_year});
 
     if (!course) {
         res.status(404);
@@ -134,7 +134,7 @@ export const getCourse = asyncHandler(async (req: Request, res: Response) => {
 export const deleteCourse = asyncHandler(async (req: Request, res: Response) => {
     const { courseNumber } = req.body;
 
-    let course = await Course.findOne({ courseNumber });
+    let course = await Course.findOne({ course_number: courseNumber });
     if (!course) {
         res.status(404);
         throw new Error("Course not found");

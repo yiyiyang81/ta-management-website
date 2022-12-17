@@ -12,26 +12,32 @@ export interface IProfessor extends mongoose.Document {
 }
 
 const ProfessorSchema = new mongoose.Schema({
-
     professor: {
         type: Schema.Types.ObjectId,
         required: true,
-        ref: "User"
+        ref: "User",
+        unique: true
+    },
+
+    email: {
+        type: String,
+        required: true,
+        unique: true
     },
 
     faculty: {
         type: String,
-        required: true,
+        required: false,
     },
 
     department: {
         type: String,
-        required: true,
+        required: false,
     },
 
     course: {
         type: Schema.Types.ObjectId,
-        required: true,
+        required: false,
         ref: "Course"
     }
 }, {
