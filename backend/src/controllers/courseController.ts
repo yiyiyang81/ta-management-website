@@ -96,7 +96,7 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
 // @Desc Get the course's current TA
 // @Route /api/course/:id/ta
 // @Method GET
-export const getCourseCurrentTA = asyncHandler(async (req: Request, res: Response) => {
+export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
     const { course_number, term_year } = req.body;
 
     if (!term_year) {
