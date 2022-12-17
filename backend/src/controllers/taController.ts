@@ -36,7 +36,7 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             let courses_applied_for_list: ICourse[] = []
             // doing checks before adding the information to database
             for (let course_number of courses_applied) {
-                let course = await Course.findOne({ course_number });
+                let course = await Course.findOne({ course_number: course_number });
                 if (!course) {
                     // res.status(404);
                     console.log("Course not found in the database! Skipping course %s .", course_number);
@@ -119,7 +119,7 @@ export const addTA = asyncHandler(async (req: Request, res: Response) => {
     let courses_applied_found: ICourse[] = [];
 
     for (let course_number of courses_applied_for_list) {
-        let course = await Course.findOne({ course_number });
+        let course = await Course.findOne({course_number: course_number });
         if (!course) {
             console.log("Course not found in the database! Skipping course %s .", course_number);
         }

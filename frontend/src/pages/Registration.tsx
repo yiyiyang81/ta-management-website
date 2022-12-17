@@ -25,8 +25,8 @@ const Registration: React.FC = () => {
   const [accountError, setAccountError] = useState(false);
 
   // Course Registration
-  const [term, setTerm] = useState("Fall");
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [term, setTerm] = useState("default");
+  const [year, setYear] = useState("default");
   const [registeredCourses, setRegisteredCourses] = useState([]);
   const handleRegisteredCourses = (value: string) => {
     if (registeredCourses.filter((val) => val === value).length > 0) {

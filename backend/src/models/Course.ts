@@ -49,7 +49,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_description: {
         type: String,
-        required: true,
+        // required: true,
     },
 
     term_year: {

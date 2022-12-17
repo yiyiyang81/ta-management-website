@@ -1,33 +1,37 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export enum UserTypes {
-    Student = "stud",
-    Professor = "prof",
-    TA = "ta",
-    Admin = "admin",
-    Sysop = "sysop",
-  }
+    Student = "Student",
+    Professor = "Instructor",
+    TA = "Teaching Assistant",
+    Admin = "TA Administrator",
+    Sysop = "System Operator",
+}
 
 export interface IUser extends mongoose.Document {
-    firstName: string,
-    lastName: string,
+    first_name: string,
+    last_name: string,
     email: string,
+    student_id?: string,
+    username: string,
     password: string,
+    registered_courses?: [Schema.Types.ObjectId],
+    semester?: string,
+    user_types: Array<UserTypes>,
     createdAt: Date,
     updatedAt: Date,
-    userType: Array<UserTypes>,
-    comparePassword(entredPassword: string): Promise<Boolean> 
+    compare_password(enteredPassword: string): Promise<Boolean>
 }
 
 const UserSchema = new mongoose.Schema({
 
-    firstName: {
+    first_name: {
         type: String,
         required: true,
     },
 
-    lastName: {
+    last_name: {
         type: String,
         required: true,
     },
@@ -35,6 +39,18 @@ const UserSchema = new mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
+    },
+
+    student_id: {
+        type: String,
+        required: false,
+    },
+
+    username: {
+        type: String,
+        required: false,
+        unique: true,
     },
 
     password: {
@@ -42,7 +58,15 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
 
-    userType: {
+    registered_courses: {
+        type: [Schema.Types.ObjectId],
+        ref: "Course"
+    },
+    semester: {
+        type: String,
+        required: false,
+    },
+    user_types: {
         type: Array,
         required: true,
     },
@@ -54,9 +78,9 @@ export interface IUserRequest extends Request {
     user?: any
 }
 
-UserSchema.pre("save", async function(next) {
-    const user = this as IUser;
-    if(!user.isModified("password")) return next();
+UserSchema.pre("save", async function (next) {
+    const user = this as unknown as IUser;
+    if (!user.isModified("password")) return next();
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(user.password, salt);
     user.password = hash;
@@ -64,12 +88,11 @@ UserSchema.pre("save", async function(next) {
 
 })
 
-UserSchema.methods.comparePassword = function(enteredPassword: string) {
+UserSchema.methods.compare_password = function (enteredPassword: string) {
     const user = this as IUser;
     return bcrypt.compareSync(enteredPassword, user.password);
 }
 
 const User = mongoose.model<IUser>("User", UserSchema);
-
 export default User;
 
