@@ -7,6 +7,9 @@ import mcgillLogo from "../assets/images/mcgill-logo.png";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
 import ManageCourses from "../components/sysop/ManageCourses";
+import TaHistory from "../components/orange/TaHistory";
+import TaAdminImportFile from "../components/orange/TaAdminImportFile";
+import TaInfo from "../components/orange/TaInfo";
 import RoleTabs from "../components/primaryTopbar";
 import "../App.css";
 import "../style/subTopbar.css";
@@ -19,11 +22,14 @@ const AdminCourse: React.FC = () => {
   }
 
   const tabNamesToJSX = new Map<string, JSX.Element>([
-    ["Courses", <ManageCourses />],
+    ["Manage a Course", <ManageCourses />],
+    ["Course TA History", <TaHistory />],
+    ["Import Document", <TaAdminImportFile />],
+    ["TA Information", <TaInfo />]
   ]);
 
   const tabsPerProfile = new Map<UserTypes, Array<string>>([
-    [UserTypes.Admin, ["Courses"]],
+    [UserTypes.Admin, ["Manage a Course","Course TA History","Import Document","TA Information"]],
   ]);
 
   const [currentProfile, setCurrentProfile] = useState<UserTypes>(
@@ -44,20 +50,20 @@ const AdminCourse: React.FC = () => {
         </Container>
       </div>
       <div>
-      <Container>
-        <Tabs
-          defaultActiveKey="0"
-          transition={false}
-          id="noanim-tab"
-          className="sub"
-        >
-          {currentTabs.map((currentTabName, i) => (
-            <Tab key={i} eventKey={i} title={currentTabName}>
-              {tabNamesToJSX.get(currentTabName)}
-            </Tab>
+        <Container>
+          <Tabs
+            defaultActiveKey="0"
+            transition={false}
+            id="noanim-tab"
+            className="sub"
+          >
+            {currentTabs.map((currentTabName, i) => (
+              <Tab key={i} eventKey={i} title={currentTabName}>
+                {tabNamesToJSX.get(currentTabName)}
+              </Tab>
             ))}
-        </Tabs>
-      </Container>
+          </Tabs>
+        </Container>
       </div>
     </div>
   );
