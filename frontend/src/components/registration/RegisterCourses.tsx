@@ -10,11 +10,11 @@ const RegisterCourses = (props: {
   handleRegisterRolesClick: React.Dispatch<React.SetStateAction<any>>;
   handleRegisterAccountClick: React.Dispatch<React.SetStateAction<any>>;
   term: string;
-  year: number;
+  year: string;
   registeredCourses: string[];
 }) => {
   const allTerms = ["Fall", "Winter"];
-  const allYears = [2022, 2023];
+  const allYears = ["2022", "2023"];
   const allCourses = [
     "COMP307",
     "COMP462",

@@ -95,8 +95,12 @@ const Select = (props: {
             name={props.name}
             id={props.id}
             value={props.value}
+            defaultValue={props.value}
             onChange={(e) => props.handleChange(e.target.value)}
           >
+            <option value="default" disabled hidden>
+              ---
+            </option>
             {props.options.map((option, i) => (
               <option className="option" key={i} value={option}>
                 {option}

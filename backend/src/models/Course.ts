@@ -36,8 +36,9 @@ export interface ICourse extends mongoose.Document {
     update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
     get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
     get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
-    add_wishlist_to_course(course_number: String, term_year: String): Promise<string>
-
+    add_wishlist_to_course(course_number: String, term_year: String): Promise<string>,
+    add_ta_to_course(ta: ITA): Promise<string>,
+    delete_ta_from_course(ta: ITA): Promise<string>,
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -49,7 +50,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_description: {
         type: String,
-        required: true,
+        // required: true,
     },
 
     term_year: {
@@ -139,6 +140,30 @@ CourseSchema.methods.add_wishlist_to_course = async function (course_number: Str
     }
     return Course.updateOne({ term_year: term_year, course_number: course_number },
         { $set: { TA_wishlist: new_wishlists } });
+}
+
+CourseSchema.methods.add_ta_to_course = async function (ta: ITA) {
+    let current_ta_list = this.course_TA;
+    if (!current_ta_list.find((i: { email: string; }) => i.email == ta.email)) {
+        current_ta_list.push(ta);
+    }
+    else {
+        console.log("TA already exist!");
+    }
+    return this.updateOne({ $set: { course_TA: current_ta_list } });
+}
+
+CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {
+    let current_ta_list = this.course_TA;
+    if (!current_ta_list.find((i: { email: string; }) => i.email === ta.email)) {
+        console.log("TA not in course!");
+    }
+    else {
+        current_ta_list = current_ta_list.filter((i: { email: string; }) =>
+            i.email !== ta.email
+        );
+    }
+    return this.updateOne({ $set: { course_TA: current_ta_list } });
 }
 
 //setting is_need_fix variable by calculating the TA per person ratio
