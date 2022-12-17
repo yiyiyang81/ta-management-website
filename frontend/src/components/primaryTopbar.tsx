@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tab, Tabs } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 
@@ -11,27 +11,26 @@ function RoleTabs(props: any) {
 
     const [activeKey, setActiveKey] = useState(3);
 
-    const handleSelect = (activeKey) => {
+
+
+    const handleSelect = (e) => {
         let route;
         // TODO: change keys
-        switch (activeKey) {
+        setActiveKey(e);
+        switch (e) {
             case 1:
-                route = 'link1';
-                console.log("HI");
-                setActiveKey(1);
+                route = '/course';
                 break;
             case 2:
                 route = '/course';
-                setActiveKey(2);
                 break;
             case 3:
-                route = 'link3';
-                setActiveKey(3);
+                route = '/course';
                 break;
             default:
                 route = '/course';
+                break;
         }
-        console.log(activeKey);
         navigate(route);
     }
 
@@ -39,9 +38,9 @@ function RoleTabs(props: any) {
         <Tabs
             activeKey={activeKey}
             className="primary mb-3"
-            onSelect={(k)=>handleSelect(k)}
+            onSelect={handleSelect}
         >
-            <Tab eventKey={0} title="Dashboard" />
+            <Tab eventKey={0} title="Dashboard"/>
             <Tab eventKey={1} title="TA Management" />
             <Tab eventKey={2} title="TA Administration" disabled />
             <Tab eventKey={3} title="Rate a TA" />
