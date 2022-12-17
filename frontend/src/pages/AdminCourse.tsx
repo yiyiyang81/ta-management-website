@@ -43,6 +43,7 @@ const AdminCourse: React.FC = () => {
           <RoleTabs></RoleTabs>
         </Container>
       </div>
+      <div>
       <Container>
         <Tabs
           defaultActiveKey="0"
@@ -51,12 +52,13 @@ const AdminCourse: React.FC = () => {
           className="sub"
         >
           {currentTabs.map((currentTabName, i) => (
-            <Tab className="sub" key={i} eventKey={i} title={currentTabName}>
+            <Tab key={i} eventKey={i} title={currentTabName}>
               {tabNamesToJSX.get(currentTabName)}
             </Tab>
-          ))}
+            ))}
         </Tabs>
       </Container>
+      </div>
     </div>
   );
 };

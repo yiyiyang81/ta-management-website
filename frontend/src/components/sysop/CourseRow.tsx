@@ -8,18 +8,22 @@ const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseDat
   };
 
   return (
-    <tr className="body">
+    <tr className="profTable">
       <td className="column0">
         <button className="btn btn-secondary" onClick={handleDeleteCourse}>
           <RemoveIcon />
         </button>
       </td>
-      <td className="column1">{course.courseNumber}</td>
-      <td className="column2">{course.courseName}</td>
-      <td className="column3">{course.courseDesc}</td>
-      <td className="column4">{course.term}</td>
-      <td className="column5">{course.year}</td>
-      <td className="column6">{course.instructorName}</td>
+      <td>{course.course_number}</td>
+      <td>{course.course_name}</td>
+      <td>{course.course_type}</td>
+      <td>{course.course_instructors}</td>
+      <td>{course.course_enrolllment_num}</td>
+      <td>{course.TA_quota}</td>
+      <td>{course.is_need_fix}</td>
+      {/* TODO: replace with meaningful URL */}
+      <td><a href="/">View Details</a></td>
+      <td><a href='/'>Manage</a></td>
     </tr>
   );
 };

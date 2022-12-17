@@ -15,20 +15,21 @@ const ManageCourses = () => {
       const data = await res.json();
       const courseObject = [];
       for (const d of data.courses) {
-        const instructorRes = await fetch("http://127.0.0.1:3000/api/users/" + d.courseInstructor);
         let item = {
-          courseNumber: d.courseNumber,
-          courseName: d.courseName,
-          courseDesc: d.courseDesc,
-          term: d.term,
-          year: d.year,
+          course_number: d.course_number,
+          course_name: d.course_name,
+          term_year: d.term_year,
+          course_description: d.course_description,
         }
-        if (instructorRes) {
-          const instructorData = await instructorRes.json();
-          item["instructorName"] = instructorData.user.firstName + " " + instructorData.user.lastName;
-        } else {
-          item["instructorName"] = ""
+        let instructorName:string[] = [];
+        for(let instructor of d.course_instructors){
+          const user_prof = await fetch("http://127.0.0.1:3000/api/users/" + instructor.professor);
+          if(user_prof){
+            const prof_data = await user_prof.json();
+            instructorName.push(prof_data.user.firstName+" "+prof_data.user.lastName);
+          }
         }
+        item["course_instructors"] = instructorName.toString();
         courseObject.push(item);
       }
       setCourses(courseObject);
@@ -54,12 +55,15 @@ const ManageCourses = () => {
             <thead>
               <tr>
                 <th className="column0"></th>
-                <th className="column1">Course Number</th>
-                <th className="column2">Course Name</th>
-                <th className="column3">Course Description</th>
-                <th className="column4">Course Semester</th>
-                <th className="column5">Course Year</th>
-                <th className="column6">Course Instructor</th>
+                <th >Course Number</th>
+                <th >Course Name</th>
+                <th >Course Type</th>
+                <th >Course Instructor</th>
+                <th >Student Enrolled</th>
+                <th >TA Quota</th>
+                <th >Need to Fix</th>
+                <th >TA Hisotry</th>                
+                <th >Manage Course</th>
               </tr>
             </thead>
             <tbody>

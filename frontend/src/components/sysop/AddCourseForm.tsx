@@ -6,12 +6,11 @@ import "../../style/userTable.css";
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
 const AddCourseForm = ({ fetchCourseData }) => {
   const [show, setShow] = React.useState(false);
-  const [courseDesc, setCourseDesc] = React.useState("");
-  const [courseNumber, setCourseNumber] = React.useState("");
-  const [courseName, setCourseName] = React.useState("");
-  const [term, setTerm] = React.useState("");
-  const [year, setYear] = React.useState("");
-  const [instructor, setInstructor] = React.useState("");
+  const [course_number, setCourseNumber] = React.useState("");
+  const [course_name, setCourseName] = React.useState("");
+  const [term_year, setTermYear] = React.useState("");
+  const [course_instructors, setInstructor] = React.useState("");
+  const [course_description, setCourseDesc] = React.useState("");
 
   const handleAddCourse = async (e) => {
     try {
@@ -21,12 +20,11 @@ const AddCourseForm = ({ fetchCourseData }) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          courseDesc: courseDesc,
-          courseNumber: courseNumber,
-          courseName: courseName,
-          term: term,
-          year: year,
-          instructorEmail: instructor
+          course_number: course_number,
+          course_name: course_name,
+          term_year: term_year,
+          course_instructors: course_instructors,
+          course_description: course_description,
         }),
       });
       if (res.status === 201) {
@@ -55,37 +53,31 @@ const AddCourseForm = ({ fetchCourseData }) => {
 
             <Row>
               <Col>
-                <Form.Control required type="courseNumber" placeholder="Please enter the course number." value={courseNumber} onChange={(e) => setCourseNumber(e.target.value)} />
+                <Form.Control required type="courseNumber" placeholder="Please enter the course number." value={course_number} onChange={(e) => setCourseNumber(e.target.value)} />
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <Form.Control required type="courseName" placeholder="Please enter the course name." value={courseName} onChange={(e) => setCourseName(e.target.value)} />
+                <Form.Control required type="courseName" placeholder="Please enter the course name." value={course_name} onChange={(e) => setCourseName(e.target.value)} />
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <Form.Control required type="courseDesc" placeholder="Please enter the course description." value={courseDesc} onChange={(e) => setCourseDesc(e.target.value)} />
+                <Form.Control required type="courseDesc" placeholder="Please enter the course description." value={course_description} onChange={(e) => setCourseDesc(e.target.value)} />
               </Col>
             </Row>
 
             <Row>
               <Col>
-                <Form.Control required type="term" placeholder="Please enter the course term." value={term} onChange={(e) => setTerm(e.target.value)} />
-              </Col>
-            </Row>
-
-            <Row>
-              <Col>
-                <Form.Control required type="year" placeholder="Please enter the course year." value={year} onChange={(e) => setYear(e.target.value)} />
+                <Form.Control required type="term_year" placeholder="Please enter the course term." value={term_year} onChange={(e) => setTermYear(e.target.value)} />
               </Col>
             </Row>
             
             <Row>
               <Col>
-                <Form.Control required type="email" placeholder="Please enter Course Instructor's Email." value={instructor} onChange={(e) => setInstructor(e.target.value)} />
+                <Form.Control required type="email" placeholder="Please enter Course Instructor's Email seperate by comma." value={course_instructors} onChange={(e) => setInstructor(e.target.value)} />
               </Col>
             </Row>
 

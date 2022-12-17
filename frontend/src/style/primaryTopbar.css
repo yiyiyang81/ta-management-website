@@ -9,11 +9,13 @@
 .primary.nav-tabs .nav-link.active {
     color: #B71A29 !important;
     font-weight: bold;
+    background-color: #fff !important;
+    border-radius: 0.375rem 0.375rem 0rem 0rem;
 }
 
 .primary.nav-tabs .nav-item:hover {
     background-color: #fff !important;
-    border-radius: 0.375rem 0.375rem 0rem 0rem; 
+    border-radius: 0.375rem 0.375rem 0rem 0rem;
 }
 
 .primary.nav-tabs .nav-link:enabled {
