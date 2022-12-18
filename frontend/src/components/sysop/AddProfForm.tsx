@@ -28,7 +28,7 @@ function AddProfForm({ fetchProfData }) {
           courseNumber: tempCourses
         }),
       });
-      if (res.status === 201) {
+      if (res.status === 200) {
         const data = await res.json();
         setTimeout(() => {
           fetchProfData();

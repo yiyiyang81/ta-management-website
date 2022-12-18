@@ -1,16 +1,11 @@
-import React from "react";
 import socsLogo from "../assets/images/socs-logo.png";
 import mcgillLogo from "../assets/images/mcgill-logo.png";
 import combinedLogos from "../assets/images/combined-logos.png";
 import { useLocation, useNavigate } from "react-router-dom";
 import Button from "../common/Button";
 import "../style/header.css";
-import { User, emptyUser } from "../classes/User";
 
-const Header = () => {
-  const [user, setUser] = React.useState<User>(emptyUser);
-  //TODO: retrieve appropriate user role
-  const userRole = "Instructor";
+const Header = (props: {profile: String}) => {
   const navigate = useNavigate();
   function handleLogout(): void {
     navigate("/logout");
@@ -82,7 +77,7 @@ const Header = () => {
               <img className="logo" src={mcgillLogo} alt="mcgill-logo" />
               <div className="button-container mt-2">
                 <div className="role-text text-center mb-2">
-                  Viewing as <span className="header-user-role">{userRole}</span>
+                  Viewing as <span className="header-user-role">{props.profile}</span>
                 </div>
                 <div className="button-container">
                   <Button
@@ -104,7 +99,7 @@ const Header = () => {
               />
               <div className="right-subcontainer d-flex align-items-center justify-content-center">
                 <div className="role-text text-center">
-                  Viewing as <span className="header-user-role">{userRole}</span>
+                  Viewing as <span className="header-user-role">{props.profile}</span>
                 </div>
                 <div className="button-container">
                   <Button

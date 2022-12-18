@@ -19,9 +19,9 @@ const UserRow = ({ user, fetchUserData }: { user: User; fetchUserData: Function 
         </button>
       </td>
       <td className="column1">{user.email}</td>
-      <td className="column2">{user.firstName}</td>
-      <td className="column3">{user.lastName}</td>
-      <td className="column5">{user.userType.join(", ")}</td>
+      <td className="column2">{user.first_name}</td>
+      <td className="column3">{user.last_name}</td>
+      <td className="column5">{user.user_types.join(", ")}</td>
     </tr>
   );
 };
