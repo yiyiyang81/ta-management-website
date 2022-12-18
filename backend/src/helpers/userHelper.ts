@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import User, { UserTypes } from "../models/User";
-import { CourseHelper } from "./courseHelper";
 
 export class UserHelper {
 	static async generateUsername(firstName: string, lastName: string, identifier: number): Promise<string> {
