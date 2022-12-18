@@ -97,7 +97,9 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
 // @Route /api/course/:id/ta
 // @Method GET
 export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, term_year } = req.body;
+
+    const term_year = req.query.term_year!;
+    const course_number = req.query.course_number!;
 
     if (!term_year) {
         var today = new Date();
@@ -165,7 +167,7 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
 // @Route /api/course/prof/:id
 // @Method GET
 export const getCoursesByInstructorEmail = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body;
+    const email = req.query.email!;
     let prof = await Professor.findOne({ email: email }, { _id: 1 });
     if (!prof) {
         res.status(404);
@@ -180,7 +182,7 @@ export const getCoursesByInstructorEmail = asyncHandler(async (req: Request, res
 // @Route /api/course/ta/:id
 // @Method GET
 export const getCoursesByTaEmail = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body;
+    const email = req.query.email!;
     let ta = await TA.findOne({ email: email }, { _id: 1 });
     if (!ta) {
         res.status(404);

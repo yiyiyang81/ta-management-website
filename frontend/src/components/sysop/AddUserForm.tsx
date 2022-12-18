@@ -5,6 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { Modal } from "react-bootstrap";
 import "../../style/userTable.css";
 import { UserTypes } from "../../enums/UserTypes";
+import { callBackend } from "../../apiConfig";
 
 function AddUserForm({ fetchUserData }) {
   const [show, setShow] = useState(false);
@@ -18,8 +19,7 @@ function AddUserForm({ fetchUserData }) {
     e.preventDefault();
 
     try {
-      // CAUTION: Do not hard code the URLs, rather use routers
-      const res = await fetch("http://127.0.0.1:3000/api/users/register", {
+      const res = await callBackend("/api/users/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

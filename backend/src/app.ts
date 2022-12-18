@@ -9,9 +9,10 @@ import TAWishlistRoutes from './routes/taWishlistRoutes';
 import performanceLogRoutes from './routes/performanceLogRoutes';
 import channelRoutes from './routes/channelRoutes';
 import taRoutes from './routes/taRoutes';
+import ratingRoutes from './routes/ratingRoutes';
 
 const app = express();
-const port = 3000;
+const port = 3001;
 
 // Basic express setup
 app.use(cors());
@@ -20,12 +21,13 @@ connectDB();
 
 app.use("/api/users", userRoutes);
 app.use("/api/prof", profRoutes);
-app.use("/api/course", courseRoutes);
+app.use("/api/course", courseRoutes)
 app.use("/api/ohresps", ohResponsibilitiesRoutes);
 app.use("/api/tawishlist", TAWishlistRoutes);
 app.use("/api/performancelog", performanceLogRoutes);
 app.use("/api/channel", channelRoutes);
 app.use("/api/ta", taRoutes);
+app.use("/api/ratings", ratingRoutes);
 
 
 app.listen(port, () => {

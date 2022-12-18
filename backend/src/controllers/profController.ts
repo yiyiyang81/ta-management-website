@@ -19,7 +19,7 @@ export const getAllProfs = asyncHandler(async (req: Request, res: Response) => {
 });
 
 // @Desc Register or create professor and course from file
-// @Route /api/prof/upload
+// @Route /api/prof/uploadProfAndCourse
 // @Method POST
 export const registerProfAndCourseFromFile = asyncHandler(async (req: Request, res: Response) => {
     const csv = req.file;
@@ -61,7 +61,7 @@ export const addProf = asyncHandler(async (req: Request, res: Response) => {
         throw new Error("Instructor not found in the database! Add user and continue.");
     }
 
-    let course = await Course.findOne({course_number: course_number });
+    let course = await Course.findOne({ course_number: course_number });
     if (!course) {
         res.status(404);
         throw new Error("Course not found in the database! Add course and continue.");
@@ -76,3 +76,36 @@ export const addProf = asyncHandler(async (req: Request, res: Response) => {
         course: prof.course,
     });
 });
+
+// @Desc Upload Professor from file
+// @Route /api/prof/uploadProf
+// @Method POST
+export const uploadProf = asyncHandler(async (req: Request, res: Response) => {
+    const csv = req.file;
+    if (csv) {
+        const fileContent = parse(csv.buffer.toString('utf-8'));
+        for (let record of fileContent) {
+            const email = record[0];
+            const faculty = record[1];
+            const department = record[2];
+            const course_number = record[3];
+            
+            const instructor_user = await UserHelper.getUserDbByEmail(email, false)
+            if (!instructor_user) {
+                throw new Error("Instructor not found in the user database! Skipping.");
+            } 
+            let course = await CourseHelper.getCourseIdByCourseNumber(course_number)
+            if (!course) {
+                throw new Error(`Course with course number ${course_number} not found in the user database! Skipping.`);
+            }
+            let professor = await ProfHelper.createProfDb(instructor_user!._id, email, faculty, department, course._id)
+            if (!professor) {
+                throw new Error(`Error when creating professor for user ${instructor_user!._id}`)
+            }
+        }
+    } else {
+        res.status(500);
+        throw new Error("File upload unsuccessful.");
+    }
+    res.status(200).json({});
+})

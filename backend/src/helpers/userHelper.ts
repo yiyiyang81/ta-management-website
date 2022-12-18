@@ -1,6 +1,5 @@
 import { Schema } from "mongoose";
 import User, { UserTypes } from "../models/User";
-import { CourseHelper } from "./courseHelper";
 
 export class UserHelper {
 	static async generateUsername(firstName: string, lastName: string, identifier: number): Promise<string> {
@@ -37,10 +36,10 @@ export class UserHelper {
 
 	static async getUserDbByEmail(email: string, includePassword: boolean) {
 		if (includePassword) {
-			return await User.find({ email: email });
+			return (await User.findOne({ email: email }));
 		}
 		else {
-			return await User.find({ email: email }).select("-password");
+			return (await User.findOne({ email: email }).select("-password"));
 		}
 	}
 

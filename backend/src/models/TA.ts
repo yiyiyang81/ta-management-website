@@ -25,7 +25,6 @@ export interface ITA extends mongoose.Document {
 }
 
 const TASchema = new mongoose.Schema({
-
     ta: {
         type: Schema.Types.ObjectId,
         ref: "User"

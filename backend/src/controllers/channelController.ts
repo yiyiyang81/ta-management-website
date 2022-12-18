@@ -8,11 +8,12 @@ import Post from "../models/Post";
 // @Method POST
 export const createChannel = asyncHandler(async (req: Request, res: Response) => {
     const { term_year, course_number } = req.body;
-    const channel = await Channel.findOne({ term_year: term_year, course_number: course_number});
+
+    const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
     if (!channel) {
         const posts = Array();
-        const new_channel = new Channel({ term_year, course_number, posts });
+        const new_channel = new Channel({ term_year: term_year, course_number: course_number, posts: posts });
         new_channel.save();
 
         res.status(201).json({ 
@@ -25,34 +26,20 @@ export const createChannel = asyncHandler(async (req: Request, res: Response) =>
         res.status(200).json({}); // channel already created
     }
 })
-  
-// @Desc Get channel object
-// @Route /api/channel/get
-// @Method GET
-export const getChannel = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number } = req.body;
-    const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
-
-    if (!channel) {
-        res.status(404);
-        throw new Error("Channel not created yet")
-    } else {
-        res.status(200).json({ channel: JSON.stringify(channel) });
-    }
-});
 
 // @Desc Add a post to the course channel
 // @Route /api/channel/post
 // @Method POST
 export const addPost = asyncHandler(async (req: Request, res: Response) => {
-    const { string_channel, author_name, title, content, time_date } = req.body;
-    const channel = await Channel.findOne({ _id: JSON.parse(string_channel)._id });
+    const { term_year, course_number, author_name, title, content, time_date } = req.body;
+
+    const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
     if (!channel) {
         res.status(404);
         throw new Error("Channel not created yet or invalid")
     } else {
-        const post = new Post({ author_name, title, content, time_date });
+        const post = new Post({ author_name: author_name, title: title, content: content, time_date: time_date });
         post.save();
         channel.posts.push(post);
         channel.save();
@@ -70,8 +57,10 @@ export const addPost = asyncHandler(async (req: Request, res: Response) => {
 // @Route /api/channel/posts
 // @Method GET
 export const getPosts = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number } = req.body;
-    const channel = await Channel.findOne({ term_year, course_number });
+    const term_year = req.query.term_year;
+    const course_number = req.query.course_number;
+
+    const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
     if (!channel) {
         res.status(404);

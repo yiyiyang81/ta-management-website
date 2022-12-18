@@ -3,6 +3,7 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import "../../style/userTable.css";
+import { callBackend } from "../../apiConfig";
 
 function AddProfForm({ fetchProfData }) {
   const [show, setShow] = useState(false);
@@ -15,7 +16,7 @@ function AddProfForm({ fetchProfData }) {
     e.preventDefault();
 
     try {
-      const res = await fetch("http://127.0.0.1:3000/api/prof/add", {
+      const res = await callBackend("/api/prof/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

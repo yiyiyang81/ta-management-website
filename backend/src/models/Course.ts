@@ -3,6 +3,7 @@ import { IProfessor } from "./Professor";
 import { ITA } from "./TA";
 import User, { IUser } from './User';
 import TAWishlist, { ITAWishlist } from './TAWishlist';
+import QueryString from 'qs';
 
 const Schema = mongoose.Schema;
 
@@ -34,7 +35,7 @@ export interface ICourse extends mongoose.Document {
     course_TA: [ITA],
     TA_wishlist: [ITA]
     update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
-    get_course_TA_info(course_number: string, term_year: string): Promise<Array<any>>,
+    get_course_TA_info(course_number: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[], term_year: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[]): Promise<Array<any>>,
     get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
     add_wishlist_to_course(course_number: String, term_year: String): Promise<string>,
     add_ta_to_course(ta: ITA): Promise<string>,
@@ -111,7 +112,7 @@ CourseSchema.methods.update_course_quota = function (term_year: string, course_n
     );
 }
 
-CourseSchema.methods.get_course_TA_info = function (course_number: string, term_year: string) {
+CourseSchema.methods.get_course_TA_info = function (course_number: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[], term_year: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[]) {
     return Course.findOne({ course_number: course_number, term_year: term_year }, { "course_TA": 1, "_id": 0 });
 }
 

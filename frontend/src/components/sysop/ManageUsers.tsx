@@ -5,13 +5,14 @@ import UserRow from "./UserRow";
 import ImportForm from "./ImportForm";
 import { Container } from "react-bootstrap";
 import AddUserForm from "./AddUserForm";
+import { callBackend, createBackendUrl } from "../../apiConfig";
 
 const ManageUsers = () => {
   const [users, setUsers] = React.useState<Array<User>>([]);
 
   const fetchUserData = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3000/api/users");
+      const res = await callBackend("/api/users");
       const json = await res.json();
       setUsers(json.users);
     } catch (err) {
@@ -26,7 +27,7 @@ const ManageUsers = () => {
 
   return (
     <div>
-      <ImportForm taskName="Users" uploadUrl="http://127.0.0.1:3000/api/users/upload"/>
+      <ImportForm taskName="Users" uploadUrl={createBackendUrl("/api/users/upload")}/>
       <Container className="mt-3">
         <div className="rowC">
           <h2 style={{ marginBottom: "20px" }}>All Users</h2> 

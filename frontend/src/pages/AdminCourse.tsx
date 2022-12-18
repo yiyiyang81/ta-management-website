@@ -14,6 +14,7 @@ import RoleTabs from "../components/primaryTopbar";
 import "../App.css";
 import "../style/subTopbar.css";
 import { Container, Navbar, Tabs, Tab } from "react-bootstrap";
+import SearchCourse from "../components/orange/SearchCourse";
 
 const AdminCourse: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const AdminCourse: React.FC = () => {
   ]);
 
   const tabsPerProfile = new Map<UserTypes, Array<string>>([
-    [UserTypes.Admin, ["Manage a Course","Course TA History","Import Document","TA Information"]],
+    [UserTypes.Admin, ["Manage a Course", "Course TA History", "Import Document", "TA Information"]],
   ]);
 
   const [currentProfile, setCurrentProfile] = useState<UserTypes>(
@@ -41,6 +42,11 @@ const AdminCourse: React.FC = () => {
     tabsPerProfile.get(currentProfile)!
   );
 
+  const [term_year, setTermYear] = useState("");
+  const [course_number, setCourseNumber] = useState("");
+  const [error, setError] = useState(false);
+
+
   return (
     <div>
       <div className="top-container">
@@ -48,6 +54,15 @@ const AdminCourse: React.FC = () => {
         <Container>
           <RoleTabs></RoleTabs>
         </Container>
+      </div>
+      <div>
+        <SearchCourse
+          term_year={term_year}
+          course_number={course_number}
+          handleTermYear={setTermYear}
+          handleCourseNumber={setCourseNumber}
+          displayError = {error}
+        ></SearchCourse>
       </div>
       <div>
         <Container>
