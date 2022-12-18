@@ -7,6 +7,7 @@ import TAWishlist from "../models/TAWishlist";
 // @Method POST
 export const addTAToWishlist = asyncHandler(async (req: Request, res: Response) => {
     const { next_term_year, course_number, TA_name, TA_email, instructor_name, instructor_email } = req.body;
+
     const tawl = await TAWishlist.findOne({ next_term_year: next_term_year, course_number: course_number, instructor_email: instructor_email });
 
     if(!tawl) {
@@ -49,7 +50,9 @@ export const addTAToWishlist = asyncHandler(async (req: Request, res: Response) 
 // @Route /api/tawishlist/get
 // @Method GET
 export const getInstructorWishlist = asyncHandler(async (req: Request, res: Response) => {
-    const { next_term_year, instructor_email } = req.body;
+    const next_term_year = req.query.next_term_year;
+    const instructor_email = req.query.instructor_email;
+
     const tawl = await TAWishlist.findOne({ next_term_year: next_term_year, instructor_email: instructor_email });
 
     if (!tawl) {
@@ -63,19 +66,25 @@ export const getInstructorWishlist = asyncHandler(async (req: Request, res: Resp
 // @Route /api/tawishlist/ta
 // @Method GET
 export const getCoursesTAWishlisted = asyncHandler(async (req: Request, res: Response) => {
-    const { next_term_year, TA_email } = req.body;
-    const tawls = await TAWishlist.find({ next_term_year: next_term_year});
+    const next_term_year = req.query.next_term_year;
+    let TA_email:string;
 
-    if (!tawls) {
-        res.status(404).json({}); // no wishlist exists for next term year yet
-    } else {
-        let courses = new Array();
-        tawls.forEach(function(wl) {
-            if (wl.TA_emails.includes(TA_email)) {
-                courses.push(wl.course_number);
-            }
-        });
+    if (req.query && req.query.TA_email) { 
+        TA_email = (req.query as any).TA_email; 
 
-        res.status(200).json({ courses: courses});
-    }
+        const tawls = await TAWishlist.find({ next_term_year: next_term_year });
+
+        if (!tawls) {
+            res.status(404).json({}); // no wishlist exists for next term year yet
+        } else {
+                let courses = new Array();
+                tawls.forEach(function(wl) {
+                    if (wl.TA_emails.includes(TA_email)) {
+                        courses.push(wl.course_number);
+                    }
+                });
+
+                res.status(200).json({ courses: courses});
+        }   
+    } 
 });

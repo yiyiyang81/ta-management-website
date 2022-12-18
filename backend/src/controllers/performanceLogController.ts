@@ -6,14 +6,15 @@ import PerformanceLog from "../models/PerformanceLog";
 // @Route /api/performancelog/add
 // @Method POST
 export const addPerformanceLog = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number, TA_name, TA_email, time_date_stamped_comment} = req.body;
+    const { term_year, course_number, TA_name, TA_email, time_date_stamped_comment } = req.body;
+
     const log = await PerformanceLog.findOne({ term_year: term_year, course_number: course_number, TA_email: TA_email });
 
     if (!log) {
         let time_date_stamped_comments = new Array();
         time_date_stamped_comments.push(time_date_stamped_comment);
 
-        const new_log = new PerformanceLog({ term_year, course_number, TA_name, TA_email, time_date_stamped_comments});
+        const new_log = new PerformanceLog({ term_year, course_number, TA_name, TA_email, time_date_stamped_comments });
         await new_log.save();
         res.status(201).json({
             id: new_log._id,
@@ -41,7 +42,10 @@ export const addPerformanceLog = asyncHandler(async (req: Request, res: Response
 // @Route /api/performancelog/coursecomments
 // @Method GET
 export const getCourseComments = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number, TA_email } = req.body;
+    const term_year = req.query.term_year;
+    const course_number = req.query.course_number;
+    const TA_email = req.query.TA_email;
+
     const log = await PerformanceLog.findOne({ term_year: term_year, course_number: course_number, TA_email: TA_email });
 
     if (!log) {
@@ -55,7 +59,8 @@ export const getCourseComments = asyncHandler(async (req: Request, res: Response
 // @Route /api/performancelog/get
 // @Method GET
 export const getPerformanceLogs = asyncHandler(async (req: Request, res: Response) => {
-    const { TA_email } = req.body;
+    const TA_email = req.query.TA_email;
+    
     const log = await PerformanceLog.find({ TA_email: TA_email });
 
     if (!log.length) {
