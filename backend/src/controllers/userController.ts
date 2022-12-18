@@ -54,6 +54,25 @@ export const getUserByEmail = asyncHandler(async (req: Request, res: Response) =
   });
 });
 
+// @Desc Check if email or username is already used by a User
+// @Route /api/users/checkValidAccount/:email/:username
+// @Method GET
+export const checkValidAccount = asyncHandler(async (req: Request, res: Response) => {
+  const email = await User.exists({email: req.params.email})
+  const username = await User.exists({username: req.params.username})
+  let emailExists = false
+  let usernameExists = false
+  if (email) {
+    emailExists = true
+  }
+  if (username) {
+    usernameExists = true
+  }
+  res.status(200).json({
+    emailExists: emailExists,
+    usernameExists: usernameExists
+  });
+});
 
 
 // @Desc Register User
@@ -68,7 +87,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
   const converted_registered_courses = await CourseHelper.getCoursesIdsByCourseNumbers(registered_courses)
   const user = await UserHelper.createUserDb(first_name, last_name, email, student_id, username, password, converted_registered_courses, semester, roles) 
 
-  res.status(201).json({
+  res.status(200).json({
     first_name: user.first_name,
     last_name: user.last_name,
     email: user.email,
