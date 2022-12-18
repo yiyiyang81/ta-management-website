@@ -19,7 +19,9 @@ const RegisterAccount = (props: {
   handleUsername: React.Dispatch<React.SetStateAction<any>>;
   handlePassword: React.Dispatch<React.SetStateAction<any>>;
   handleRegisterCoursesClick: React.Dispatch<React.SetStateAction<any>>;
-  displayError: boolean;
+  displayAccountError: boolean;
+  displayUniqueEmailError: boolean;
+  displayUniqueUsernameError: boolean;
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const handlePasswordCheck = (e: any) => {
@@ -128,9 +130,19 @@ const RegisterAccount = (props: {
         </div>
       </div>
       <div className="bottom-form-container">
-        {props.displayError && (
+        {props.displayAccountError && (
           <div className="mb-2">
             <ErrorBox errorMessage="* Please fill in all the required fields."></ErrorBox>
+          </div>
+        )}
+        {props.displayUniqueEmailError && (
+          <div className="mb-2">
+            <ErrorBox errorMessage="* An account with this email already exists. Please choose a different email."></ErrorBox>
+          </div>
+        )}
+        {props.displayUniqueUsernameError && (
+          <div className="mb-2">
+            <ErrorBox errorMessage="* An account with this username already exists. Please choose a different username."></ErrorBox>
           </div>
         )}
         <div className="register-account-buttons">

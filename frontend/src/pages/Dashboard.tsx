@@ -1,11 +1,8 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../style/subTopbar.css";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
-import ManageProfessors from "../components/sysop/ManageProfessors";
-import ManageCourses from "../components/sysop/ManageCourses";
-import ManageUsers from "../components/sysop/ManageUsers";
 import "../style/dashboard.css";
 import Tile from "../common/Tile";
 import StudentIcon from "../assets/images/student-icon.png";
@@ -14,103 +11,122 @@ import InstructorIcon from "../assets/images/instructor-icon.png";
 import TeachingAssistantAdminIcon from "../assets/images/ta-admin-icon.png";
 import SysopIcon from "../assets/images/sysop-icon.png";
 
-export const Dashboard = () => {
-  const tabsPerProfile = new Map<UserTypes, Array<string>>([
-    [UserTypes.Sysop, ["Professors", "Courses", "Users"]],
-  ]);
-
-  const tabNamesToJSX = new Map<string, JSX.Element>([
-    ["Professors", <ManageProfessors />],
-    ["Courses", <ManageCourses />],
-    ["Users", <ManageUsers />],
-  ]);
-
+export const Dashboard = (props: {
+  setProfile: React.Dispatch<React.SetStateAction<any>>;
+}) => {
   const navigate = useNavigate();
   /**
    * Get list of user's profiles/types
    * @TODO Retrieve this information from the actual global user state
    */
-  const { user, setUser } = useContext(UserContext);
-  const userFirstName = "Marlene";
-  const userLastName = "Liang";
-  // Set a default profile
-  const [currentProfile, setCurrentProfile] = useState<UserTypes>(
-    UserTypes.Sysop
-  );
+  const { user } = useContext(UserContext);
+  const userTypes = user.user_types;
+  console.log(user);
+  const checkType = (type: UserTypes) => {
+    if (userTypes.filter((val) => val === type).length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
 
-  // Set the default array of tabs relative to our default profile
-  const [currentTabs, setCurrentTabs] = useState<Array<string>>(
-    tabsPerProfile.get(currentProfile)!
-  );
+  const isStudent = checkType(UserTypes.Student);
+  const isTA = checkType(UserTypes.TA);
+  const isProfessor = checkType(UserTypes.Professor);
+  const isAdmin = checkType(UserTypes.Admin);
+  const isSysop = checkType(UserTypes.Sysop);
 
-  // On nav bar selection, this function sets the new current profile and associated tabs.
-  function handleNavClick(profile: UserTypes): void {
-    setCurrentProfile(profile);
-    setCurrentTabs(tabsPerProfile.get(profile)!);
-  }
+  useEffect(() => {
+    // if no user redirect to login page
+    if (!user.email) {
+      navigate("/login");
+    }
+  }, [user, navigate]);
 
-  // useEffect(() => {
-  //   // if no user redirect to login page
-  //   if (!user.email) {
-  //     navigate("/login");
-  //   }
-  // }, [user, navigate]);
-
-  // PLACEHOLDER
-  // TODO: MODIFY HANDLE NAV CLICK
   const handleNavigation = (role: string) => {
-    console.log("Logging in as", role)
-    navigate("/course");
-  }
+    switch (role) {
+      case "Student":
+        props.setProfile("Student")
+        navigate("/student");
+        break;
+
+      case "Teaching Assistant":
+        props.setProfile("Teaching Assistant")
+        navigate("/ta");
+        break;
+
+      case "Professor":
+        props.setProfile("Professor")
+        navigate("/professor");
+        break;
+
+      case "TA Administrator":
+      props.setProfile("TA Administrator")
+        navigate("/ta-admin");
+        break;
+
+      case "Sysop":
+        props.setProfile("Sysop")
+        navigate("/sysop");
+        break;
+    }
+  };
 
   // Render nav dropdown options and nav tabs based on state above
   return (
     <>
       <div className="dashboard-container">
         <div className="d-flex flex-column align-items-center pt-5">
-          <h1>
-            Welcome to your dashboard, {userFirstName} {userLastName}
+          <h1 className="text-center">
+            Welcome to your dashboard, {user.first_name} {user.last_name}
           </h1>
           <h4>Continue viewing as:</h4>
-          <div className="top-tiles-container d-md-flex justify-content-evenly mb-md-4 mt-3">
-            <Tile
-              image={StudentIcon}
-              value="Student"
-              width="15rem"
-              margin="0rem 0rem 0.5rem 0rem"
-              onClick={() => handleNavigation("Student")}
-            ></Tile>
-            <Tile
-              image={TeachingAssitantIcon}
-              value="Teaching Assistant"
-              width="15rem"
-              margin="0rem 0rem 0.5rem 0rem"
-              onClick={() => handleNavigation("Teaching Assistant")}
-            ></Tile>
-            <Tile
-              image={InstructorIcon}
-              value="Instructor"
-              width="15rem"
-              margin="0rem 0rem 0.5rem 0rem"
-              onClick={() => handleNavigation("Instructor")}
-            ></Tile>
-          </div>
-          <div className="bottom-tiles-container d-md-flex justify-content-evenly">
-            <Tile
-              image={TeachingAssistantAdminIcon}
-              value="TA Administrator"
-              width="15rem"
-              margin="0rem 0rem 0.5rem 0rem"
-              onClick={() => handleNavigation("TA Admin")}
-
-            ></Tile>
-            <Tile
-              image={SysopIcon}
-              value="Sysop"
-              width="15rem"
-              margin="0rem 0rem 1rem 0rem"
-              onClick={() => handleNavigation("Sysop")}
-            ></Tile>
+          <div className="d-flex flex-wrap align-items-center justify-content-center">
+            {isStudent && (
+              <Tile
+                image={StudentIcon}
+                value="Student"
+                width="15rem"
+                margin="0.5rem"
+                onClick={() => handleNavigation("Student")}
+              ></Tile>
+            )}
+            {isTA && (
+              <Tile
+                image={TeachingAssitantIcon}
+                value="Teaching Assistant"
+                width="15rem"
+                margin="0.5rem"
+                onClick={() => handleNavigation("Teaching Assistant")}
+              ></Tile>
+            )}
+            {isProfessor && (
+              <Tile
+                image={InstructorIcon}
+                value="Professor"
+                width="15rem"
+                margin="0.5rem"
+                onClick={() => handleNavigation("Professor")}
+              ></Tile>
+            )}
+            {isAdmin && (
+              <Tile
+                image={TeachingAssistantAdminIcon}
+                value="TA Administrator"
+                width="15rem"
+                margin="0.5rem"
+                onClick={() => handleNavigation("TA Administrator")}
+              ></Tile>
+            )}
+            {isSysop && (
+              <Tile
+                image={SysopIcon}
+                value="Sysop"
+                width="15rem"
+                margin="0.5rem"
+                onClick={() => handleNavigation("Sysop")}
+              ></Tile>
+            )}
           </div>
         </div>
       </div>
