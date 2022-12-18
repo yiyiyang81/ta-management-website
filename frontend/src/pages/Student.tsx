@@ -1,18 +1,11 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
+import { Container, Navbar, Tab, Tabs } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import LogoutIcon from "@mui/icons-material/Logout";
-import combinedLogos from "../assets/images/combined-logos.png";
-import socsLogo from "../assets/images/socs-logo.png";
-import mcgillLogo from "../assets/images/mcgill-logo.png";
-import { UserContext } from "../App";
-import { UserTypes } from "../enums/UserTypes";
-import ManageCourses from "../components/sysop/ManageCourses";
 import RoleTabs from "../components/RoleTabs";
-import "../App.css";
-import "../style/subTopbar.css";
-import { Container, Navbar, Tabs, Tab } from "react-bootstrap";
+import ManageCourses from "../components/sysop/ManageCourses";
+import { UserTypes } from "../enums/UserTypes";
 
-const AdminCourse: React.FC = () => {
+const Student = () => {
   const navigate = useNavigate();
   function handleLogout(): void {
     navigate("/logout");
@@ -34,9 +27,8 @@ const AdminCourse: React.FC = () => {
   const [currentTabs, setCurrentTabs] = useState<Array<string>>(
     tabsPerProfile.get(currentProfile)!
   );
-
   return (
-    <div>
+    <>
       <div className="top-container">
         <Navbar></Navbar>
         <Container>
@@ -57,8 +49,8 @@ const AdminCourse: React.FC = () => {
           ))}
         </Tabs>
       </Container>
-    </div>
+    </>
   );
 };
 
-export default AdminCourse;
+export default Student;
