@@ -51,7 +51,7 @@ const Registration: React.FC = () => {
   enum DisplayedRoleEnums {
     "Student" = "stud",
     "Teaching Assistant" = "ta",
-    "Professor" = "professor",
+    "Professor" = "prof",
     "TA Administrator" = "admin",
     "System Operator" = "sysop",
   }
@@ -59,7 +59,7 @@ const Registration: React.FC = () => {
   const availableRoles = [
     "Student",
     "Teaching Assistant",
-    "Instructor",
+    "Professor",
     "TA Administrator",
     "Sysop",
   ];
