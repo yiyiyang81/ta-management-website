@@ -68,7 +68,7 @@ export const addProf = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const prof = await ProfHelper.createProfDb(instructor._id, email, faculty, department, course._id)
-    res.status(201).json({
+    res.status(200).json({
         id: prof._id,
         instructor: prof.professor,
         faculty: prof.faculty,

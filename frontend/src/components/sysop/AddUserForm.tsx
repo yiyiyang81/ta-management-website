@@ -26,10 +26,15 @@ function AddUserForm({ fetchUserData }) {
         },
         body: JSON.stringify({
           email: tempEmail,
-          firstName: tempFirstname,
-          lastName: tempLastname,
+          first_name: tempFirstname,
+          last_name: tempLastname,
           password: tempPassword,
-          userType: tempUserType,
+          registered_courses: [],
+          roles: tempUserType,
+          student_id: "",
+          term: "",
+          username: "",
+          year: ""
         }),
       });
 
