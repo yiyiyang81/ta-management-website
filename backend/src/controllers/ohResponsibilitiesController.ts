@@ -50,7 +50,9 @@ export const setOHResponsibilities = asyncHandler(async (req: Request, res: Resp
 // @Route /api/ohresps/oh
 // @Method GET
 export const getCourseOH = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, email } = req.body;
+    const course_number = req.query.course_number;
+    const email = req.query.email;
+
     const oh = await OHResponsibilities.findOne({ course_number: course_number, email: email });
 
     if (!oh) {
@@ -64,7 +66,7 @@ export const getCourseOH = asyncHandler(async (req: Request, res: Response) => {
 // @Route /api/ohresps/allohs
 // @Method GET
 export const getAllOHs = asyncHandler(async (req: Request, res: Response) => {
-    const { email } = req.body;
+    const email = req.query.email;
     const ohs = await OHResponsibilities.find({ email: email });
 
     if (!ohs) {
@@ -89,7 +91,9 @@ export const getAllOHs = asyncHandler(async (req: Request, res: Response) => {
 // @Route /api/ohresps/resps
 // @Method GET
 export const getCourseResponsibilities = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, email } = req.body;
+    const course_number = req.query.course_number;
+    const email = req.query.email;
+
     const ohresps = await OHResponsibilities.findOne({ course_number: course_number, email: email });
 
     if (!ohresps) {
