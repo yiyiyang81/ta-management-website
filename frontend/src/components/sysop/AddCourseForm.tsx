@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import "../../style/userTable.css";
+import { callBackend } from "../../apiConfig";
 
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
 const AddCourseForm = ({ fetchCourseData }) => {
@@ -15,7 +16,7 @@ const AddCourseForm = ({ fetchCourseData }) => {
 
   const handleAddCourse = async (e) => {
     try {
-      const res = await fetch("http://127.0.0.1:3000/api/course/add", {
+      const res = await callBackend("/api/course/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
