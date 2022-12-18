@@ -5,17 +5,18 @@ import "../../style/userTable.css";
 import { Course } from "../../classes/Course";
 import ImportForm from "./ImportForm";
 import { Container } from "react-bootstrap";
+import { callBackend, createBackendUrl } from "../../apiConfig";
 
 const ManageCourses = () => {
   const [courses, setCourses] = useState<Array<Course>>([]);
 
   const fetchCourseData = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3000/api/course");
+      const res = await callBackend("/api/course");
       const data = await res.json();
       const courseObject = [];
       for (const d of data.courses) {
-        const instructorRes = await fetch("http://127.0.0.1:3000/api/users/" + d.courseInstructor);
+        const instructorRes = await callBackend("/api/users/" + d.courseInstructor);
         let item = {
           courseNumber: d.courseNumber,
           courseName: d.courseName,
@@ -43,7 +44,7 @@ const ManageCourses = () => {
 
   return (
     <div>
-      <ImportForm taskName="Courses" uploadUrl="http://127.0.0.1:3000/api/course/upload"/>
+      <ImportForm taskName="Courses" uploadUrl={createBackendUrl("/api/course/upload")}/>
       <Container className="mt-3">
         <div className="rowC">
           <h2 style={{ marginBottom: "20px" }}>All Courses</h2> 

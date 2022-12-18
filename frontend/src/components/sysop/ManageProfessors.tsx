@@ -5,17 +5,18 @@ import "../../style/userTable.css";
 import { Professor } from "../../classes/Professor";
 import ImportForm from "./ImportForm";
 import { Container } from "react-bootstrap";
+import { callBackend, createBackendUrl } from "../../apiConfig";
 
 const ManageProfessors = () => {
   const [profs, setProfs] = React.useState<Array<Professor>>([]);
 
   const fetchProfData = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:3000/api/prof");
+      const res = await callBackend("/api/prof");
       const data = await res.json();
       const profObject = [];
       for (const d of data.profs) {
-        const instructorRes = await fetch("http://127.0.0.1:3000/api/users/" + d.professor);
+        const instructorRes = await callBackend("/api/users/" + d.professor);
         let item = {
           faculty: d.faculty,
           department: d.department,
@@ -45,7 +46,7 @@ const ManageProfessors = () => {
 
   return (
     <div>
-      <ImportForm taskName="Professors" uploadUrl="http://127.0.0.1:3000/api/prof/upload"/>
+      <ImportForm taskName="Professors" uploadUrl={createBackendUrl("/api/prof/upload")}/>
       <Container className="mt-3">
         <div className="rowC">
           <h2 style={{ marginBottom: "20px" }}>All Professors</h2> 

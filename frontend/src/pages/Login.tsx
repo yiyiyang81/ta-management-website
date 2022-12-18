@@ -6,6 +6,7 @@ import { UserContext } from "../App";
 import "../App.css";
 import "../style/login.css";
 import Button from "../common/Button";
+import { callBackend } from "../apiConfig";
 
 const Login: React.FC = () => {
   // Load global state
@@ -32,7 +33,7 @@ const Login: React.FC = () => {
     try {
       // Make login API call
       // CAUTION: Do not hardcode the URLs, instead use routers
-      const res = await fetch("http://127.0.0.1:3000/api/users/login", {
+      const res = await callBackend("/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
