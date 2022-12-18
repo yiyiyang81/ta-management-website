@@ -36,10 +36,10 @@ export class UserHelper {
 
 	static async getUserDbByEmail(email: string, includePassword: boolean) {
 		if (includePassword) {
-			return await User.find({ email: email });
+			return (await User.findOne({ email: email }));
 		}
 		else {
-			return await User.find({ email: email }).select("-password");
+			return (await User.findOne({ email: email }).select("-password"));
 		}
 	}
 

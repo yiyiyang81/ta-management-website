@@ -1,0 +1,3 @@
+Fall 2022,COMP307,Intro to Website Design,Joseph Vybihal
+Fall 2022,COMP462,Computational Biology,Mathieu Blanchette
+Winter 2023,COMP598,Probabilistic Programming,Jane Doe
