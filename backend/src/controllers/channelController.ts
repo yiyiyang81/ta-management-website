@@ -35,8 +35,6 @@ export const addPost = asyncHandler(async (req: Request, res: Response) => {
 
     const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
-    //const channel = await Channel.findOne({ _id: JSON.parse(string_channel)._id });
-
     if (!channel) {
         res.status(404);
         throw new Error("Channel not created yet or invalid")
