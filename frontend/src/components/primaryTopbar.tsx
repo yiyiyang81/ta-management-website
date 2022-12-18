@@ -12,17 +12,18 @@ function RoleTabs(props: any) {
         let route;
         // TODO: change keys
         switch (eventKey) {
-            case 1:
-                route = 'link1';
+            case "0":
+                route = '/dashboard';
                 break;
-            case 2:
-                route = 'link2';
+            case "1":
+                route = '/dashboard/tamanagement';
                 break;
-            case 3:
-                route = 'link3';
+            case "2":
+                route = '/dashboard';
                 break;
-            default:
-                route = '/';
+            case "3":
+                route = '/dashboard';
+                break;
         }
         navigate(route)
     }
@@ -35,7 +36,7 @@ function RoleTabs(props: any) {
         >
             <Tab eventKey={0} title="Dashboard" />
             <Tab eventKey={1} title="TA Management" />
-            <Tab eventKey={2} title="TA Administration" disabled />
+            <Tab eventKey={2} title="TA Administration" />
             <Tab eventKey={3} title="Rate a TA" />
         </Tabs>
     );

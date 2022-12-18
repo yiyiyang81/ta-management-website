@@ -7,6 +7,7 @@ import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration"
 import AdminCourse from "./pages/AdminCourse";
 import Header from "./components/Header";
+import TAManagement from "./pages/TAManagement";
 
 interface UserProviderProps {
   user: User;
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/logout" element={<LoggedOut />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/course" element={<AdminCourse />} />
+          <Route path="/dashboard/tamanagement" element={<TAManagement />} />
         </Routes>
       </Router>
     </UserContext.Provider>
