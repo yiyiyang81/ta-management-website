@@ -22,7 +22,7 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
-// @Desc Get all Courses
+// @Desc Get Course by term year and email
 // @Route /api/course/:id
 // @Method GET
 export const getCourse = asyncHandler(async (req: Request, res: Response) => {
@@ -259,4 +259,20 @@ export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Respons
     course.delete_ta_from_course(ta);
     res.status(200).json({}
     );
+});
+
+// @Desc get the courses from all history
+// @Route /api/course/:course_number/
+// @Method GET
+export const getCoursesByCourseNumber = asyncHandler(async (req: Request, res: Response) => {
+    const course_number = req.params.course_number!;
+
+    let course = await Course.find({ course_number: course_number});
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
 });

@@ -1,18 +1,14 @@
 import React from "react";
 import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
-import LabeledInput from "../../common/LabeledInput";
 import Select from "../../common/Select";
 
-const SearchCourse = (props: {
-    termYear: string;
+const SearchCourseSimple = (props: {
     courseNumber: string;
-    handleTermYear: React.Dispatch<React.SetStateAction<any>>;
     handleCourseNumber: React.Dispatch<React.SetStateAction<any>>;
     handleCourseSearchClick: React.Dispatch<React.SetStateAction<any>>;
     displayError: boolean;
 }) => {
-    const allTermYears = ["Fall2022", "Fall2023", "Winter2022", "Winter2023"];
     const allCourses = [
         "COMP307",
         "COMP310",
@@ -31,16 +27,6 @@ const SearchCourse = (props: {
                 <h4>Manage TA of a course by first selecting a course number and a term year.  </h4>
                 <div>
                     <div>
-                        <Select
-                            label="Term Year"
-                            required={false}
-                            name="term_year"
-                            id="term_year"
-                            options={allTermYears}
-                            value={props.termYear}
-                            handleChange={props.handleTermYear}
-                        ></Select>
-
                         <Select
                             label="Course Number"
                             required={false}
@@ -72,4 +58,4 @@ const SearchCourse = (props: {
     );
 };
 
-export default SearchCourse;
+export default SearchCourseSimple;

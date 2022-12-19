@@ -2,7 +2,8 @@ import express from 'express';
 import {
     getAllCourses, getCourse, addCourse, registerCourseFromFile,
     getCourseTA, getCoursesByInstructorEmail,
-    getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse
+    getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse,
+    getCoursesByCourseNumber
 } from '../controllers/courseController';
 import multer from "multer";
 const upload = multer();
@@ -18,5 +19,6 @@ router.route("/ta/:id").get(getCoursesByTaEmail);
 router.route("/:id/ta/:id").post(addTaToCourse);
 router.route("/:id/ta/:id").delete(deleteTaFromCourse);
 router.route("/:term_year/:course_number").get(getCourse);
+router.route("/:course_number").get(getCoursesByCourseNumber)
 
 export default router;

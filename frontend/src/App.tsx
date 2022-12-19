@@ -5,7 +5,7 @@ import Login from "./pages/Login";
 import { User, emptyUser } from "./classes/User";
 import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration"
-import AdminCourseTa from "./pages/AdminCourseTa";
+// import AdminCourseTa from "./pages/AdminCourseTa";
 import Header from "./components/Header";
 import Admin from "./pages/Admin";
 import RateTA from "./pages/RateTA";

@@ -126,6 +126,8 @@ const ManageCourseTa = () => {
 
   const checkValidCourse = async () => {
     try {
+      console.log(termYear)
+      console.log("courseNumber",courseNumber)
       const res = await callBackend(`/api/course/${termYear}/${courseNumber}`, {
         method: "GET",
         headers: {
