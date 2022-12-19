@@ -12,23 +12,28 @@
 		justify-content      : space-between;
 		align-items          : center;
 		min-height           : 110vh;
+		z-index              : -2;
 	}
+}
 
+.left-background {
+	background-color: white;
+	height          : 100vh;
 }
 
 .registration-form-container {
-	height: 100%;
-	width           : 80%;
-	background-color: #FFFFFF;
-	display         : flex;
-	flex-direction  : column;
-	padding-top     : 4rem;
-	padding-bottom  : 4rem;
-	max-width       : 50rem;
-	border-top-right-radius: 5px;
+	height                    : 100%;
+	width                     : 80%;
+	background-color          : #FFFFFF;
+	display                   : flex;
+	flex-direction            : column;
+	padding-top               : 4rem;
+	padding-bottom            : 4rem;
+	max-width                 : 50rem;
+	z-index                   : 1;
+	border-top-right-radius   : 5px;
 	border-bottom-right-radius: 5px;
 }
-
 
 .registration-form-container form {
 	padding: 0rem 3rem;
