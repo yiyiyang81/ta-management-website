@@ -101,8 +101,8 @@ const Login: React.FC = () => {
           </form>
         </div>
       </div>
-      <div className="registration-container">
-        <div className="registration">
+      <div className="right-container">
+        <div className="right-content">
           <div className="mb-5">
             <h1 className="mb-4">Welcome to myTAs! </h1>
             The teaching assistant management website designed to enhance your
