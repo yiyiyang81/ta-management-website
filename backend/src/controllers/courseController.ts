@@ -236,7 +236,11 @@ export const addTaToCourse = asyncHandler(async (req: Request, res: Response) =>
 // @Route /api/course/:id/ta/:id
 // @Method DELETE
 export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, term_year, email } = req.body;
+    // const { course_number, term_year, email } = req.body;
+    const course_number = req.params.course_number!;
+    const term_year = req.params.term_year!;
+    const email = req.params.email!;
+
 
     let ta = await TA.findOne({ email: email });
 

@@ -25,9 +25,9 @@ const SearchCourse = (props: {
 
     return (
         <>
-            <h1 className="">Manage a Course </h1>
+            <h1 className="">Search for a Course </h1>
             <div className="mb-3">
-                <h4>Manage a course by first selecting a course number and a term year.  </h4>
+                <h4>Manage TA of a course by first selecting a course number and a term year.  </h4>
                 <div>
                     <div>
                         <Select

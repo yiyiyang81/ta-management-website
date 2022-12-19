@@ -47,27 +47,27 @@ export const Dashboard = (props: {
     switch (role) {
       case "Student":
         props.setProfile("Student")
-        navigate("/student");
+        navigate("/dashboard/student");
         break;
 
       case "Teaching Assistant":
         props.setProfile("Teaching Assistant")
-        navigate("/ta");
+        navigate("/dashboard/ta");
         break;
 
       case "Professor":
         props.setProfile("Professor")
-        navigate("/professor");
+        navigate("/dashboard/professor");
         break;
 
       case "TA Administrator":
       props.setProfile("TA Administrator")
-        navigate("/ta-admin");
+        navigate("/dashboard/ta-admin");
         break;
 
       case "Sysop":
         props.setProfile("Sysop")
-        navigate("/sysop");
+        navigate("/dashboard/sysop");
         break;
     }
   };

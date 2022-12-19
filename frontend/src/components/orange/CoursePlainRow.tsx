@@ -2,18 +2,12 @@ import React from "react";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { Course } from "../../classes/Course";
 
-const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseData: Function }) => {
-  const handleDeleteCourse = () => {
-    console.log("Delete course");
-  };
+const CoursePlainRow = ({ course, fetchCourseData }: { course: Course; fetchCourseData: Function }) => {
   
-  console.log(course)
   return (
     <tr className="profTable">
       <td className="column0">
-        <button className="btn btn-secondary" onClick={handleDeleteCourse}>
-          <RemoveIcon />
-        </button>
+
       </td>
       <td>{course.course_number}</td>
       <td>{course.course_name}</td>
@@ -28,4 +22,4 @@ const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseDat
   );
 };
 
-export default CourseRow;
+export default CoursePlainRow;
