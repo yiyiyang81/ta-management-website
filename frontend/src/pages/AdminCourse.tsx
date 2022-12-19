@@ -7,7 +7,7 @@ import mcgillLogo from "../assets/images/mcgill-logo.png";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
 import ManageCourses from "../components/sysop/ManageCourses";
-import RoleTabs from "../components/RoleTabs";
+import TopTabs from "../components/TopTabs";
 import "../App.css";
 import "../style/subTopbar.css";
 import { Container, Navbar, Tabs, Tab } from "react-bootstrap";
@@ -37,12 +37,7 @@ const AdminCourse: React.FC = () => {
 
   return (
     <div>
-      <div className="top-container">
-        <Navbar></Navbar>
-        <Container>
-          <RoleTabs></RoleTabs>
-        </Container>
-      </div>
+      <TopTabs navArray={[]}></TopTabs>
       <Container>
         <Tabs
           defaultActiveKey="0"

@@ -4,6 +4,7 @@ const RateTA=()=>
 {
  return (
 	<>
+	<div>Hello im rateTA</div>
 	</>
  );
 }
