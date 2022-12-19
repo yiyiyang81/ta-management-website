@@ -4,7 +4,6 @@ import { Container } from "react-bootstrap";
 import { Post } from "../../classes/Post";
 
 const UseChannel = (props: {
-    termYear: string;
     courseName: string;
 }) => {
 
@@ -12,7 +11,7 @@ const UseChannel = (props: {
 
     const fetchPostData = async () => {
         try {
-            const courseData = "term_year=" + props.termYear +  "&course_number=" + props.courseName.split(" ")[0].toString();
+            const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
             const res = await fetch("http://127.0.0.1:3000/api/channel/allposts?" + courseData);
             const data = await res.json();
             const coursePosts = new Array();

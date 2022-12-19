@@ -4,12 +4,14 @@ import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
 import Button from "../../common/Button";
 import { createBackendUrl, callBackend } from "../../apiConfig";
+import ErrorBox from "../../common/ErrorBox";
 
 const AddTAToWishlist = (props: {
     handleTA: React.Dispatch<React.SetStateAction<any>>;
     handleAddTA: React.Dispatch<React.SetStateAction<any>>;
     handleTerm: React.Dispatch<React.SetStateAction<any>>;
     handleYear: React.Dispatch<React.SetStateAction<any>>;
+    missingInfoError: boolean;
     courseName: string;
     wishedTA: string
     wishedTerm: string,
@@ -19,7 +21,7 @@ const AddTAToWishlist = (props: {
     const [allTAs, setAllTAs] = React.useState<Array<String>>([]);
 
     const allTerms = ["Winter", "Fall", "Summer"]
-    const allYears = ["2022", "2023"] // TODO: get years
+    const allYears = [new Date().getFullYear().toString(), (new Date().getFullYear() + 1).toString()]
 
     const fetchTAData = async () => {
         try {
@@ -53,8 +55,8 @@ const AddTAToWishlist = (props: {
         <div className="form-horizontal-container">
           <div className="form-horizontal-subcontainer">
             <Select
-              label="Term"
-              required={false}
+              label="Next Term"
+              required={true}
               name="term"
               id="term"
               options={allTerms}
@@ -65,7 +67,7 @@ const AddTAToWishlist = (props: {
           <div className="form-horizontal-subcontainer">
             <Select
               label="Year"
-              required={false}
+              required={true}
               name="year"
               id="year"
               options={allYears}
@@ -76,13 +78,19 @@ const AddTAToWishlist = (props: {
         </div>
             <Select
                 label="Teaching Assistant"
-                required={false}
+                required={true}
                 name="wishedTA"
                 id="wishedTA"
                 options={allTAs}
                 value={props.wishedTA}
                 handleChange={props.handleTA}
             ></Select>
+
+            {props.missingInfoError && (
+              <div className="mb-2">
+                <ErrorBox errorMessage="* Please select an item for all above fields."></ErrorBox>
+              </div>
+            )}
 
             <form onSubmit={props.handleAddTA}>
               <Button

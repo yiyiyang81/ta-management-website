@@ -42,7 +42,7 @@ const ChooseCourse = (props: {
         Access TA management features by first selecting a course.
         <div style={{width: "40%"}}>
             <Select
-                label=""
+                label="Course"
                 required={true}
                 name="course"
                 id="course"
