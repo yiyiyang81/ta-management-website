@@ -1,6 +1,5 @@
 import React from "react";
 import Button from "../../common/Button";
-import LabeledInput from "../../common/LabeledInput";
 import Select from "../../common/Select";
 
 const RegisterCourses = (props: {
@@ -13,6 +12,7 @@ const RegisterCourses = (props: {
   year: string;
   registeredCourses: string[];
 }) => {
+  // TODO: get all terms, years, and courses
   const allTerms = ["Fall", "Winter"];
   const allYears = ["2022", "2023"];
   const allCourses = [

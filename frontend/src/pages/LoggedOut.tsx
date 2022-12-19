@@ -10,8 +10,8 @@ const LoggedOut: React.FC = () => {
       <form>
         <div className="form-inner">
           <img className="logo" src={logo} alt="mcgill-logo" />
-          <h2 style={{ marginTop: "40px", marginBottom: "5px" }}>Sign out</h2>
-          <p>You have successfully signed out.</p>
+          <h1 style={{ marginTop: "40px", marginBottom: "5px" }}>Sign out</h1>
+          <h4>You have successfully signed out.</h4>
           <p className="bottom">
             <Link className="links" to="/login">
               Return to Login
