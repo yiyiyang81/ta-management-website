@@ -77,7 +77,7 @@ const Header = (props: {profile: String}) => {
               <img className="logo" src={mcgillLogo} alt="mcgill-logo" />
               <div className="button-container mt-2">
                 <div className="role-text text-center mb-2">
-                  Viewing as <span className="header-user-role">{props.profile}</span>
+                  Viewing <span className="header-user-role">{props.profile}</span>
                 </div>
                 <div className="button-container">
                   <Button
@@ -99,7 +99,7 @@ const Header = (props: {profile: String}) => {
               />
               <div className="right-subcontainer d-flex align-items-center justify-content-center">
                 <div className="role-text text-center">
-                  Viewing as <span className="header-user-role">{props.profile}</span>
+                  Viewing <span className="header-user-role">{props.profile}</span>
                 </div>
                 <div className="button-container">
                   <Button

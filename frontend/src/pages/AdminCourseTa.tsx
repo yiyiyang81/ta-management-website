@@ -40,7 +40,7 @@ const AdminCourseTa: React.FC = () => {
 
   return (
     <div>
-      <TopTabs navArray={[]}></TopTabs>
+      {/* <TopTabs navArray={[]}></TopTabs> */}
       <Container>
         <Tabs
           defaultActiveKey="0"

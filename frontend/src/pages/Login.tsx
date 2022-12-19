@@ -10,7 +10,7 @@ import { callBackend } from "../apiConfig";
 
 const Login: React.FC = () => {
   // Load global state
-  const { user, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
 
   // Declare hooks
   const [email, setEmail] = useState<string>("");

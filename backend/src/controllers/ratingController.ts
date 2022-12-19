@@ -63,6 +63,7 @@ export const addRating = asyncHandler(async (req: Request, res: Response) => {
 	const { course_number, email, rating_score, comment } = req.body
 	const courseId = await CourseHelper.getCourseIdByCourseNumber(course_number)
 	const teachingAssistantId = await TAHelper.getTAIdByEmail(email)
+	
 	const rating = await RatingHelper.createRatingsDb(course_number, courseId, email, teachingAssistantId, rating_score, comment)
 	res.status(200).json({
 		rating
