@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import AddCourseForm from "../sysop/AddCourseForm";
+import AddTaToCourse from "./AddTaToCourse";
 import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
 import { Course } from "../../classes/Course";
@@ -63,46 +63,58 @@ const ManageCourseTa = () => {
   };
 
 
-
-
   useEffect(() => {
-    // fetchCurrentTAData();
     const fetchCurrentTAData = async () => {
       try {
-        // console.log("HEYLOO", courseInfo);
         if (courseInfo) {
           const course_query = "term_year=" + courseInfo.term_year + "&course_number=" + courseInfo.course_number;
           const course_res = await callBackend(`/api/course/1/ta?` + course_query);
           const data = await course_res.json();
-          console.log("type", typeof (data.course_TA))
+          let performance_logs = [];
+          let courses_assigned: string[] = [];
+          let average_rating = 0;
+          let rating_comments = [];
+
           for (let ta of data.course_TA) {
-            console.log("ta goes here", ta)
-            console.log("the email goes here haha", ta.email)
-
-            const performance_logs_res = await callBackend(`/api/performancelog/get?TA_email=` + ta.email);
-            const all_logs = await performance_logs_res.json();
-            let performance_logs = [];
-            for (let log of all_logs.log) {
-              performance_logs = performance_logs.concat(log.time_date_stamped_comments);
+            try {
+              const performance_logs_res = await callBackend(`/api/performancelog/get?TA_email=` + ta.email);
+              const all_logs = await performance_logs_res.json();
+              for (let log of all_logs.log) {
+                performance_logs = performance_logs.concat(log.time_date_stamped_comments);
+              }
+              ta["performance_logs"] = performance_logs.join(", ");
+            }
+            catch (e) {
+              performance_logs = ["Not Available"];
             }
 
-            const courses_assigned_res = await callBackend(`/api/course/ta/1?email=` + ta.email);
-            const all_courses_assigned = await courses_assigned_res.json();
-            let courses_assigned = [];
-            for (let course of all_courses_assigned) {
-              courses_assigned = courses_assigned.concat(course.time_date_stamped_comments);
+            try {
+              const courses_assigned_res = await callBackend(`/api/course/ta/1?email=` + ta.email);
+              const all_courses_assigned = await courses_assigned_res.json();
+              for (let course of all_courses_assigned) {
+                let course_info = course.course_number.concat(": ", course.term_year);
+                courses_assigned.push(course_info);
+              }
+              ta["courses_assigned"] = courses_assigned.join(", ");
+            } catch (e) {
+              courses_assigned = ["Not Available"];
             }
-            console.log(all_courses_assigned)
 
             const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
             const all_ratings = await ratings_res.json();
-            let average_rating;
-            let rating_comments = [];
-
-            ta["performance_logs"] = performance_logs.join(", ");
-            ta["courses_assigned"] = courses_assigned.join(", ");
+            for (let rating of all_ratings.ratings) {
+              average_rating = average_rating + rating.rating_score;
+              rating_comments.push(rating.comment);
+            }
+            if (all_ratings.ratings.length === 0) {
+              ta["average_rating"] = -1;
+              ta["rating_comments"] = ["Not Available"];
+            }
+            else {
+              ta["average_rating"] = average_rating / all_ratings.ratings.length;
+              ta["rating_comments"] = rating_comments.join(", ");
+            }
           }
-          // console.log(data.course_TA);
           setTas(data.course_TA);
         }
       } catch (err) {
@@ -114,7 +126,6 @@ const ManageCourseTa = () => {
 
   const checkValidCourse = async () => {
     try {
-      // const res = await callBackend(`/api/course/term_year=${term_year}&course_number=${course_number}`, {
       const res = await callBackend(`/api/course/${termYear}/${courseNumber}`, {
         method: "GET",
         headers: {
@@ -130,7 +141,6 @@ const ManageCourseTa = () => {
 
   const handleCourseSearchClick = async () => {
 
-    // if (isValidFields) {
     setDisplayError(false)
     const course = await checkValidCourse();
     if (course !== null && course !== undefined) {
@@ -201,6 +211,10 @@ const ManageCourseTa = () => {
           <Container className="mt-3">
             <div className="rowC">
               <h2 style={{ marginBottom: "20px" }}>Current TA</h2>
+              <AddTaToCourse
+                courseNumber={courseInfo.course_number}
+                termYear={courseInfo.term_year}
+              />
             </div>
             <div id="profTable">
               <table className="table table-striped">
