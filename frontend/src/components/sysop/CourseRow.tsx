@@ -6,19 +6,20 @@ const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseDat
   const handleDeleteCourse = () => {
     console.log("Delete course");
   };
-
+  
+  console.log(course)
   return (
     <tr className="profTable">
       <td className="column0">
-        <button className="btn btn-secondary" onClick={handleDeleteCourse}>
+        {/* <button className="btn btn-secondary" onClick={handleDeleteCourse}>
           <RemoveIcon />
-        </button>
+        </button> */}
       </td>
       <td>{course.course_number}</td>
       <td>{course.course_name}</td>
       <td>{course.course_type}</td>
       <td>{course.course_instructors}</td>
-      <td>{course.course_enrolllment_num}</td>
+      <td>{course.course_enrollment_num}</td>
       <td>{course.TA_quota}</td>
       <td>{course.is_need_fix}</td>
       {/* TODO: replace with meaningful URL */}

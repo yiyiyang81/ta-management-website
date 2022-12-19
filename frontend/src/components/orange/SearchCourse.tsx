@@ -1,13 +1,15 @@
 import React from "react";
 import Button from "../../common/Button";
+import ErrorBox from "../../common/ErrorBox";
 import LabeledInput from "../../common/LabeledInput";
 import Select from "../../common/Select";
 
 const SearchCourse = (props: {
-    term_year: string;
-    course_number: string;
+    termYear: string;
+    courseNumber: string;
     handleTermYear: React.Dispatch<React.SetStateAction<any>>;
     handleCourseNumber: React.Dispatch<React.SetStateAction<any>>;
+    handleCourseSearchClick: React.Dispatch<React.SetStateAction<any>>;
     displayError: boolean;
 }) => {
     const allTermYears = ["Fall2022", "Fall2023", "Winter2022", "Winter2023"];
@@ -30,36 +32,37 @@ const SearchCourse = (props: {
                     <div>
                         <Select
                             label="Term Year"
-                            required={true}
+                            required={false}
                             name="term_year"
                             id="term_year"
                             options={allTermYears}
-                            value={props.term_year}
+                            value={props.termYear}
                             handleChange={props.handleTermYear}
-                            isMultiple={false}
                         ></Select>
 
                         <Select
                             label="Course Number"
-                            required={true}
+                            required={false}
                             name="course_number"
                             id="course_number"
                             options={allCourses}
-                            value={props.course_number}
+                            value={props.courseNumber}
                             handleChange={props.handleCourseNumber}
-                            isMultiple={false}
                         ></Select>
                     </div>
                 </div>
-
-
                 <div>
+                    {props.displayError && (
+                        <div>
+                            <ErrorBox errorMessage="Course does not exist!"></ErrorBox>
+                        </div>
+                    )}
                     <div>
                         <Button
                             width="15rem"
                             type="primary"
                             value="Search for Course"
-                        //   onClick={props.handleCourseSearchClick}
+                            onClick={props.handleCourseSearchClick}
                         ></Button>
                     </div>
                 </div>

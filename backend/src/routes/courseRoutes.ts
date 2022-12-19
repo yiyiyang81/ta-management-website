@@ -1,6 +1,6 @@
 import express from 'express';
 import {
-    getAllCourses, addCourse, registerCourseFromFile,
+    getAllCourses, getCourse, addCourse, registerCourseFromFile,
     getCourseTA, getCoursesByInstructorEmail,
     getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse
 } from '../controllers/courseController';
@@ -17,6 +17,6 @@ router.route("/prof/:id").get(getCoursesByInstructorEmail);
 router.route("/ta/:id").get(getCoursesByTaEmail);
 router.route("/:id/ta/:id").post(addTaToCourse);
 router.route("/:id/ta/:id").delete(deleteTaFromCourse);
-
+router.route("/:term_year/:course_number").get(getCourse);
 
 export default router;

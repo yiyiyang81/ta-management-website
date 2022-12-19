@@ -4,7 +4,7 @@ export interface Course {
   term_year: string,
   course_number: string,
   course_type: string,
-  course_enrolllment_num: number,
+  course_enrollment_num: number,
   TA_quota: number,
   is_need_fix: Boolean,
   instructor_office_hour: string,

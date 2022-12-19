@@ -22,6 +22,23 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
+// @Desc Get all Courses
+// @Route /api/course/:id
+// @Method GET
+export const getCourse = asyncHandler(async (req: Request, res: Response) => {
+    const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
+
+    let course = await Course.findOne({ term_year: term_year, course_number: course_number });
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
+});
+
 // @Desc Save multiple courses
 // @Route /api/course/upload
 // @Method POST
