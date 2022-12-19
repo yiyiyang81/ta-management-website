@@ -7,7 +7,8 @@ import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration"
 import AdminCourse from "./pages/AdminCourse";
 import Header from "./components/Header";
-import { UserTypes } from "./enums/UserTypes";
+import Student from "./pages/Student";
+import Sysop from "./pages/Sysop";
 
 interface UserProviderProps {
   user: User;
@@ -34,6 +35,8 @@ const App = () => {
           <Route path="/logout" element={<LoggedOut />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/course" element={<AdminCourse />} />
+          <Route path="/dashboard/student" element={<Student />} />
+          <Route path="/dashboard/sysop" element={<Sysop />} />
         </Routes>
       </Router>
     </UserContext.Provider>
