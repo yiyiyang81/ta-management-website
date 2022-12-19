@@ -9,6 +9,7 @@ const Select = (props: {
   options: any[];
   value: any;
   placeholder?: string;
+  disabled? : boolean;
   isMultiple: boolean;
   handleChange: React.Dispatch<React.SetStateAction<any>>;
 }) => {
@@ -67,7 +68,8 @@ const Select = (props: {
     return (
       <>
         <div className="mb-3">
-          <label htmlFor={props.id}>{props.label}</label>
+          <label htmlFor={props.id}>{props.label}</label>{" "}
+          {props.required && <span className="required-symbol"> *</span>}
           <div
             className="multiple-select-input mb-1"
             onClick={() => {
@@ -79,7 +81,6 @@ const Select = (props: {
               {createSelectedValues()}
             </div>
           </div>
-
           {showMultipleSelect && (
             <div className="dropdown">{createOptions()}</div>
           )}
@@ -91,15 +92,17 @@ const Select = (props: {
       <>
         <div className="mb-3">
           <label htmlFor={props.id}>{props.label}</label>
+          {props.required && <span className="required-symbol"> *</span>}
           <select
             name={props.name}
             id={props.id}
             value={props.value}
             defaultValue={props.value}
             onChange={(e) => props.handleChange(e.target.value)}
+            disabled={props.disabled}
           >
             <option value="default" disabled hidden>
-              ---
+              {props.placeholder}
             </option>
             {props.options.map((option, i) => (
               <option className="option" key={i} value={option}>
@@ -113,5 +116,5 @@ const Select = (props: {
   }
 };
 
-Select.defaultProps = { isMultiple: false, placeholder: "---" };
+Select.defaultProps = { isMultiple: false, placeholder: "---", disabled: false };
 export default Select;

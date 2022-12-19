@@ -45,3 +45,10 @@ button {
 	border    : none;
 	outline   : none;
 }
+
+.secondary-button:hover,
+.primary-button:hover,
+.submit-button:hover {
+	filter: brightness(120%) saturate(90%);
+
+}

@@ -5,14 +5,13 @@ import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
 import "../style/dashboard.css";
 import Tile from "../common/Tile";
-import StudentIcon from "../assets/images/student-icon.png";
+import RatingIcon from "../assets/images/rating-icon.png";
 import TeachingAssitantIcon from "../assets/images/ta-icon.png";
-import InstructorIcon from "../assets/images/instructor-icon.png";
 import TeachingAssistantAdminIcon from "../assets/images/ta-admin-icon.png";
 import SysopIcon from "../assets/images/sysop-icon.png";
 
 export const Dashboard = (props: {
-  setProfile: React.Dispatch<React.SetStateAction<any>>;
+  setTaskProfile: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const navigate = useNavigate();
   /**
@@ -30,11 +29,12 @@ export const Dashboard = (props: {
     }
   };
 
-  const isStudent = checkType(UserTypes.Student);
   const isTA = checkType(UserTypes.TA);
   const isProfessor = checkType(UserTypes.Professor);
   const isAdmin = checkType(UserTypes.Admin);
   const isSysop = checkType(UserTypes.Sysop);
+  const canViewTAAdministration = isAdmin || isSysop;
+  const canViewTAManagement = isProfessor || isSysop || isAdmin || isTA;
 
   useEffect(() => {
     // if no user redirect to login page
@@ -43,31 +43,26 @@ export const Dashboard = (props: {
     }
   }, [user, navigate]);
 
-  const handleNavigation = (role: string) => {
-    switch (role) {
-      case "Student":
-        props.setProfile("Student")
-        navigate("/dashboard/student");
+  const handleNavigation = (task: string) => {
+    switch (task) {
+      case "Rate a TA":
+        props.setTaskProfile("Rate a TA");
+        navigate("/dashboard/rate-ta");
         break;
 
-      case "Teaching Assistant":
-        props.setProfile("Teaching Assistant")
-        navigate("/dashboard/ta");
+      case "TA Management":
+        props.setTaskProfile("TA Management");
+        navigate("/dashboard/ta-management");
         break;
 
-      case "Professor":
-        props.setProfile("Professor")
-        navigate("/dashboard/professor");
+      case "TA Administration":
+        props.setTaskProfile("TA Administration");
+        navigate("/dashboard/ta-administration");
         break;
 
-      case "TA Administrator":
-      props.setProfile("TA Administrator")
-        navigate("/dashboard/ta-admin");
-        break;
-
-      case "Sysop":
-        props.setProfile("Sysop")
-        navigate("/dashboard/sysop");
+      case "Sysop Tasks":
+        props.setTaskProfile("Sysop Tasks");
+        navigate("/dashboard/sysop-tasks");
         break;
     }
   };
@@ -80,51 +75,41 @@ export const Dashboard = (props: {
           <h1 className="text-center">
             Welcome to your dashboard, {user.first_name} {user.last_name}
           </h1>
-          <h4>Continue viewing as:</h4>
+          <h4>What would you like to do?</h4>
           <div className="d-flex flex-wrap align-items-center justify-content-center">
-            {isStudent && (
-              <Tile
-                image={StudentIcon}
-                value="Student"
-                width="15rem"
-                margin="0.5rem"
-                onClick={() => handleNavigation("Student")}
-              ></Tile>
-            )}
-            {isTA && (
+            <Tile
+              image={RatingIcon}
+              value="Rate a TA"
+              width="15rem"
+              margin="0.5rem"
+              onClick={() => handleNavigation("Rate a TA")}
+            ></Tile>
+
+            {canViewTAManagement && (
               <Tile
                 image={TeachingAssitantIcon}
-                value="Teaching Assistant"
+                value="TA Management"
                 width="15rem"
                 margin="0.5rem"
-                onClick={() => handleNavigation("Teaching Assistant")}
+                onClick={() => handleNavigation("TA Management")}
               ></Tile>
             )}
-            {isProfessor && (
-              <Tile
-                image={InstructorIcon}
-                value="Professor"
-                width="15rem"
-                margin="0.5rem"
-                onClick={() => handleNavigation("Professor")}
-              ></Tile>
-            )}
-            {isAdmin && (
+            {canViewTAAdministration && (
               <Tile
                 image={TeachingAssistantAdminIcon}
-                value="TA Administrator"
+                value="TA Administration"
                 width="15rem"
                 margin="0.5rem"
-                onClick={() => handleNavigation("TA Administrator")}
+                onClick={() => handleNavigation("TA Administration")}
               ></Tile>
             )}
             {isSysop && (
               <Tile
                 image={SysopIcon}
-                value="Sysop"
+                value="Sysop Tasks"
                 width="15rem"
                 margin="0.5rem"
-                onClick={() => handleNavigation("Sysop")}
+                onClick={() => handleNavigation("Sysop Tasks")}
               ></Tile>
             )}
           </div>

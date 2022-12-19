@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, {  useState } from "react";
 import combinedLogos from "../assets/images/combined-logos.png";
 import socsLogo from "../assets/images/socs-logo.png";
 import mcgillLogo from "../assets/images/mcgill-logo.png";
-import { UserContext } from "../App";
 import "../App.css";
 import "../style/registration.css";
 import RegisterAccount from "../components/registration/RegisterAccount";
@@ -13,8 +11,6 @@ import { callBackend } from "../apiConfig";
 import RegistrationCompleted from "../components/registration/RegistrationCompleted";
 
 const Registration: React.FC = () => {
-  const { user, setUser } = useContext(UserContext);
-  const navigate = useNavigate();
   const [formState, setFormState] = useState("Account Registration");
 
   // On Registration Success
@@ -39,7 +35,7 @@ const Registration: React.FC = () => {
   const handleRegisteredCourses = (value: string) => {
     if (registeredCourses.filter((val) => val === value).length > 0) {
       setRegisteredCourses(
-        registeredCourses.filter((course) => course != value)
+        registeredCourses.filter((course) => course !== value)
       );
     } else {
       setRegisteredCourses(registeredCourses.concat([value]));
@@ -68,7 +64,7 @@ const Registration: React.FC = () => {
   const [roleError, setRoleError] = useState(false);
   const handleRoles = (value: string) => {
     if (roles.filter((val) => val === value).length > 0) {
-      setRoles(roles.filter((role) => role != role));
+      setRoles(roles.filter((val) => val !== value));
     } else {
       setRoles(roles.concat([value]));
     }
@@ -149,7 +145,6 @@ const Registration: React.FC = () => {
       setRoleError(true);
     }
   };
-
   return (
     <div className="registration-container">
       <div className="registration-form-container">
@@ -163,6 +158,7 @@ const Registration: React.FC = () => {
           </a>
         </div>
         {!isSuccess && (
+          <div className="left-background">
           <form onSubmit={submitRegistration}>
             <div className="form-inner mt-2">
               {formState === "Account Registration" && (
@@ -218,9 +214,10 @@ const Registration: React.FC = () => {
               )}
             </div>
           </form>
+          </div>
         )}
         <div className="text-center">
-          {isSuccess && <RegistrationCompleted></RegistrationCompleted>}
+          {isSuccess &&<div className="left-background"> <RegistrationCompleted></RegistrationCompleted></div>}
         </div>
       </div>
     </div>

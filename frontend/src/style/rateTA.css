@@ -1,0 +1,25 @@
+.rate-ta-container {
+	padding  : 2rem 4rem;
+	max-width: 50rem;
+}
+
+.rate-ta-button-container {
+	width: 15rem;
+	float: right;
+	margin-bottom: 3rem;
+}
+
+.review-submitted-text {
+	margin-left: 0.5rem;
+}
+
+@media (max-width: 576px) {
+	.rate-ta-container {
+		padding: 2rem 3rem;
+	}
+
+	.rate-ta-button-container {
+		width: 100%;
+		float: none;
+	}
+}
