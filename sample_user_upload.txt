@@ -1,2 +1,1 @@
-Jane,Doe,jane@comp307.com,jdcomp307,ta/student
-Mathieu,Blanchette,mathieu@comp307.com,mbcomp307,prof/sysop/admin
+Jane,Doe,jane.doe@gmail.com,jdoe1,ta/stud/sysop/admin/prof

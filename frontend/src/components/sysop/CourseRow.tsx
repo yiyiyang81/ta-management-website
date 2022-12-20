@@ -2,7 +2,7 @@ import React from "react";
 import RemoveIcon from "@material-ui/icons/Remove";
 import { Course } from "../../classes/Course";
 
-const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseData: Function }) => {
+const CourseRow = ({ course, loadCoursesData }: { course: Course; loadCoursesData: Function }) => {
   const handleDeleteCourse = () => {
     console.log("Delete course");
   };
@@ -19,7 +19,7 @@ const CourseRow = ({ course, fetchCourseData }: { course: Course; fetchCourseDat
       <td className="column3">{course.courseDesc}</td>
       <td className="column4">{course.term}</td>
       <td className="column5">{course.year}</td>
-      <td className="column6">{course.instructorName}</td>
+      <td className="column6">{course.instructorNames}</td>
     </tr>
   );
 };

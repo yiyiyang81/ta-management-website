@@ -2,13 +2,12 @@ import mongoose, { Schema } from 'mongoose';
 import bcrypt from 'bcrypt';
 
 export enum UserTypes {
-    Student = "Student",
-    Professor = "Instructor",
-    TA = "Teaching Assistant",
-    Admin = "TA Administrator",
-    Sysop = "System Operator",
+  Student = "stud",
+  Professor = "prof",
+  TA = "ta",
+  Admin = "admin",
+  Sysop = "sysop",
 }
-
 export interface IUser extends mongoose.Document {
     first_name: string,
     last_name: string,

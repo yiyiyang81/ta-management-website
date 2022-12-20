@@ -5,7 +5,7 @@ import "../../style/userTable.css";
 import { callBackend } from "../../apiConfig";
 
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
-const AddCourseForm = ({ fetchCourseData }) => {
+const AddCourseForm = ({ loadCoursesData }) => {
   const [show, setShow] = React.useState(false);
   const [courseDesc, setCourseDesc] = React.useState("");
   const [courseNumber, setCourseNumber] = React.useState("");
@@ -32,7 +32,7 @@ const AddCourseForm = ({ fetchCourseData }) => {
       });
       if (res.status === 201) {
         setTimeout(() => {
-          fetchCourseData();
+          loadCoursesData();
           setShow(false);
         }, 500);
       }
