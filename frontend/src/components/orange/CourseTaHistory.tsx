@@ -10,16 +10,18 @@ import { callBackend, createBackendUrl } from "../../apiConfig";
 import SearchCourseSimple from "./SearchCourseSimple";
 import Button from "../../common/Button";
 import TARow from "./TARow";
-import TAPlainRow from "./TAPlainRow";
+import TAPlainRow from "./TAHistoryRow";
 
 
 
-const CourseTaHistory = () => {
+const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
+    courseNumber: string;
+    setCourseNumber: React.Dispatch<React.SetStateAction<any>>
+}) => {
 
     const [subPage, setSubPage] = useState("Search");
 
-    // const [termYear, setTermYear] = useState("default");
-    const [courseNumber, setCourseNumber] = useState("default");
+    // const [courseNumber, setCourseNumber] = useState("default");
     const [displayError, setDisplayError] = useState(false);
     const [coursesInfo, setCoursesInfo] = useState<Array<Course>>([]);
     const [tas, setTas] = useState<Array<TA>>([]);
@@ -28,8 +30,7 @@ const CourseTaHistory = () => {
     useEffect(() => {
         const fetchHistoryTAData = async () => {
             try {
-                console.log("#################################")
-                let new_tas = tas;
+                let new_tas = [];
 
                 for (let courseInfo of coursesInfo) {
                     console.log("courseInfo", courseInfo)
@@ -52,7 +53,7 @@ const CourseTaHistory = () => {
                                 ta["performance_logs"] = performance_logs.join(", ");
                             }
                             catch (e) {
-                                performance_logs = ["Not Available"];
+                                ta["performance_logs"] = ["Not Available"];
                             }
 
                             try {
@@ -69,6 +70,7 @@ const CourseTaHistory = () => {
 
                             const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
                             const all_ratings = await ratings_res.json();
+                            console.log(all_ratings)
                             for (let rating of all_ratings.ratings) {
                                 average_rating = average_rating + rating.rating_score;
                                 rating_comments.push(rating.comment);
@@ -82,13 +84,11 @@ const CourseTaHistory = () => {
                                 ta["rating_comments"] = rating_comments.join(", ");
                             }
                             ta["term_year"] = courseInfo.term_year;
+                            new_tas.push(ta);
                         }
-                        new_tas.concat(data.course_TA);
                     }
                 }
-                console.log(new_tas);
                 setTas(new_tas);
-
             } catch (err) {
                 console.error(err);
             }
@@ -98,7 +98,7 @@ const CourseTaHistory = () => {
 
     const checkValidCourse = async () => {
         try {
-            const res = await callBackend(`/api/course/${courseNumber}`, {
+            const res = await callBackend(`/api/course/search-course-num/${courseNumber}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -112,7 +112,7 @@ const CourseTaHistory = () => {
 
     const handleGoBack = () => {
         setTas([]);
-        setCoursesInfo([]);
+        // setCoursesInfo([]);
         setSubPage("Search");
     }
 

@@ -1,6 +1,6 @@
 import { TA } from "../../classes/TA";
 
-const TAPlainRow = (
+const TAHistoryRow = (
   { ta, course_number }: {
     ta: TA; course_number: string
   }) => {
@@ -20,4 +20,4 @@ const TAPlainRow = (
   );
 };
 
-export default TAPlainRow;
+export default TAHistoryRow;

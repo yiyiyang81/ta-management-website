@@ -12,13 +12,15 @@ import Button from "../../common/Button";
 import TARow from "./TARow";
 
 
-const ManageCourseTa = () => {
-
+const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
+  courseNumber: string;
+  setCourseNumber: React.Dispatch<React.SetStateAction<any>>
+}) => {
   const [subPage, setSubPage] = useState("Search");
 
   const [courses, setCourses] = useState<Array<Course>>([]);
   const [termYear, setTermYear] = useState("default");
-  const [courseNumber, setCourseNumber] = useState("default");
+  // const [courseNumber, setCourseNumber] = useState("default");
   const [displayError, setDisplayError] = useState(false);
   const [courseInfo, setCourseInfo] = useState<Course>();
   const [tas, setTas] = useState<Array<TA>>([]);
@@ -127,7 +129,7 @@ const ManageCourseTa = () => {
 
   const checkValidCourse = async () => {
     try {
-      const res = await callBackend(`/api/course/${termYear}/${courseNumber}`, {
+      const res = await callBackend(`/api/course/search/${termYear}/${courseNumber}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -190,13 +192,19 @@ const ManageCourseTa = () => {
                     <th >Course Instructor</th>
                     <th >Student Enrolled</th>
                     <th >TA Quota</th>
-                    <th >TA Hisotry</th>
+                    {/* <th >TA Hisotry</th> */}
                     <th >Manage Course</th>
                   </tr>
                 </thead>
                 <tbody>
                   {courses.map((course: Course, i: number) => (
-                    <CoursePlainRow key={i} course={course} fetchCourseData={fetchCourseData} />
+                    <CoursePlainRow
+                      key={i}
+                      course={course}
+                      handleCourseNumberChange={setCourseNumber}
+                      handleCourseInfoChange={setCourseInfo}
+                      handleSubPageChange={setSubPage}
+                      handleTermYearChange={setTermYear} />
                   ))}
                 </tbody>
               </table>

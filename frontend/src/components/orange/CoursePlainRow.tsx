@@ -1,9 +1,21 @@
 import React from "react";
-import RemoveIcon from "@material-ui/icons/Remove";
 import { Course } from "../../classes/Course";
+import Button from "../../common/Button";
 
-const CoursePlainRow = ({ course, fetchCourseData }: { course: Course; fetchCourseData: Function }) => {
-  
+const CoursePlainRow = (
+  { course,
+    handleCourseInfoChange,
+    handleSubPageChange,
+    handleCourseNumberChange,
+    handleTermYearChange }:
+    {
+      course: Course;
+      handleCourseInfoChange: React.Dispatch<React.SetStateAction<any>>;
+      handleSubPageChange: React.Dispatch<React.SetStateAction<any>>;
+      handleCourseNumberChange: React.Dispatch<React.SetStateAction<any>>;
+      handleTermYearChange: React.Dispatch<React.SetStateAction<any>>;
+    }) => {
+
   return (
     <tr className="profTable">
       <td className="column0">
@@ -15,9 +27,26 @@ const CoursePlainRow = ({ course, fetchCourseData }: { course: Course; fetchCour
       <td>{course.course_instructors}</td>
       <td>{course.course_enrollment_num}</td>
       <td>{course.TA_quota}</td>
-      {/* TODO: replace with meaningful URL */}
-      <td><a href="/">View Details</a></td>
-      <td><a href='/'>Manage</a></td>
+      {/* <td>
+        <Button
+          width="15rem"
+          type="secondary"
+          value="View"
+          onClick={() => { handleCourseNumberChange(course.course_number); }}
+        ></Button>
+      </td> */}
+      <td>
+        <Button
+          width="15rem"
+          type="secondary"
+          value="Manage"
+          onClick={() => {
+            handleCourseInfoChange(course);
+            handleSubPageChange("Course");
+            handleCourseNumberChange(course.course_number);
+            handleTermYearChange(course.term_year);
+          }}
+        ></Button></td>
     </tr>
   );
 };

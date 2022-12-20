@@ -6,12 +6,13 @@ import Select from "../../common/Select";
 
 const SearchTA = (props: {
     studentNumber: string;
-    handleStudentNumber: React.Dispatch<React.SetStateAction<any>>;
     email: string;
+    handleStudentNumber: React.Dispatch<React.SetStateAction<any>>;
     handleEmail: React.Dispatch<React.SetStateAction<any>>;
     handleTASNSearchClick: React.Dispatch<React.SetStateAction<any>>;
     handleTAEmailSearchClick: React.Dispatch<React.SetStateAction<any>>;
-    displayError: boolean;
+    displayErrorEmail: boolean;
+    displayErrorSN: boolean;
 }) => {
 
     return (
@@ -31,7 +32,7 @@ const SearchTA = (props: {
                             handleChange={props.handleStudentNumber}
                         ></LabeledInput>
                     </div>
-                    {props.displayError && (
+                    {props.displayErrorSN && (
                         <div>
                             <ErrorBox errorMessage="TA does not exist!"></ErrorBox>
                         </div>
@@ -57,7 +58,7 @@ const SearchTA = (props: {
                             handleChange={props.handleEmail}
                         ></LabeledInput>
                     </div>
-                    {props.displayError && (
+                    {props.displayErrorEmail && (
                         <div>
                             <ErrorBox errorMessage="TA does not exist!"></ErrorBox>
                         </div>
