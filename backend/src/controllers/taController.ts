@@ -160,3 +160,27 @@ export const addTA = asyncHandler(async (req: Request, res: Response) => {
         notes: ta.notes
     });
 });
+
+// @Desc Get TA by email
+// @Route /api/ta/email/:email
+// @Method GET
+export const getTAByEmail = asyncHandler(async (req: Request, res: Response) => {
+    const email = req.params.email;
+    const TAs = await TA.findOne({ email: email });
+    res.status(200).json({
+        TAs
+    });
+});
+
+// @Desc Get TA by student number
+// @Route /api/ta/student-number/:student_number
+// @Method GET
+export const getTAByStudentNumber = asyncHandler(async (req: Request, res: Response) => {
+    const student_number = req.params.student_number;
+    console.log(student_number)
+    const TAs = await TA.findOne({ student_ID: student_number });
+    console.log(TAs)
+    res.status(200).json({
+        TAs
+    });
+});

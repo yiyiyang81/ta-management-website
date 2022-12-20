@@ -4,8 +4,9 @@ import { TA } from "../../classes/TA";
 import { callBackend } from "../../apiConfig";
 
 const TARow = (
-  { ta, term_year, course_number}: {
-    ta: TA; term_year: string, course_number: string
+  { ta, term_year, course_number,handleTAChange}: {
+    ta: TA; term_year: string, course_number: string,
+    handleTAChange: React.Dispatch<React.SetStateAction<any>>;
   }) => {
 
   const [isSuccess, setIsSuccess] = useState(false);
@@ -21,6 +22,7 @@ const TARow = (
 
       if (res.status === 200) {
         setIsSuccess(true);
+        handleTAChange(true);
         alert("TA deleted successfully");
       } else {
         alert("Error while deleting TA.");

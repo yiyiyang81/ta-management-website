@@ -229,16 +229,16 @@ export const addTaToCourse = asyncHandler(async (req: Request, res: Response) =>
         throw new Error("Course not found");
     }
     course.add_ta_to_course(ta);
-    res.status(200).json({});
+    res.status(201).json({});
 });
 
 // @Desc delete a TA to a Course
-// @Route /api/course/:id/ta/:id
+// @Route /api/course/:term_year/:cousre_number/ta/:email
 // @Method DELETE
 export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Response) => {
     // const { course_number, term_year, email } = req.body;
-    const course_number = req.params.course_number!;
     const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
     const email = req.params.email!;
 
 

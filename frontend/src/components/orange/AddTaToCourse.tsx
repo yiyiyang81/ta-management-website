@@ -5,7 +5,7 @@ import "../../style/userTable.css";
 import { callBackend } from "../../apiConfig";
 
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
-const AddTaToCourse = ({ courseNumber, termYear }) => {
+const AddTaToCourse = ({ courseNumber, termYear,handleTAChange}) => {
     const [show, setShow] = React.useState(false);
     const [taEmail, setTAEmail] = React.useState("");
 
@@ -24,10 +24,14 @@ const AddTaToCourse = ({ courseNumber, termYear }) => {
                 }),
             });
             if (res.status === 201) {
-                    setShow(false);
+                setShow(false);
+                setTAEmail("");
+                handleTAChange();
             }
         } catch (e) {
             console.error(e);
+            setTAEmail("");
+            handleTAChange();
         }
     };
 
@@ -46,7 +50,7 @@ const AddTaToCourse = ({ courseNumber, termYear }) => {
 
                         <Row>
                             <Col>
-                                <Form.Control required type="email" placeholder="Please enter TA's Email seperate by comma." value={taEmail} onChange={(e) => setTAEmail(e.target.value)} />
+                                <Form.Control required type="email" placeholder="Please enter TA's Email." value={taEmail} onChange={(e) => setTAEmail(e.target.value)} />
                             </Col>
                         </Row>
 

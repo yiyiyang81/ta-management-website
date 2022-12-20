@@ -1,12 +1,16 @@
 import React from "react";
 import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
+import LabeledInput from "../../common/LabeledInput";
 import Select from "../../common/Select";
 
 const SearchTA = (props: {
-    courseNumber: string;
-    handleCourseNumber: React.Dispatch<React.SetStateAction<any>>;
-    handleCourseSearchClick: React.Dispatch<React.SetStateAction<any>>;
+    studentNumber: string;
+    handleStudentNumber: React.Dispatch<React.SetStateAction<any>>;
+    email: string;
+    handleEmail: React.Dispatch<React.SetStateAction<any>>;
+    handleTASNSearchClick: React.Dispatch<React.SetStateAction<any>>;
+    handleTAEmailSearchClick: React.Dispatch<React.SetStateAction<any>>;
     displayError: boolean;
 }) => {
 
@@ -14,13 +18,19 @@ const SearchTA = (props: {
         <>
             <h1 className="">Search for a TA </h1>
             <div className="mb-3">
-                <h4>Manage TA of a course by first selecting a course number and a term year.  </h4>
+                <h4>Search for a TA by student number or email to view TA information.  </h4>
                 <div>
                     <div>
-
+                        <LabeledInput
+                            label="Student Number"
+                            required={false}
+                            type="text"
+                            name="studentnumber"
+                            id="studentnumber"
+                            value={props.studentNumber}
+                            handleChange={props.handleStudentNumber}
+                        ></LabeledInput>
                     </div>
-                </div>
-                <div>
                     {props.displayError && (
                         <div>
                             <ErrorBox errorMessage="TA does not exist!"></ErrorBox>
@@ -30,10 +40,38 @@ const SearchTA = (props: {
                         <Button
                             width="15rem"
                             type="primary"
-                            value="Search for TA"
-                            onClick={props.handleCourseSearchClick}
+                            value="Search by Student Number"
+                            onClick={props.handleTASNSearchClick}
                         ></Button>
                     </div>
+                </div>
+                <div>
+                    <div>
+                        <LabeledInput
+                            label="Student Email"
+                            required={false}
+                            type="text"
+                            name="studentemail"
+                            id="studentemail"
+                            value={props.email}
+                            handleChange={props.handleEmail}
+                        ></LabeledInput>
+                    </div>
+                    {props.displayError && (
+                        <div>
+                            <ErrorBox errorMessage="TA does not exist!"></ErrorBox>
+                        </div>
+                    )}
+                    <div>
+                        <Button
+                            width="15rem"
+                            type="primary"
+                            value="Search by Email"
+                            onClick={props.handleTAEmailSearchClick}
+                        ></Button>
+                    </div>
+                </div>
+                <div>
                 </div>
             </div>
         </>

@@ -22,6 +22,7 @@ const ManageCourseTa = () => {
   const [displayError, setDisplayError] = useState(false);
   const [courseInfo, setCourseInfo] = useState<Course>();
   const [tas, setTas] = useState<Array<TA>>([]);
+  const [taChange, setTAChange] = useState(false);
 
   const fetchCourseData = async () => {
     try {
@@ -122,12 +123,10 @@ const ManageCourseTa = () => {
       }
     }
     fetchCurrentTAData();
-  }, [courseInfo]);
+  }, [courseInfo, taChange]);
 
   const checkValidCourse = async () => {
     try {
-      console.log(termYear)
-      console.log("courseNumber",courseNumber)
       const res = await callBackend(`/api/course/${termYear}/${courseNumber}`, {
         method: "GET",
         headers: {
@@ -157,6 +156,11 @@ const ManageCourseTa = () => {
   useEffect(() => {
     fetchCourseData();
   }, []);
+
+  const handleTAChange = () => {
+    taChange ? setTAChange(false) : setTAChange(true)
+  }
+
 
   return (
     <div>
@@ -216,7 +220,7 @@ const ManageCourseTa = () => {
               <AddTaToCourse
                 courseNumber={courseInfo.course_number}
                 termYear={courseInfo.term_year}
-              />
+                handleTAChange={handleTAChange} />
             </div>
             <div id="profTable">
               <table className="table table-striped">
@@ -234,7 +238,8 @@ const ManageCourseTa = () => {
                 </thead>
                 <tbody>
                   {tas.map((ta: TA, i: number) => (
-                    <TARow key={i} ta={ta} term_year={termYear} course_number={courseNumber} />
+                    <TARow key={i} ta={ta} term_year={termYear} course_number={courseNumber}
+                      handleTAChange={handleTAChange} />
                   ))}
                 </tbody>
               </table>

@@ -24,3 +24,25 @@ export interface TA {
     performance_logs:Array<string>,
     courses_assigned:Array<string>
 }
+
+export const emptyTA: TA = {
+    TA_name: "", student_ID: "", email: "",
+    legal_name: "",
+    term_year: "",
+    grad_ugrad: "",
+    supervisor_name: "",
+    priority: false,
+    hours: 0,
+    date_applied: "",
+    location: "",
+    phone: "",
+    degree: "",
+    courses_applied_for_list: [],
+    open_to_other_courses: false,
+    notes: "",
+    assigned_hours: 0,
+    average_rating: 0,
+    rating_comments: [],
+    performance_logs: [],
+    courses_assigned: []
+};
