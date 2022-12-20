@@ -147,7 +147,7 @@ export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
     }
 });
 
-// @Desc Get the course's current TA
+// @Desc Get the course's current prof
 // @Route /api/course/:id/prof
 // @Method GET
 export const getCourseProf = asyncHandler(async (req: Request, res: Response) => {
