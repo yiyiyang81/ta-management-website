@@ -19,7 +19,6 @@ const AdminCourse: React.FC = () => {
   }
 
   const tabNamesToJSX = new Map<string, JSX.Element>([
-    ["Courses", <ManageCourses />],
   ]);
 
   const tabsPerProfile = new Map<UserTypes, Array<string>>([

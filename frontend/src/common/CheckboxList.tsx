@@ -16,7 +16,7 @@ const CheckboxList = (props: {
           name={option}
           key={i}
           value={option}
-		  onChange={(e) => props.handleCheckbox(e.target.value)}
+          onChange={props.handleCheckbox}
         />
         <div>{option}</div>
       </div>

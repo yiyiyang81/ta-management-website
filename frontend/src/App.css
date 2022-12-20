@@ -94,3 +94,11 @@ form .form-inner .form-group {
   font-weight  : 500;
   margin-bottom: 30px;
 }
+
+#example-custom-modal-styling-title {
+  font-family: 'Lato', sans-serif;
+  font-weight: 700;
+  font-size  : 1.2rem;
+  line-height: 38px;
+  padding    : 0rem 0.5rem;
+}
