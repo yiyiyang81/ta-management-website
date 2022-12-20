@@ -2,7 +2,7 @@ import express from 'express';
 import {
     getAllCourses, addCourse, registerCourseFromFile,
     getCourseTA, getCoursesByInstructorEmail,
-    getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse
+    getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse, getCourseById
 } from '../controllers/courseController';
 import multer from "multer";
 const upload = multer();
@@ -10,6 +10,7 @@ const upload = multer();
 const router = express.Router();
 
 router.route("/").get(getAllCourses);
+router.route("/:id").get(getCourseById);
 router.route("/:id/ta/").get(getCourseTA);
 router.route("/add").post(addCourse);
 router.route("/upload").post(upload.single("csvFile"), registerCourseFromFile);

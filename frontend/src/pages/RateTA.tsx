@@ -69,7 +69,7 @@ const RateTA = () => {
       courseNames = Array.from(newCourses.keys());
     }
     setAllCourseNames(courseNames);
-  }, [taEmail]);
+  }, [taEmail, allTasObject]);
 
   useEffect(() => {
     let termYears = [];
@@ -77,7 +77,7 @@ const RateTA = () => {
       termYears = allTasObject.get(taEmail).get(courseName)["termYear"];
     }
     setAllTermYears(termYears);
-  }, [courseName]);
+  }, [courseName, taEmail, allTasObject]);
 
   const handleRatingScore = (score: number) => {
     setRatingScore(score);
@@ -220,7 +220,7 @@ const RateTA = () => {
         {isSuccess && (
           <div className="d-flex flex-column">
             <div className="d-flex align-items-center mb-4">
-              <img src={CheckIcon} height="20"></img>
+              <img src={CheckIcon} height="20" alt="check-icon"></img>
               <div className="review-submitted-text">
                 <b>Your review has been submitted!</b>
               </div>

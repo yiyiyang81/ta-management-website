@@ -4,8 +4,10 @@ import React from "react";
 import AddIcon from "@mui/icons-material/Add";
 import "../../style/userTable.css";
 import { callBackend } from "../../apiConfig";
+import ManualAddIcon from "./../../assets/images/manual-add-icon.png";
+import TinyTile from "../../common/TinyTile";
 
-function AddProfForm({ fetchProfData }) {
+function AddProfForm({ loadProfsData }) {
   const [show, setShow] = useState(false);
   const [tempEmail, setTempEmail] = useState<string>();
   const [tempFaculty, setTempFaculty] = useState<string>("Science");
@@ -25,13 +27,13 @@ function AddProfForm({ fetchProfData }) {
           professorEmail: tempEmail,
           faculty: tempFaculty,
           department: tempDept,
-          courseNumber: tempCourses
+          courseNumber: tempCourses,
         }),
       });
       if (res.status === 200) {
         const data = await res.json();
         setTimeout(() => {
-          fetchProfData();
+          loadProfsData();
         }, 500);
       } else {
         alert("Error while adding professor details.");
@@ -43,24 +45,44 @@ function AddProfForm({ fetchProfData }) {
 
   return (
     <div>
-      <button className="mb-4 mt-2" onClick={() => setShow(true)}>
-        <AddIcon />
-      </button>
+      <TinyTile
+        value="Manually add professor"
+        image={ManualAddIcon}
+        width="8rem"
+        onClick={() => setShow(true)}
+      ></TinyTile>
+    
 
-      <Modal show={show} onHide={() => setShow(false)} dialogClassName="modal-lg" aria-labelledby="example-custom-modal-styling-title">
+      <Modal
+        show={show}
+        onHide={() => setShow(false)}
+        dialogClassName="modal-lg"
+        aria-labelledby="example-custom-modal-styling-title"
+      >
         <Modal.Header closeButton>
-          <Modal.Title id="example-custom-modal-styling-title">Add a Professor</Modal.Title>
+          <Modal.Title id="example-custom-modal-styling-title">
+            Add a Professor
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>
-                <Form.Control required type="email" placeholder="Instructor Email" value={tempEmail} onChange={(e) => setTempEmail(e.target.value)} />
+                <Form.Control
+                  required
+                  type="email"
+                  placeholder="Instructor Email"
+                  value={tempEmail}
+                  onChange={(e) => setTempEmail(e.target.value)}
+                />
               </Col>
             </Row>
             <Row>
               <Col>
-                <Form.Select required onChange={(e) => setTempFaculty(e.target.value)}>
+                <Form.Select
+                  required
+                  onChange={(e) => setTempFaculty(e.target.value)}
+                >
                   <option value="">Select a Faculty...</option>
                   <option value="Science">Science</option>
                   <option value="Engineering">Engineering</option>
@@ -70,7 +92,10 @@ function AddProfForm({ fetchProfData }) {
             </Row>
             <Row>
               <Col>
-                <Form.Select required onChange={(e) => setTempDept(e.target.value)}>
+                <Form.Select
+                  required
+                  onChange={(e) => setTempDept(e.target.value)}
+                >
                   <option value="">Select a Department...</option>
                   <option value="Computer Science">Computer Science</option>
                   <option value="Mathematics">Mathematics</option>
@@ -80,7 +105,13 @@ function AddProfForm({ fetchProfData }) {
             </Row>
             <Row>
               <Col>
-                <Form.Control required type="string" placeholder="Course Number" value={tempCourses} onChange={(e) => setTempCourses(e.target.value)} />
+                <Form.Control
+                  required
+                  type="string"
+                  placeholder="Course Number"
+                  value={tempCourses}
+                  onChange={(e) => setTempCourses(e.target.value)}
+                />
               </Col>
             </Row>
             <Button className="mt-3" variant="light" type="submit">

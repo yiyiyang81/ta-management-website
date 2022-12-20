@@ -7,76 +7,57 @@ import ImportForm from "./ImportForm";
 import { Container } from "react-bootstrap";
 import { callBackend, createBackendUrl } from "../../apiConfig";
 
-const ManageProfessors = () => {
-  const [profs, setProfs] = React.useState<Array<Professor>>([]);
-
-  const fetchProfData = async () => {
-    try {
-      const res = await callBackend("/api/prof");
-      const data = await res.json();
-      const profObject = [];
-      for (const d of data.profs) {
-        const instructorRes = await callBackend("/api/users/" + d.professor);
-        let item = {
-          faculty: d.faculty,
-          department: d.department,
-        }
-        if (instructorRes) {
-          const instructorData = await instructorRes.json();
-          item["firstName"] = instructorData.user.firstName;
-          item["lastName"] = instructorData.user.lastName;
-          item["email"] = instructorData.user.email;
-        } else {
-          item["firstName"] = "";
-          item["lastName"] = "";
-          item["email"] = "";
-        }
-        profObject.push(item);
-      }
-      setProfs(profObject);
-    } catch (err) {
-      console.log(err);
-    }
-  }; 
-
-  useEffect(() => {
-    // Load data
-    fetchProfData();
-  }, []);
-
+const ManageProfessors = (props: {
+  loadProfsData: Function;
+  profs: Array<Professor>;
+}) => {
   return (
-    <div>
-      <ImportForm taskName="Professors" uploadUrl={createBackendUrl("/api/prof/upload")}/>
-      <Container className="mt-3">
+    <div className="mb-5">
+      <h2>Add Professors</h2>
+      <h6> Import a CSV file to add professors or manually add a professor.</h6>
+      <div className="d-flex flex-wrap align-items-center">
+        <ImportForm
+          taskName="Professors"
+          uploadUrl={createBackendUrl("/api/prof/upload")}
+          loadFunction={props.loadProfsData}
+        />
+        <div className="px-3"></div>
+        <AddProfForm loadProfsData={props.loadProfsData} />
+      </div>
+      <hr></hr>
         <div className="rowC">
-          <h2 style={{ marginBottom: "20px" }}>All Professors</h2> 
-          <AddProfForm fetchProfData={fetchProfData} />
+          <h2 style={{ marginBottom: "20px" }}>All Professors</h2>
         </div>
         <div id="profTable">
           <table>
             <thead>
               <tr>
-                <th className="column0"></th>
-                <th className="column1">Email</th>
-                <th className="column2">First name</th>
-                <th className="column3">Last name</th>
-                <th className="column4">Faculty</th>
-                <th className="column5">Department</th>
+                <th className="column0">Email</th>
+                <th className="column1">First name</th>
+                <th className="column2">Last name</th>
+                <th className="column3">Faculty</th>
+                <th className="column4">Department</th>
                 <th className="column5">Courses</th>
+                <th className="column6">Delete</th>
               </tr>
             </thead>
             <tbody>
               {/**Set to hardcoded list of profs for testing purposes */}
-              {profs.map((professor: Professor, i: number) => {
+              {props.profs.map((professor: Professor, i: number) => {
                 if (professor) {
-                  return <ProfRow key={i} professor={professor} fetchProfData={fetchProfData} />;
+                  return (
+                    <ProfRow
+                      key={i}
+                      professor={professor}
+                      loadProfsData={props.loadProfsData}
+                    />
+                  );
                 }
                 return null;
               })}
             </tbody>
           </table>
         </div>
-      </Container>
     </div>
   );
 };

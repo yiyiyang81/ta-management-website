@@ -22,6 +22,20 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
+// @Desc Get all Courses
+// @Route /api/course/:id
+// @Method GET
+export const getCourseById= asyncHandler(async (req: Request, res: Response) => {
+    let course = await Course.findOne({_id: req.params.id});
+    if (!course) {
+        res.status(404);
+        throw new Error(`No course with Object ID ${req.params.id} in the database!`);
+    }
+    res.status(200).json({ course });
+});
+
+
+
 // @Desc Save multiple courses
 // @Route /api/course/upload
 // @Method POST
@@ -163,7 +177,7 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
 });
 
 
-// @Desc Get all the coruses of a prof
+// @Desc Get all the courses of a prof
 // @Route /api/course/prof/:id
 // @Method GET
 export const getCoursesByInstructorEmail = asyncHandler(async (req: Request, res: Response) => {

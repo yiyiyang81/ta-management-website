@@ -11,6 +11,7 @@ const Select = (props: {
   placeholder?: string;
   disabled? : boolean;
   isMultiple: boolean;
+  margin? : string
   handleChange: React.Dispatch<React.SetStateAction<any>>;
 }) => {
   const [showMultipleSelect, setShowMultipleSelect] = useState(false);
@@ -76,13 +77,13 @@ const Select = (props: {
               setShowMultipleSelect((val) => !val);
             }}
           >
-            {props.value.length == 0 && props.placeholder}
+            {props.value.length === 0 && props.placeholder}
             <div className="d-flex overflow-hidden" style={{ zIndex: 1000 }}>
               {createSelectedValues()}
             </div>
           </div>
           {showMultipleSelect && (
-            <div className="dropdown">{createOptions()}</div>
+            <div className="dropdown" style={{margin: props.margin}}>{createOptions()}</div>
           )}
         </div>
       </>
@@ -97,7 +98,6 @@ const Select = (props: {
             name={props.name}
             id={props.id}
             value={props.value}
-            defaultValue={props.value}
             onChange={(e) => props.handleChange(e.target.value)}
             disabled={props.disabled}
           >
@@ -116,5 +116,5 @@ const Select = (props: {
   }
 };
 
-Select.defaultProps = { isMultiple: false, placeholder: "---", disabled: false };
+Select.defaultProps = { isMultiple: false, placeholder: "---", disabled: false, margin: "0rem" };
 export default Select;

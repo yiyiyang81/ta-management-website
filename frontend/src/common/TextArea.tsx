@@ -1,4 +1,3 @@
-import { valueToPercent } from "@mui/base";
 import React from "react";
 
 const TextArea = (props: {
@@ -30,7 +29,7 @@ const TextArea = (props: {
       </div>
       <p style={{fontSize: "0.8rem", color: "#6D6E71"}}>
         Remaining <span>{remainingCharacters}</span> character
-        {remainingCharacters != 0 && "s"}
+        {remainingCharacters !== 0 && "s"}
       </p>
     </>
   );

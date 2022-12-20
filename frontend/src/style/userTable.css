@@ -1,73 +1,58 @@
+#profTable {
+  max-width: max-content
+}
+
 #profTable table td {
-  border: 1px solid #e9ecee;
+  font-family: 'Lato';
 }
+
 #profTable th {
-  font-weight: normal;
-  border: 1px solid #e9ecee;
+  font-weight  : bold;
+  border-bottom: 2px solid #B9B9B9;
+  background-color: #FFFFFF;
 }
+
 #profTable td {
-  font-weight: 200;
-  color: black;
-  border: 1px solid #e9ecee;
+  color        : black;
 }
 
-#profTable th:first-child {
-  border-left: none;
-}
-#profTable td:first-child {
-  border-left: none;
-}
-
-#profTable th:nth-child(2) {
-  border-left: none;
-}
-#profTable td:nth-child(2) {
-  border-left: none;
-}
-
-#profTable th:last-child {
-  border-right: none;
-}
-#profTable td:last-child {
-  border-right: none;
-}
-
-#profTable .column0 {
-  border: none;
+#profTable tr:nth-child(odd) {
+  background-color: #F5F5F5;
 }
 
 th,
 td {
-  padding-left: 15px;
+  padding-left : 15px;
   padding-right: 15px;
+
 }
 
 .btn.btn-secondary {
   appearance: none;
   background: none;
-  border: none;
-  outline: none;
-  color: #B71A29;
+  border    : none;
+  outline   : none;
+  color     : #B71A29;
 }
 
 .mb-4.mt-2 {
   padding-left: 27px;
-  color: green;
+  color       : green;
 }
 
 .wishlist-add {
-  padding-top: 10px;
+  padding-top   : 10px;
   padding-bottom: 10px;
-  padding-left: 0px;
-  color: green;
+  padding-left  : 0px;
+  color         : green;
 }
 
 .courses {
-  color: #a5a4a1;
-  font-size: 13px;
-  font-weight: bold;
-  border: 1.5px solid #dfdfdf;
-  box-shadow: 0px 0px 2px 0px #dfdfdf;
+  color        : #a5a4a1;
+  font-size    : 13px;
+  font-weight  : bold;
+  border       : 1.5px solid #dfdfdf;
+  box-shadow   : 0px 0px 2px 0px #dfdfdf;
   border-radius: 5px;
 }
 
@@ -99,7 +84,7 @@ td {
 /* button spacing used on multiple pages*/
 .button-spacing {
   padding-left: 15px;
-  float: right !important;
+  float       : right !important;
 }
 
 /* add TA button pages*/
@@ -109,22 +94,24 @@ td {
 
 /* removes blue highlighting when clicking on dropdown */
 .dropdown-item:active {
-  color: black !important;
+  color           : black !important;
   background-color: #dee2e6 !important;
 }
 
-.dropdown-toggle.courses , .dropdown-menu.courses {
+.dropdown-toggle.courses,
+.dropdown-menu.courses {
   background-color: white !important;
-  color: #a5a4a1 !important;
-  font-size: 13px;
-  font-weight: bold;
-  border: 1.5px solid #dfdfdf;
-  box-shadow: 0px 0px 2px 0px #dfdfdf;
-  border-radius: 5px;
+  color           : #a5a4a1 !important;
+  font-size       : 13px;
+  font-weight     : bold;
+  border          : 1.5px solid #dfdfdf;
+  box-shadow      : 0px 0px 2px 0px #dfdfdf;
+  border-radius   : 5px;
 }
 
 /* TA Admin. have beginning of table always line up with course name */
-@media (min-width: 1200px){
+@media (min-width: 1200px) {
+
   .container,
   .container-lg,
   .container-md,
@@ -141,7 +128,7 @@ td {
 
 /* styling for professor log modal back button */
 .log-back {
-padding-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 /* styling for professor log modal add button */
@@ -149,7 +136,7 @@ padding-bottom: 15px;
   color: green;
 }
 
-.rowC{
-  display:flex; 
-  flex-direction:row;
+.rowC {
+  display       : flex;
+  flex-direction: row;
 }

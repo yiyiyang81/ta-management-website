@@ -7,48 +7,21 @@ import ImportForm from "./ImportForm";
 import { Container } from "react-bootstrap";
 import { callBackend, createBackendUrl } from "../../apiConfig";
 
-const ManageCourses = () => {
-  const [courses, setCourses] = useState<Array<Course>>([]);
-
-  const fetchCourseData = async () => {
-    try {
-      const res = await callBackend("/api/course");
-      const data = await res.json();
-      const courseObject = [];
-      for (const d of data.courses) {
-        const instructorRes = await callBackend("/api/users/" + d.courseInstructor);
-        let item = {
-          courseNumber: d.courseNumber,
-          courseName: d.courseName,
-          courseDesc: d.courseDesc,
-          term: d.term,
-          year: d.year,
-        }
-        if (instructorRes) {
-          const instructorData = await instructorRes.json();
-          item["instructorName"] = instructorData.user.firstName + " " + instructorData.user.lastName;
-        } else {
-          item["instructorName"] = ""
-        }
-        courseObject.push(item);
-      }
-      setCourses(courseObject);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    fetchCourseData();
-  }, []);
-
+const ManageCourses = (props: {
+  loadCoursesData: Function;
+  courses: Array<Course>;
+}) => {
   return (
     <div>
-      <ImportForm taskName="Courses" uploadUrl={createBackendUrl("/api/course/upload")}/>
+      <ImportForm
+        taskName="Courses"
+        uploadUrl={createBackendUrl("/api/course/upload")}
+        loadFunction={props.loadCoursesData}
+      />
       <Container className="mt-3">
         <div className="rowC">
-          <h2 style={{ marginBottom: "20px" }}>All Courses</h2> 
-          <AddCourseForm fetchCourseData={fetchCourseData} />
+          <h2 style={{ marginBottom: "20px" }}>All Courses</h2>
+          <AddCourseForm loadCoursesData={props.loadCoursesData} />
         </div>
         <div id="profTable">
           <table>
@@ -60,12 +33,16 @@ const ManageCourses = () => {
                 <th className="column3">Course Description</th>
                 <th className="column4">Course Semester</th>
                 <th className="column5">Course Year</th>
-                <th className="column6">Course Instructor</th>
+                <th className="column6">Course Instructors</th>
               </tr>
             </thead>
             <tbody>
-              {courses.map((course: Course, i: number) => (
-                <CourseRow key={i} course={course} fetchCourseData={fetchCourseData} />
+              {props.courses.map((course: Course, i: number) => (
+                <CourseRow
+                  key={i}
+                  course={course}
+                  loadCoursesData={props.loadCoursesData}
+                />
               ))}
             </tbody>
           </table>
