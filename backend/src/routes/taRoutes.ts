@@ -7,6 +7,6 @@ const router = express.Router();
 
 router.route("/").get(getAllTAs);
 router.route("/add").post(addTA);
-router.route("/upload").post(upload.single("csvFile"), registerTAFromFile);
+router.route("/upload/:fileType").post(upload.single("csvFile"), registerTAFromFile);
 
 export default router;

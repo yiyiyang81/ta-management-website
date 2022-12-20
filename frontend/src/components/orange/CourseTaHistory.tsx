@@ -29,7 +29,7 @@ const CourseTaHistory = () => {
         const fetchHistoryTAData = async () => {
             try {
                 console.log("#################################")
-                let new_tas = [];
+                let new_tas = tas;
 
                 for (let courseInfo of coursesInfo) {
                     console.log("courseInfo", courseInfo)

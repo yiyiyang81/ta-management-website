@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Tile from "../../common/Tile";
 import TeachingAssitantIcon from "../../assets/images/ta-icon.png";
 import TeachingAssistantAdminIcon from "../../assets/images/ta-admin-icon.png";
-import ImportForm from "../sysop/ImportForm";
+import AdminImportForm from "./AdminImportForm";
 import { callBackend, createBackendUrl } from "../../apiConfig";
 
 const TaAdminImportFile = (props: {}) => {
@@ -19,17 +19,17 @@ const TaAdminImportFile = (props: {}) => {
                     value="TA Cohort"
                     width="15rem"
                     margin="0.5rem"
-                    onClick={() => setFileType("TACohort")}
+                    onClick={() => setFileType("tacohort")}
                 ></Tile>
                 <Tile
                     image={TeachingAssistantAdminIcon}
                     value="Course Quota"
                     width="15rem"
                     margin="0.5rem"
-                    onClick={() => setFileType("CourseQuota")}
+                    onClick={() => setFileType("coursequota")}
                 ></Tile>
             </div>
-            <ImportForm taskName="" uploadUrl={createBackendUrl("/api/course/upload")} />
+            <AdminImportForm taskName="" uploadUrl={createBackendUrl("/api/ta/upload")} fileType={fileType} />
 
         </div>
     )
