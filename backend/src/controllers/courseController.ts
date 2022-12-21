@@ -6,6 +6,7 @@ import Professor from "../models/Professor";
 import { IProfessor } from "../models/Professor";
 import { forEach, parse } from 'csv-string';
 import TA from "../models/TA";
+import mongoose from "mongoose";
 
 // @Desc Get all Courses
 // @Route /api/course
@@ -22,11 +23,28 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
+// @Desc Get Course by term year and course number
+// @Route /api/course/search/:term_year/:course_number
+// @Method GET
+export const getCourse = asyncHandler(async (req: Request, res: Response) => {
+    const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
+
+    let course = await Course.findOne({ term_year: term_year, course_number: course_number });
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
+});
+
 // @Desc Get all Courses
 // @Route /api/course/:id
 // @Method GET
-export const getCourseById= asyncHandler(async (req: Request, res: Response) => {
-    let course = await Course.findOne({_id: req.params.id});
+export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
+    let course = await Course.findOne({ _id: req.params.id });
     if (!course) {
         res.status(404);
         throw new Error(`No course with Object ID ${req.params.id} in the database!`);
@@ -280,14 +298,18 @@ export const addTaToCourse = asyncHandler(async (req: Request, res: Response) =>
         throw new Error("Course not found");
     }
     course.add_ta_to_course(ta);
-    res.status(200).json({});
+    res.status(201).json({});
 });
 
 // @Desc delete a TA to a Course
-// @Route /api/course/:id/ta/:id
+// @Route /api/course/:term_year/:cousre_number/ta/:email
 // @Method DELETE
 export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, term_year, email } = req.body;
+    // const { course_number, term_year, email } = req.body;
+    const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
+    const email = req.params.email!;
+
 
     let ta = await TA.findOne({ email: email });
 
@@ -306,4 +328,20 @@ export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Respons
     course.delete_ta_from_course(ta);
     res.status(200).json({}
     );
+});
+
+// @Desc get the courses from all history
+// @Route /api/course/:course_number/
+// @Method GET
+export const getCoursesByCourseNumber = asyncHandler(async (req: Request, res: Response) => {
+    const course_number = req.params.course_number!;
+
+    let course = await Course.find({ course_number: course_number });
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
 });

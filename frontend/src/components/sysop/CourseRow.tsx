@@ -6,9 +6,10 @@ const CourseRow = ({ course, loadCoursesData }: { course: Course; loadCoursesDat
   const handleDeleteCourse = () => {
     console.log("Delete course");
   };
-
+  
+  console.log(course)
   return (
-    <tr className="body">
+    <tr className="profTable">
       <td className="column0">
         <button className="btn btn-secondary" onClick={handleDeleteCourse}>
           <RemoveIcon />
