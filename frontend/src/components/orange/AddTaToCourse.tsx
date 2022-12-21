@@ -38,7 +38,7 @@ const AddTaToCourse = ({ courseNumber, termYear, handleTAChange }) => {
     return (
         <div>
             <TinyTile
-                value="Manually add a TA"
+                value="Manually assign a TA"
                 image={ManualAddIcon}
                 width="8rem"
                 onClick={() => setShow(true)}
@@ -46,7 +46,7 @@ const AddTaToCourse = ({ courseNumber, termYear, handleTAChange }) => {
 
             <Modal show={show} onHide={() => setShow(false)} dialogClassName="modal-lg" aria-labelledby="example-custom-modal-styling-title">
                 <Modal.Header closeButton>
-                    <Modal.Title id="example-custom-modal-styling-title">Add a TA</Modal.Title>
+                    <Modal.Title id="example-custom-modal-styling-title">Assign a TA</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleAddTA}>
