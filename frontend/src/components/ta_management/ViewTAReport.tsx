@@ -42,7 +42,6 @@ const ViewTAReport = (props: {
               let comments = "No comments yet"
 
               if (avg.averageScore !== null) {
-                console.log("avg", avg.averageScore)
                 rating = avg.averageScore;
               }
 
