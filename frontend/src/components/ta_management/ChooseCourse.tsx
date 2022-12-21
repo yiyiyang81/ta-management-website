@@ -31,7 +31,7 @@ const ChooseCourse = (props: {
             setAllCourses(currentCourses);
 
           } else {
-            const courseData = "email=" + props.userEmail; 
+            const courseData = "email=" + props.userEmail;
 
             let url = "";
             if (props.isInstructor) {
@@ -42,16 +42,16 @@ const ChooseCourse = (props: {
 
             const res = await callBackend(url);
             const data = await res.json();
-            
+
             const getCourses = new Array();
             data.forEach(c => {
                 getCourses.push((c.course_number) + " " + c.course_name);
             });
             setAllCourses(getCourses);
-  
+
           }
         }  catch (err) {
-            console.error(err);
+            //console.error(err);
         }
     };
 
