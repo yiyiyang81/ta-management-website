@@ -8,11 +8,12 @@ export abstract class CourseHelper {
 			const res = await callBackend(`/api/course/${courseId}`);
 			const data = await res.json();
 			const d = data.course
+			console.log("COURSe", data.course)
 			const term_year = d.term_year.split(" ");
 			let item = {
 				courseNumber: d.course_number,
 				courseName: d.course_name,
-				courseDesc: d.course_desc,
+				courseDesc: d.course_description,
 				term: term_year[0],
 				year: term_year[1],
 			};
@@ -42,7 +43,7 @@ export abstract class CourseHelper {
 				let item = {
 					courseNumber: d.course_number,
 					courseName: d.course_name,
-					courseDesc: d.course_desc,
+					courseDesc: d.course_description,
 					term: term_year[0],
 					year: term_year[1],
 				};
@@ -83,7 +84,7 @@ export abstract class CourseHelper {
 				let item = {
 					courseNumber: d.course_number,
 					courseName: d.course_name,
-					courseDesc: d.course_desc,
+					courseDesc: d.course_description,
 					term: term_year[0],
 					year: term_year[1],
 				};

@@ -101,10 +101,12 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
     let instuctorObjectList = await (async function (course_instructors: any, res: Response, next: NextFunction) {
         var resultObjectList: IProfessor[] = [];
         for (var email of course_instructors) {
-            let userId = await User.findOne({ email: email }).select("_id");
-            let course_instructor = await Professor.findOne({ professor: userId });
+            let user = await User.findOne({ email: email })
+            if (!user) {
+                user = await UserHelper.createSkeletonUserDb(course_number, course_number, email, course_number, course_number, [UserTypes.Professor])
+            }
+            let course_instructor = await Professor.findOne({ professor: user._id });
             if (!course_instructor) {
-                const user = await UserHelper.createSkeletonUserDb(course_number, course_number, email, course_number, course_number, [UserTypes.Professor])
                 course_instructor = await ProfHelper.checkExistsOrCreateSkeleton(user.email, user._id)
             }
             resultObjectList.push(course_instructor._id);
@@ -113,9 +115,9 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
     })(course_instructors, res, next);
 
     const course = new Course({ course_name, course_description, term_year, course_number, course_instructors: instuctorObjectList });
-    await course.save();
-    for (let i = 0; i < course_instructors; i++) {
-        let course_instructor = await Professor.findOne({ email: course_instructors[i].email });
+    const newCourse = await course.save();
+    for (let i = 0; i < newCourse.course_instructors.length; i++) {
+        let course_instructor = await Professor.findOne({ _id: newCourse.course_instructors[i]});
         if (course_instructor) {
             ProfHelper.addCourseToProf(course_instructor.email, course._id)
         }

@@ -9,15 +9,15 @@ import { UserContext } from "../../App";
 
 const UserRow = ({
   rowUser,
-  loadUserData,
+  loadAllData,
 }: {
   rowUser: User;
-  loadUserData: Function;
+  loadAllData: Function;
 }) => {
   const { user } = useContext(UserContext);
   const handleDeleteUser = async () => {
     await UserHelper.deleteUserByEmail(rowUser.email);
-    loadUserData();
+    loadAllData();
   };
 
   return (
@@ -31,7 +31,7 @@ const UserRow = ({
           .join(", ")}
       </td>
       <td className="column4">
-        <EditUserForm loadUserData={loadUserData} user={rowUser}></EditUserForm>
+        <EditUserForm loadAllData={loadAllData} user={rowUser}></EditUserForm>
       </td>
       <td className="column5 text-center">
         {rowUser.email !== user.email && (

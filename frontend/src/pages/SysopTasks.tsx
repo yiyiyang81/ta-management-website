@@ -34,8 +34,8 @@ const SysopTasks = () => {
 
   const loadAllData = async () => {
     loadUsers();
-    loadProfs();
     loadCourses();
+    loadProfs();
   };
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const SysopTasks = () => {
     {
       eventKey: "manageUsers",
       title: "Manage Users",
-      component: <ManageUsers users={users} loadUserData={loadUsers} />,
+      component: <ManageUsers users={users} loadAllData={loadAllData}/>,
     },
     {
       eventKey: "quickImport",
@@ -62,8 +62,7 @@ const SysopTasks = () => {
       title: "Manage Professors",
       component: (
         <ManageProfessors
-          loadProfsData={loadProfs}
-          loadCoursesData={loadCourses}
+          loadAllData={loadAllData}
           profs={profs}
         />
       ),
@@ -73,8 +72,7 @@ const SysopTasks = () => {
       title: "Manage Courses",
       component: (
         <ManageCourses
-          loadCoursesData={loadCourses}
-          loadProfsData={loadProfs}
+          loadAllData={loadAllData}
           courses={courses}
         />
       ),

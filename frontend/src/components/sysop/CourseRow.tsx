@@ -6,20 +6,16 @@ import { CourseHelper } from "../../helpers/CourseHelper";
 
 const CourseRow = ({
   course,
-  loadCoursesData,
-  loadProfsData,
+  loadAllData,
 }: {
   course: Course;
-  loadCoursesData: Function;
-  loadProfsData: Function;
+  loadAllData: Function;
 }) => {
   const handleDeleteCourse = async () => {
     await CourseHelper.deleteCourseByCourseNumber(course.courseNumber);
-    loadCoursesData();
-    loadProfsData();
+    loadAllData();
   };
   
-  console.log(course)
   return (
     <tr className="body">
       <td className="column0">{course.courseNumber}</td>

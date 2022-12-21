@@ -1,4 +1,5 @@
 export interface Professor {
+  termYear: string;
   hasCourse: boolean;
   courseName?: string;
   courseNumber?: string;

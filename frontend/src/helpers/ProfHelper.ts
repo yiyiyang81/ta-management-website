@@ -14,10 +14,11 @@ export abstract class ProfHelper {
 					const courseRes = await callBackend("api/course/" + d.course)
 					if (courseRes) {
 						const courseData = await courseRes.json()
-						if (course["exists"]) {
+						if (courseData.exists) {
 							course["hasCourse"] = true
 							course["courseName"] = courseData.course.course_name
 							course["courseNumber"] = courseData.course.course_number
+							course["termYear"] = courseData.course.term_year
 						}
 					}
 				}

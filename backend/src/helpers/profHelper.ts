@@ -37,15 +37,14 @@ export class ProfHelper {
 			throw new Error(`No instructor found with email: ${email}`)
 		}
 		let course = await Course.findOne({ _id: courseId })
-		if (!courseId) {
-			throw new Error(`No course found with id: ${courseId}`)
+		if (course) {
+			const filter = { email: email }
+			const update = {
+				course: course._id
+				
+			}
+			await Professor.findOneAndUpdate(filter, update);
 		}
-		const filter = { email: email }
-		const update = {
-			course: course
-
-		}
-		await Professor.findOneAndUpdate(filter, update);
 
 	}
 

@@ -53,7 +53,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_description: {
         type: String,
-        // required: true,
+        required: false,
     },
 
     term_year: {
@@ -68,7 +68,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_type: {
         type: String,
-        // required: true,
+        required: false,
     },
 
     course_enrollment_num: {

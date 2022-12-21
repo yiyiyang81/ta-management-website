@@ -1,5 +1,6 @@
 import { Schema } from "mongoose";
 import Course from "../models/Course";
+import { IProfessor } from "../models/Professor";
 
 export class CourseHelper {
 	static async getCourseByCourseId(courseId: Schema.Types.ObjectId) {
@@ -63,6 +64,23 @@ export class CourseHelper {
 			const filter = { _id: courseId }
 			const update = {
 				courses_instructors: filteredCourseProfs
+			}
+			await Course.findOneAndUpdate(filter, update);
+		}
+		else {
+			throw new Error("Course not found!")
+		}
+	}
+
+	static async addProfessorToCourse(courseId: Schema.Types.ObjectId, professor: IProfessor) {
+		const course = await Course.findOne({ _id: courseId })
+		if (course) {
+			const courseProfs = course.course_instructors
+			const filteredCourseProfs = courseProfs.filter((profId) => profId !== professor._id)
+			filteredCourseProfs.push(professor._id)
+			const filter = { _id: courseId }
+			const update = {
+				course_instructors: filteredCourseProfs
 			}
 			await Course.findOneAndUpdate(filter, update);
 		}

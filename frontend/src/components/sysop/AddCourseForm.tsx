@@ -11,7 +11,7 @@ import Select from "../../common/Select";
 import ErrorBox from "../../common/ErrorBox";
 
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
-const AddCourseForm = ({ loadCoursesData }) => {
+const AddCourseForm = ({ loadAllData }) => {
   const [show, setShow] = useState(false);
   const [courseDesc, setCourseDesc] = useState("");
   const [courseNumber, setCourseNumber] = useState("");
@@ -63,7 +63,7 @@ const AddCourseForm = ({ loadCoursesData }) => {
           });
           if (res.status === 201) {
             setTimeout(() => {
-              loadCoursesData();
+              loadAllData();
               setShow(false);
             }, 500);
           }
@@ -183,7 +183,7 @@ const AddCourseForm = ({ loadCoursesData }) => {
             <Row>
               {uniqueCourseError && (
                 <div className="mb-2">
-                  <ErrorBox errorMessage="* A professor with this email already exists. Please choose a different email."></ErrorBox>
+                  <ErrorBox errorMessage="* A course with this course number and term year already exists. Please create a different course."></ErrorBox>
                 </div>
               )}
               {displayEmptyFieldsError && (

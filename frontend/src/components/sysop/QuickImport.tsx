@@ -1,7 +1,4 @@
-import AddCourseForm from "./AddCourseForm";
-import CourseRow from "./CourseRow";
 import "../../style/userTable.css";
-import { Course } from "../../classes/Course";
 import ImportForm from "./ImportForm";
 import { createBackendUrl } from "../../apiConfig";
 

@@ -129,6 +129,7 @@ export const uploadProf = asyncHandler(async (req: Request, res: Response) => {
             if (!professor) {
                 throw new Error(`Error when creating professor for user ${instructor_user!._id}`)
             }
+            await CourseHelper.addProfessorToCourse(course._id, professor)
         }
     } else {
         res.status(500);

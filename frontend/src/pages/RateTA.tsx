@@ -25,46 +25,21 @@ const RateTA = () => {
   const fetchTaData = async () => {
     try {
       const courseRes = await callBackend("/api/course");
-      const courseData = await courseRes.json();
+      const courseData = (await courseRes.json())['courses']
 
       const taRes = await callBackend("/api/ta")
-      const taData = await taRes.json()
+      const taData = (await taRes.json())['TAs']
 
       const getCoursesForTa = (ta_id) => {
-        courseData.filter(course => course.course_TA.includes(ta_id))
+        return courseData.filter(course => course.course_TA.filter(ta => ta._id === ta_id).length > 0)
       }
       const taDictionary = {}
       for (let ta of taData){
         taDictionary[ta.email] = getCoursesForTa(ta._id)
       }
+      const taEmails = Object.keys(taDictionary)
       setTaDictionary(taDictionary)
-
-      // let allCourses = new Map();
-      // for (const d of data.ta_emails) {
-      //   let taEmail = d.email;
-      //   let courses = d.courses_applied_for_list;
-      //   let allCourses = new Map();
-      //   for (let i = 0; i < courses.length; i++) {
-      //     const courseNumber = courses[i].course_number;
-      //     const courseName = courses[i].course_name;
-      //     const fullCourseName = `${courseNumber}: ${courseName}`;
-      //     const termYear = courses[i].term_year;
-      //     if (allCourses.has(fullCourseName)) {
-      //       allCourses.get(fullCourseName)["termYear"].push(termYear);
-      //     } else {
-      //       let courseObject = {
-      //         courseNumber: courseNumber,
-      //         courseName: courseName,
-      //         termYear: [termYear],
-      //       };
-      //       allCourses.set(fullCourseName, courseObject);
-      //     }
-      //   }
-      //   allTas.set(taEmail, allCourses);
-      // }
-      // const taEmailsArray = Array.from(allTas.keys());
-      // setAllTasObject(allTas);
-      // setAllEmails(taEmailsArray);
+      setAllEmails(taEmails)
     } catch (err) {
       console.error(err);
     }
@@ -85,7 +60,7 @@ const RateTA = () => {
   useEffect(() => {
     let termYears = [];
     if (courseName !== "default") {
-      termYears = taDictionary[taEmail].filter(course => course.course_name === courseName)[0]["termYear"];
+      termYears = taDictionary[taEmail].filter(course => course.course_name === courseName).map(el => el.term_year)
     }
     setAllTermYears(termYears);
   }, [courseName, taEmail, taDictionary]);
@@ -112,7 +87,7 @@ const RateTA = () => {
   const submitRatingForm = async (e: any) => {
     e.preventDefault();
     if (isValidForm) {
-      const course_number = taDictionary['taEmail'].filter(course => course.course_name === courseName)[0].course_number
+      const course_number = taDictionary[taEmail].filter(course => course.course_name === courseName)[0].course_number
       try {
         const res = await callBackend("/api/ratings/add", {
           method: "POST",
@@ -121,6 +96,7 @@ const RateTA = () => {
           },
           body: JSON.stringify({
             course_number: course_number,
+            term_year: termYear,
             email: taEmail,
             rating_score: ratingScore,
             comment: comment,

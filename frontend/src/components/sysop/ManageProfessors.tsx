@@ -6,8 +6,7 @@ import ImportForm from "./ImportForm";
 import { createBackendUrl } from "../../apiConfig";
 
 const ManageProfessors = (props: {
-  loadProfsData: Function;
-  loadCoursesData: Function;
+  loadAllData:Function;
   profs: Array<Professor>;
 }) => {
   return (
@@ -21,10 +20,10 @@ const ManageProfessors = (props: {
           <ImportForm
             taskName="Professors"
             uploadUrl={createBackendUrl("/api/prof/uploadProf")}
-            loadFunction={props.loadProfsData}
+            loadFunction={props.loadAllData}
           />
           <div className="px-3"></div>
-          <AddProfForm loadProfsData={props.loadProfsData} />
+          <AddProfForm loadProfsData={props.loadAllData} />
         </div>
       </div>
       <hr></hr>
@@ -52,8 +51,7 @@ const ManageProfessors = (props: {
                   <ProfRow
                   key={i}
                   professor={professor}
-                  loadProfsData={props.loadProfsData}
-                  loadCoursesData={props.loadCoursesData}
+                  loadAllData={props.loadAllData}
                   />
                   );
               }
