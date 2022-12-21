@@ -19,10 +19,11 @@ export interface TA {
     open_to_other_courses: boolean,
     notes: string,
     assigned_hours: number
-    average_rating:number,
-    rating_comments:Array<string>,
-    performance_logs:Array<string>,
-    courses_assigned:Array<string>
+    average_rating: number,
+    rating_comments: Array<string>,
+    performance_logs: Array<string>,
+    courses_assigned: Array<string>,
+    courses_wishlisted: Array<string>
 }
 
 export const emptyTA: TA = {
@@ -44,5 +45,6 @@ export const emptyTA: TA = {
     average_rating: 0,
     rating_comments: [],
     performance_logs: [],
-    courses_assigned: []
+    courses_assigned: [],
+    courses_wishlisted: []
 };

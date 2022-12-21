@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import deleteIcon from "../../assets/images/trash-icon.png";
 import { TA } from "../../classes/TA";
 import { callBackend } from "../../apiConfig";

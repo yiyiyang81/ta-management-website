@@ -11,3 +11,17 @@ export interface CourseQuota {
   lecture_hours: string,
   course_instructors: string,
 }
+
+export const emptyCourseQuota: CourseQuota = {
+  course_name: "",
+  course_description: "",
+  term_year: "",
+  course_number: "",
+  course_type: "",
+  course_enrollment_num: 0,
+  TA_quota: 0,
+  is_need_fix: undefined,
+  instructor_office_hour: "",
+  lecture_hours: "",
+  course_instructors: ""
+}

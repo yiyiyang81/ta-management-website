@@ -2,7 +2,7 @@ import { TA } from "../../classes/TA";
 
 const TAInfoRow = (
   { ta }: {
-    ta: TA; 
+    ta: TA;
   }) => {
 
   return (
@@ -13,6 +13,8 @@ const TAInfoRow = (
       <td>{ta.TA_name}</td>
       <td>{ta.email}</td>
       <td>{ta.average_rating}</td>
+      <td>{ta.courses_assigned}</td>
+      <td>{ta.courses_wishlisted}</td>
     </tr>
   );
 };

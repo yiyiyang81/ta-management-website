@@ -19,24 +19,25 @@ const TAInfo = () => {
     const [studentNumber, setStudentNumber] = useState("");
     const [displayErrorSN, setDisplayErrorSN] = useState(false);
     const [displayErrorEmail, setDisplayErrorEmail] = useState(false);
-    const [ta, setTAInfo] = useState<TA>();
+    const [ta, setTAInfo] = useState<TA>(emptyTA);
     const [performanceLogs, setPerformanceLogs] = useState<Array<PerformanceLog>>([]);
     const [ratings, setRatings] = useState<Array<Rating>>([]);
 
+
+    //when a TA Student Number or Email is entered by the user, will fetch all data for this TA
     useEffect(() => {
         const fetchTAData = async () => {
             try {
-
                 let performance_logs: PerformanceLog[] = [];
                 let courses_assigned: string[] = [];
                 let average_rating = 0;
                 let rating_comments = [];
                 let taRowInfo = ta;
-                console.log("ta", taRowInfo)
+
+                //getting performance logs info and update state
                 try {
                     const performance_logs_res = await callBackend(`/api/performancelog/get?TA_email=` + ta.email);
                     const all_logs = await performance_logs_res.json();
-
                     for (let log of all_logs.log) {
                         if (log.time_date_stamped_comments.length !== 0) {
                             for (let comment of log.time_date_stamped_comments) {
@@ -51,6 +52,7 @@ const TAInfo = () => {
                     setPerformanceLogs([]);
                 }
 
+                //get info on courses this TA is assigned to
                 try {
                     const courses_assigned_res = await callBackend(`/api/course/ta/1?email=` + ta.email);
                     const all_courses_assigned = await courses_assigned_res.json();
@@ -58,36 +60,67 @@ const TAInfo = () => {
                         let course_info = course.course_number.concat(": ", course.term_year);
                         courses_assigned.push(course_info);
                     }
-                    taRowInfo["courses_assigned"] = courses_assigned;
+                    //course assigned will not be returned in a seperate table so no need to use state
+                    ta["courses_assigned"] = courses_assigned;
                 } catch (e) {
-                    taRowInfo["courses_assigned"] = [];
+                    ta["courses_assigned"] = [];
                 }
 
-                const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
-                const all_ratings = await ratings_res.json();
-                console.log(all_ratings)
+                //get course that this TA is a member of the prof's wishlist
+                try {
+                    //first get current date to get next semester
+                    var today = new Date();
+                    var mm = today.getMonth() + 1; //January is 0!
+                    var yyyy = today.getFullYear();
+                    let season: string;
+                    if (mm >= 1 && mm <= 4) {
+                        season = "Summer";
+                    }
+                    else if (mm >= 5 && mm <= 8) {
+                        season = "Fall";
+                    }
+                    else {
+                        season = "Winter";
+                    }
+                    let next_term_year = season + " " + String(yyyy);
 
-                if (all_ratings.ratings.length === 0) {
+                    //get courses that a prof wish this TA to work with
+                    const courses_wishlisted_res = await callBackend(`/api/tawishlist/ta?next_term_year=${next_term_year}&TA_email=${ta.email}`);
+                    const courses_wishlisted = await courses_wishlisted_res.json();
+                    ta["courses_wishlisted"] = courses_wishlisted.courses;
+                } catch (e) {
+                    ta["courses_wishlisted"] = [];
+                }
+
+                //get average rating and all ratings info
+                try {
+                    const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
+                    const all_ratings = await ratings_res.json();
+
+                    if (all_ratings.ratings.length === 0) {
+                        taRowInfo["average_rating"] = -1;
+                        setRatings([]);
+                    }
+                    else {
+                        for (let rating of all_ratings.ratings) {
+                            let course = await callBackend(`/api/course/${rating.course.toString()}`);
+                            let course_res = await course.json();
+                            let item = {
+                                "created_at": rating.createdAt,
+                                "course_number": rating.course_number,
+                                "course_name": course_res.course.course_name,
+                                "rating_score": rating.rating_score,
+                                "comment": rating.comment,
+                            }
+                            average_rating = average_rating + rating.rating_score;
+                            rating_comments.push(item);
+                        }
+                        taRowInfo["average_rating"] = average_rating / all_ratings.ratings.length;
+                        setRatings(rating_comments)
+                    }
+                } catch (e) {
                     taRowInfo["average_rating"] = -1;
                     setRatings([]);
-                }
-                else {
-                    for (let rating of all_ratings.ratings) {
-                        let course = await callBackend(`/api/course/${rating.course.toString()}`);
-                        let course_res = await course.json();
-                        console.log(course_res);
-                        let item = {
-                            "created_at": rating.createdAt,
-                            "course_number": rating.course_number,
-                            "course_name": course_res.course.course_name,
-                            "rating_score": rating.rating_score,
-                            "comment": rating.comment,
-                        }
-                        average_rating = average_rating + rating.rating_score;
-                        rating_comments.push(item);
-                    }
-                    taRowInfo["average_rating"] = average_rating / all_ratings.ratings.length;
-                    setRatings(rating_comments)
                 }
                 setTAInfo(taRowInfo);
             } catch (err) {
@@ -97,6 +130,7 @@ const TAInfo = () => {
         fetchTAData();
     }, [ta])
 
+    //verify if the TA exists with Student Number specified
     const checkValidTABySN = async () => {
         try {
             const res = await callBackend(`/api/ta/student-number/${studentNumber}`, {
@@ -111,6 +145,7 @@ const TAInfo = () => {
         }
     };
 
+    //verify if the TA exists with email specified
     const checkValidTAByEmail = async () => {
         try {
             const res = await callBackend(`/api/ta/email/${email}`, {
@@ -125,19 +160,19 @@ const TAInfo = () => {
         }
     };
 
+    //reset all states to initial values
     const handleGoBack = () => {
         setTAInfo(emptyTA);
         setEmail("");
         setStudentNumber("");
+        setPerformanceLogs([]);
+        setRatings([]);
         setSubPage("Search");
     }
 
     const handleTASNSearchClick = async () => {
-
         setDisplayErrorSN(false)
-
         const ta = await checkValidTABySN();
-
         if (ta.TAs !== null && ta.TAs !== undefined) {
             setSubPage("TA");
             setTAInfo(ta.TAs);
@@ -149,11 +184,8 @@ const TAInfo = () => {
 
 
     const handleTAEmailSearchClick = async () => {
-
         setDisplayErrorEmail(false);
-
         const ta = await checkValidTAByEmail();
-
         if (ta.TAs !== null && ta.TAs !== undefined) {
             setSubPage("TA");
             setTAInfo(ta.TAs);
@@ -204,6 +236,8 @@ const TAInfo = () => {
                                         <th >Student Name</th>
                                         <th >Email</th>
                                         <th >Average Rating</th>
+                                        <th >Courses Assigned</th>
+                                        <th >Wishlisted Next Term</th>
                                     </tr>
                                 </thead>
                                 <tbody>
