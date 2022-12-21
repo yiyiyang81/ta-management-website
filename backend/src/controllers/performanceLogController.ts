@@ -1,13 +1,15 @@
 import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import PerformanceLog from "../models/PerformanceLog";
+import { getTermYear } from "./ohResponsibilitiesController";
 
 // @Desc Adds a time and date stamped comment about a TA to the TA's performance log
 // @Route /api/performancelog/add
 // @Method POST
 export const addPerformanceLog = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number, TA_name, TA_email, time_date_stamped_comment } = req.body;
+    const { course_number, TA_name, TA_email, time_date_stamped_comment } = req.body;
 
+    const term_year = getTermYear();
     const log = await PerformanceLog.findOne({ term_year: term_year, course_number: course_number, TA_email: TA_email });
 
     if (!log) {
@@ -24,7 +26,7 @@ export const addPerformanceLog = asyncHandler(async (req: Request, res: Response
             TA_email: new_log.TA_email,
             time_date_stamped_comments: new_log.time_date_stamped_comments
         });
-    } else {
+    } else { // add new log to the existing document containing all logs by prof about same TA
         log.time_date_stamped_comments.push(time_date_stamped_comment);
         await log.save()
         res.status(200).json({
@@ -42,7 +44,7 @@ export const addPerformanceLog = asyncHandler(async (req: Request, res: Response
 // @Route /api/performancelog/coursecomments
 // @Method GET
 export const getCourseComments = asyncHandler(async (req: Request, res: Response) => {
-    const term_year = req.query.term_year;
+    const term_year = getTermYear();
     const course_number = req.query.course_number;
     const TA_email = req.query.TA_email;
 
@@ -64,8 +66,8 @@ export const getPerformanceLogs = asyncHandler(async (req: Request, res: Respons
     const log = await PerformanceLog.find({ TA_email: TA_email });
 
     if (!log.length) {
-        res.status(404).json({}); // prof didn't record any logs about this TA
+        res.status(200).json({}); // prof didn't record any logs about this TA
     } else {
-        res.status(200).json({ all_performance_logs: JSON.stringify(log) });
+        res.status(200).json({ log });
     }
 });

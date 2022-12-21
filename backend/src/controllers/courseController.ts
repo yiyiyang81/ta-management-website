@@ -4,10 +4,11 @@ import Course from "../models/Course";
 import User, { UserTypes } from "../models/User";
 import Professor from "../models/Professor";
 import { IProfessor } from "../models/Professor";
-import { parse } from 'csv-string';
+import { forEach, parse } from 'csv-string';
 import TA from "../models/TA";
 import { ProfHelper } from "../helpers/profHelper";
 import { UserHelper } from "../helpers/userHelper";
+import mongoose from "mongoose";
 
 // @Desc Get all Courses
 // @Route /api/course
@@ -25,9 +26,25 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
-
-
 // @Desc Get course by ID
+// @Desc Get Course by term year and course number
+// @Route /api/course/search/:term_year/:course_number
+// @Method GET
+export const getCourse = asyncHandler(async (req: Request, res: Response) => {
+    const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
+
+    let course = await Course.findOne({ term_year: term_year, course_number: course_number });
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
+});
+
+// @Desc Get all Courses
 // @Route /api/course/:id
 // @Method GET
 export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
@@ -168,6 +185,60 @@ export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
     }
 });
 
+// @Desc Get the course's current prof
+// @Route /api/course/:id/prof
+// @Method GET
+export const getCourseProf = asyncHandler(async (req: Request, res: Response) => {
+
+    const term_year = req.query.term_year!;
+    const course_number = req.query.course_number!;
+
+    if (!term_year) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        let season: string;
+        if (mm >= 1 && mm <= 4) {
+            season = "Winter";
+        }
+        else if (mm >= 5 && mm <= 8) {
+            season = "Summer";
+        }
+        else {
+            season = "Fall";
+        }
+
+        let current_term_year = season + " " + String(yyyy);
+
+        let course = await Course.findOne({ course_number: course_number, term_year: current_term_year });
+
+        if (!course) {
+            res.status(404);
+            throw new Error("Course not found");
+        }
+
+        let instructors = await course.course_instructors;
+
+        res.status(200).json({ instructors: instructors }
+        );
+    }
+    else {
+        let course = await Course.findOne({ course_number: course_number, term_year: term_year });
+
+        if (!course) {
+            res.status(404);
+            throw new Error("Course not found");
+        }
+
+        let instructors = await course.course_instructors;
+
+        res.status(200).json({ instructors: instructors }
+        );
+    }
+});
+
 // @Desc Delete Course
 // @Route /api/course/delete/:courseNumber
 // @Method DELETE
@@ -234,14 +305,18 @@ export const addTaToCourse = asyncHandler(async (req: Request, res: Response) =>
         throw new Error("Course not found");
     }
     course.add_ta_to_course(ta);
-    res.status(200).json({});
+    res.status(201).json({});
 });
 
 // @Desc delete a TA to a Course
-// @Route /api/course/:id/ta/:id
+// @Route /api/course/:term_year/:cousre_number/ta/:email
 // @Method DELETE
 export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Response) => {
-    const { course_number, term_year, email } = req.body;
+    // const { course_number, term_year, email } = req.body;
+    const term_year = req.params.term_year!;
+    const course_number = req.params.course_number!;
+    const email = req.params.email!;
+
 
     let ta = await TA.findOne({ email: email });
 
@@ -278,4 +353,19 @@ export const checkValidCourse = asyncHandler(async (req: Request, res: Response)
     res.status(200).json({
         courseExists: courseExists,
     });
+});
+// @Desc get the courses from all history
+// @Route /api/course/:course_number/
+// @Method GET
+export const getCoursesByCourseNumber = asyncHandler(async (req: Request, res: Response) => {
+    const course_number = req.params.course_number!;
+
+    let course = await Course.find({ course_number: course_number });
+
+    if (!course) {
+        res.status(404);
+        throw new Error("Course not found!");
+    }
+
+    res.status(200).json({ course });
 });

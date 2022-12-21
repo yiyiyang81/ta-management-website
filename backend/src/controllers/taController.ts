@@ -22,7 +22,10 @@ export const getAllTAs = asyncHandler(async (req: Request, res: Response) => {
 // @Method POST
 export const registerTAFromFile = asyncHandler(async (req: Request, res: Response) => {
     const csv = req.file;
-    const type = req.body;  //need to pass the file type info from frontend
+    const type = req.params.fileType;  //need to pass the file type info from frontend
+
+    console.log("csv", csv)
+    console.log("type", type)
     if (!csv) {
         res.status(500);
         throw new Error("File upload unsuccessful.");
@@ -32,14 +35,15 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
         const fileContent = parse(csv.buffer.toString('utf-8'));
         for (let record of fileContent) {
             const taEmail = record[4];
-            const courses_applied = record[13];
+            const courses_applied = record[13].split(" ");
+            const term_year = record[0];
+            console.log("courses_applied", courses_applied);
             let courses_applied_for_list: ICourse[] = []
             // doing checks before adding the information to database
             for (let course_number of courses_applied) {
-                let course = await Course.findOne({ course_number: course_number });
+                let course = await Course.findOne({ course_number: course_number, term_year: term_year });
                 if (!course) {
-                    // res.status(404);
-                    console.log("Course not found in the database! Skipping course %s .", course_number);
+                    console.log(`Course not found in the database! Skipping course ${course_number}.`);
                 }
                 else {
                     courses_applied_for_list.push(course);
@@ -79,24 +83,13 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             const course_enrollment_num = Number(record[5]);
             const TA_quota = Number(record[6]);
             let any_prof = await Professor.findOne();//need an instance to invoke schema method
-            //will exit the loop if there is no professor in the db
-            if (!any_prof) {
-                res.status(404);
-                console.log("Empty database for instructor! Cannot proceed");
-                break;
-            }
-            let instructor = any_prof.get_prof_by_name(instructor_name);
             let course = await Course.findOne({ course_number: course_number, term_year: term_year });
-            if (!instructor) {
-                console.log("Instructor not found in the database! Skipping row.");
-                continue;
-            }
-            else if (!course) {
+            if (!course) {
                 console.log("Course not found in the database! Skipping row.");
                 continue;
             }
             else {
-                course.update_course_quota(term_year, course_number, course_type, course_enrollment_num, TA_quota);
+                course.update_course_quota(course_type, course_enrollment_num, TA_quota);
             }
         }
     }
@@ -119,7 +112,7 @@ export const addTA = asyncHandler(async (req: Request, res: Response) => {
     let courses_applied_found: ICourse[] = [];
 
     for (let course_number of courses_applied_for_list) {
-        let course = await Course.findOne({course_number: course_number });
+        let course = await Course.findOne({ course_number: course_number });
         if (!course) {
             console.log("Course not found in the database! Skipping course %s .", course_number);
         }
@@ -165,5 +158,29 @@ export const addTA = asyncHandler(async (req: Request, res: Response) => {
         courses_applied_for_list: ta.courses_applied_for_list,
         open_to_other_courses: ta.open_to_other_courses,
         notes: ta.notes
+    });
+});
+
+// @Desc Get TA by email
+// @Route /api/ta/email/:email
+// @Method GET
+export const getTAByEmail = asyncHandler(async (req: Request, res: Response) => {
+    const email = req.params.email;
+    const TAs = await TA.findOne({ email: email });
+    res.status(200).json({
+        TAs
+    });
+});
+
+// @Desc Get TA by student number
+// @Route /api/ta/student-number/:student_number
+// @Method GET
+export const getTAByStudentNumber = asyncHandler(async (req: Request, res: Response) => {
+    const student_number = req.params.student_number;
+    console.log(student_number)
+    const TAs = await TA.findOne({ student_ID: student_number });
+    console.log(TAs)
+    res.status(200).json({
+        TAs
     });
 });

@@ -1,0 +1,28 @@
+.ta-admin-container {
+    padding: 0rem 4rem;
+    max-width: 50rem;
+}
+
+.ta-admin-button-container {
+    width: 15rem;
+    float: none;
+}
+
+.ta-admin-box-container {
+    width: 25rem;
+    float: none;
+}
+
+@media (max-width: 576px) {
+    .ta-admin-container {
+        padding: 0rem 2rem;
+    }
+    .ta-admin-button-container {
+        width: 100%;
+        float: none;
+    }
+    .ta-admin-box-container {
+        width: 100%;
+        float: none;
+    }
+}

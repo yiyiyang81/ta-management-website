@@ -10,7 +10,7 @@ export const addTAToWishlist = asyncHandler(async (req: Request, res: Response) 
 
     const tawl = await TAWishlist.findOne({ next_term_year: next_term_year, course_number: course_number, instructor_email: instructor_email });
 
-    if(!tawl) {
+    if(!tawl) { // create wishlist for instructor if doesn't exist yet
         let TA_names = Array();
         let TA_emails = Array();
 
@@ -29,9 +29,12 @@ export const addTAToWishlist = asyncHandler(async (req: Request, res: Response) 
             instructor_name: wl.instructor_name
         });
 
-    } else { 
-        tawl.TA_names.push(TA_name);
-        tawl.TA_emails.push(TA_email);
+    } else { // add TA to existing wishlist
+        if (!tawl.TA_emails.includes(TA_email)) { // check if TA has been added already
+            tawl.TA_names.push(TA_name);
+            tawl.TA_emails.push(TA_email);
+            await tawl.save();
+        }
 
         await tawl.save();
         res.status(200).json({
@@ -56,7 +59,7 @@ export const getInstructorWishlist = asyncHandler(async (req: Request, res: Resp
     const tawl = await TAWishlist.findOne({ next_term_year: next_term_year, instructor_email: instructor_email });
 
     if (!tawl) {
-        res.status(404).json({}); // instructor has no wishlist
+        res.status(200).json({}); // instructor has no wishlist
     } else {
         res.status(200).json({ wished_TAs: tawl.TA_emails });
     }
@@ -75,8 +78,8 @@ export const getCoursesTAWishlisted = asyncHandler(async (req: Request, res: Res
         const tawls = await TAWishlist.find({ next_term_year: next_term_year });
 
         if (!tawls) {
-            res.status(404).json({}); // no wishlist exists for next term year yet
-        } else {
+            res.status(200).json({}); // no wishlist exists for next term year yet
+        } else { // search through each wishlist to check if TA is in a wishlist
                 let courses = new Array();
                 tawls.forEach(function(wl) {
                     if (wl.TA_emails.includes(TA_email)) {

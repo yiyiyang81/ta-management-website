@@ -18,7 +18,8 @@ const CourseRow = ({
     loadCoursesData();
     loadProfsData();
   };
-
+  
+  console.log(course)
   return (
     <tr className="body">
       <td className="column0">{course.courseNumber}</td>

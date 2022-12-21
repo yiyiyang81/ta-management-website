@@ -34,7 +34,7 @@ export interface ICourse extends mongoose.Document {
     course_instructors: [IProfessor],
     course_TA: [ITA],
     TA_wishlist: [ITA]
-    update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
+    update_course_quota(course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
     get_course_TA_info(course_number: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[], term_year: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[]): Promise<Array<any>>,
     get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
     add_wishlist_to_course(course_number: String, term_year: String): Promise<string>,
@@ -113,9 +113,16 @@ const CourseSchema = new mongoose.Schema({
 
 
 //Database Methods
-CourseSchema.methods.update_course_quota = function (term_year: string, course_number: string,
+CourseSchema.methods.update_course_quota = async function (
+    // term_year: string, course_number: string,
     course_type: string, course_enrollment_num: number, TA_quota: number) {
-    return Course.updateOne({ "term_year": term_year, "course_number": course_number },
+
+    console.log("course_enrollment_num", course_enrollment_num);
+    console.log("course_type", course_type)
+    console.log("TA_quota", TA_quota)
+
+    return await this.updateOne(
+        // { "term_year": term_year, "course_number": course_number },
         { $set: { course_type: course_type, course_enrollment_num: course_enrollment_num, TA_quota: TA_quota } }
     );
 }
@@ -159,7 +166,7 @@ CourseSchema.methods.add_ta_to_course = async function (ta: ITA) {
     else {
         console.log("TA already exist!");
     }
-    return this.updateOne({ $set: { course_TA: current_ta_list } });
+    return await this.updateOne({ $set: { course_TA: current_ta_list } });
 }
 
 CourseSchema.methods.add_prof_to_course = async function (prof: IProfessor) {

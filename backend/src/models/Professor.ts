@@ -54,7 +54,7 @@ const ProfessorSchema = new mongoose.Schema({
 
 ProfessorSchema.methods.get_prof_by_email = async function (email: string) {
     const user_id = await User.findOne({ email: email }, { _id: 1 });
-    return Professor.findOne({ professor: user_id });
+    return await Professor.findOne({ professor: user_id });
 }
 
 ProfessorSchema.methods.get_prof_by_name = async function (name: string) {
@@ -67,7 +67,7 @@ ProfessorSchema.methods.get_prof_by_name = async function (name: string) {
             $regex: new RegExp(last_name, "i")
         }
     }, { _id: 1 });
-    return Professor.findOne({ professor: user_id });
+    return await Professor.findOne({ professor: user_id });
 }
 
 const Professor = mongoose.model<IProfessor>("Professor", ProfessorSchema);
