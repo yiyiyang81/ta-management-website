@@ -37,7 +37,7 @@ const AddTAToWishlist = (props: {
             const data = await res.json();
             data.course_TA.forEach(c => {
                 courseTAs.push(c.TA_name + " " + c.email);
-            })
+            });
 
             setAllTAs(courseTAs);
             
@@ -87,6 +87,11 @@ const AddTAToWishlist = (props: {
                 required={true}
                 name="wishedTA"
                 id="wishedTA"
+                placeholder={
+                    allTAs && allTAs.length !== 0
+                  ? "Select a TA"
+                  : "No TAs available"
+                }
                 options={allTAs}
                 value={props.wishedTA}
                 handleChange={props.handleTA}

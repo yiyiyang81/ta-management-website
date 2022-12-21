@@ -37,12 +37,11 @@ const AddPerformanceLog = (props: {
             const url = createBackendUrl("/api/course/1/ta?" + courseData);
             const res = await callBackend(url);
 
-            let courseTAs = new Array();
+            let courseTAs = [];
             const data = await res.json();
             data.course_TA.forEach(c => {
                 courseTAs.push(c.TA_name + " " + c.email);
-            })
-
+            });
             setAllTAs(courseTAs);
             
         }  catch (err) {
@@ -74,6 +73,11 @@ const AddPerformanceLog = (props: {
                 required={true}
                 name="loggedTA"
                 id="loggedTA"
+                placeholder={
+                    allTAs && allTAs.length !== 0
+                  ? "Select a TA"
+                  : "No TAs available"
+                }
                 options={allTAs}
                 value={props.loggedTA}
                 handleChange={props.handleLoggedTA}
