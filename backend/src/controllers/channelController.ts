@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Channel from "../models/Channel";
 import Post from "../models/Post";
+import { getTermYear } from "./ohResponsibilitiesController";
 
 // @Desc Create a channel for a course for the given term_year
 // @Route /api/channel/create
 // @Method POST
 export const createChannel = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number } = req.body;
+    const { course_number } = req.body;
+
+    const term_year = getTermYear();
 
     const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
@@ -31,7 +34,9 @@ export const createChannel = asyncHandler(async (req: Request, res: Response) =>
 // @Route /api/channel/post
 // @Method POST
 export const addPost = asyncHandler(async (req: Request, res: Response) => {
-    const { term_year, course_number, author_name, title, content, time_date } = req.body;
+    const { course_number, author_name, title, content, time_date } = req.body;
+
+    const term_year = getTermYear();
 
     const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });
 
@@ -57,7 +62,7 @@ export const addPost = asyncHandler(async (req: Request, res: Response) => {
 // @Route /api/channel/posts
 // @Method GET
 export const getPosts = asyncHandler(async (req: Request, res: Response) => {
-    const term_year = req.query.term_year;
+    const term_year = getTermYear()
     const course_number = req.query.course_number;
 
     const channel = await Channel.findOne({ term_year: term_year, course_number: course_number });

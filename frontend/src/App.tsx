@@ -7,6 +7,8 @@ import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration";
 import AdminCourse from "./pages/AdminCourse";
 import Header from "./components/Header";
+import TAManagement from "./pages/TAManagement";
+import { UserTypes } from "./enums/UserTypes";
 import RateTA from "./pages/RateTA";
 import SysopTasks from "./pages/SysopTasks";
 
@@ -53,6 +55,8 @@ const App = () => {
           />
           <Route path="/logout" element={<LoggedOut />} />
           <Route path="/register" element={<Registration />} />
+          <Route path="/course" element={<AdminCourse />} />
+          <Route path="/dashboard/ta-management" element={<TAManagement />} />
           <Route
             path="/dashboard/ta-administration"
             element={<AdminCourse />}
