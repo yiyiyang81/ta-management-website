@@ -12,6 +12,7 @@ const AddPerformanceLog = (props: {
     handleAddLog: React.Dispatch<React.SetStateAction<any>>;
     handleLog: React.Dispatch<React.SetStateAction<any>>;
     handleLoggedTA: React.Dispatch<React.SetStateAction<any>>;
+    adminLogError: boolean;
     performanceLogSuccess: boolean;
     missingTAError: boolean;
     courseName: string;
@@ -20,7 +21,7 @@ const AddPerformanceLog = (props: {
 }) => {
 
     const [allTAs, setAllTAs] = React.useState<Array<String>>([]);
-    const [log, setLog] = useState(""); 
+    const [log, setLog] = useState("");
 
     // goal: want user to see what they're typing in the text box
     const handleLogChange = (event: {
@@ -28,7 +29,7 @@ const AddPerformanceLog = (props: {
       }) => {
         setLog(event.target.value);
     };
-    
+
     // get all TAs associated with the selected course
     // goal: want to give a dropdown of all TAs for the prof to pick from
     const fetchTAData = async () => {
@@ -43,9 +44,9 @@ const AddPerformanceLog = (props: {
                 courseTAs.push(c.TA_name + " " + c.email);
             });
             setAllTAs(courseTAs);
-            
+
         }  catch (err) {
-            console.error(err);
+            //console.error(err);
         }
     };
 
@@ -67,7 +68,7 @@ const AddPerformanceLog = (props: {
         Record an instructor's notes about TAs.
         </div>
         <div style={{width: "40%"}}>
-          
+
             <Select
                 label="Teaching Assistant"
                 required={true}
@@ -108,14 +109,21 @@ const AddPerformanceLog = (props: {
                 value="Save Performance Log"
               ></Button>
             </form>
-        </div>
-        {props.performanceLogSuccess && (
-            <div className="d-flex align-items-center mb-4">
-                <img src={CheckIcon} height="20"></img>
-                <div className="review-submitted-text">
-                <b>Your performance log has been saved!</b>
-                </div>
             </div>
+
+            {props.adminLogError && (
+              <div className="mb-2">
+                <ErrorBox errorMessage="* Only the selected course's professors can save their logs."></ErrorBox>
+              </div>
+            )}
+
+            {props.performanceLogSuccess && (
+                <div className="d-flex align-items-center mb-4">
+                    <img src={CheckIcon} height="20"></img>
+                    <div className="review-submitted-text">
+                    <b>Your performance log has been saved!</b>
+                    </div>
+                </div>
         )}
       </Container>
     </div>

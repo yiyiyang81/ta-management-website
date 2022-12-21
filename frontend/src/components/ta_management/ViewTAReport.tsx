@@ -68,9 +68,9 @@ const ViewTAReport = (props: {
             }
 
             setTAInfo(TAInfo);
-            
+
         }  catch (err) {
-            console.error(err);
+            //console.error(err);
         }
     };
 
