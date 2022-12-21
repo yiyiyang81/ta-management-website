@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import React from "react";
 import { Modal } from "react-bootstrap";
 import "../../style/userTable.css";
@@ -12,6 +12,13 @@ function AdminImportForm({ taskName, uploadUrl, fileType }: { taskName: string, 
   function handleChange(e) {
     setFile(e.target.files[0]);
   }
+  const generateWidthStyle = () => {
+    return {
+      minWidth: "100%",
+      maxWidth: "15 rem",
+      width: "100%",
+    };
+  };
 
   const handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,10 +50,12 @@ function AdminImportForm({ taskName, uploadUrl, fileType }: { taskName: string, 
 
   return (
     <div id="ta-review-modal">
-      <button className="courses" onClick={() => setShow(true)}>
-        <FileDownload /> Import
-      </button>
-
+      <div className="ta-admin-button-container">
+        <button className="primary-button"
+          style={generateWidthStyle()} onClick={() => setShow(true)}>
+          <FileDownload /> Import
+        </button>
+      </div>
       <Modal show={show} onHide={() => setShow(false)} dialogClassName="modal-md" aria-labelledby="example-custom-modal-styling-title">
         <Modal.Header closeButton>
           <Modal.Title id="example-custom-modal-styling-title">{`Import ${taskName}`}</Modal.Title>
@@ -65,7 +74,7 @@ function AdminImportForm({ taskName, uploadUrl, fileType }: { taskName: string, 
           </Form>
         </Modal.Body>
       </Modal>
-    </div>
+    </div >
   );
 }
 

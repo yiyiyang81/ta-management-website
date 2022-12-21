@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddTaToCourse from "./AddTaToCourse";
 import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
+import "../../style/taAdmin.css"
 import { CourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
 import ImportForm from "../sysop/ImportForm";
@@ -9,7 +10,6 @@ import { Container } from "react-bootstrap";
 import { callBackend, createBackendUrl } from "../../apiConfig";
 import SearchCourseSimple from "./SearchCourseSimple";
 import Button from "../../common/Button";
-import TARow from "./TARow";
 import TAPlainRow from "./TAHistoryRow";
 
 
@@ -20,8 +20,6 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
 }) => {
 
     const [subPage, setSubPage] = useState("Search");
-
-    // const [courseNumber, setCourseNumber] = useState("default");
     const [displayError, setDisplayError] = useState(false);
     const [coursesInfo, setCoursesInfo] = useState<Array<CourseQuota>>([]);
     const [tas, setTas] = useState<Array<TA>>([]);
@@ -132,7 +130,7 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
 
 
     return (
-        <div>
+        <div className="ta-admin-container">
             {subPage === "Search" && (
                 <div>
                     <SearchCourseSimple
@@ -146,13 +144,6 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
 
             {subPage === "Course" && (
                 <div>
-                    <Button
-                        width="15rem"
-                        type="primary"
-                        value="Go Back"
-                        onClick={handleGoBack}
-                    ></Button>
-
                     <Container className="mt-3">
                         <div className="rowC">
                             <h2 style={{ marginBottom: "20px" }}>TA History</h2>
@@ -177,6 +168,14 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
                                     ))}
                                 </tbody>
                             </table>
+                    <div className="ta-admin-button-container">
+                        <Button
+                            width="15rem"
+                            type="primary"
+                            value="Go Back"
+                            onClick={handleGoBack}
+                        ></Button>
+                    </div>
                         </div>
                     </Container>
 

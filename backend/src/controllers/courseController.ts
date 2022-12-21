@@ -43,8 +43,8 @@ export const getCourse = asyncHandler(async (req: Request, res: Response) => {
 // @Desc Get all Courses
 // @Route /api/course/:id
 // @Method GET
-export const getCourseById= asyncHandler(async (req: Request, res: Response) => {
-    let course = await Course.findOne({_id: req.params.id});
+export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
+    let course = await Course.findOne({ _id: req.params.id });
     if (!course) {
         res.status(404);
         throw new Error(`No course with Object ID ${req.params.id} in the database!`);
@@ -291,19 +291,3 @@ export const getCoursesByCourseNumber = asyncHandler(async (req: Request, res: R
 
     res.status(200).json({ course });
 });
-
-// // @Desc Get Course by id
-// // @Route /api/course/course-id/:id
-// // @Method GET
-// export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
-//     const id = new mongoose.Types.ObjectId(req.params.id!);
-
-//     let course = await Course.findOne({ _id: id });
-
-//     if (!course) {
-//         res.status(404);
-//         throw new Error("Course not found!");
-//     }
-
-//     res.status(200).json({ course });
-// });

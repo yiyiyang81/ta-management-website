@@ -3,9 +3,11 @@ import { Modal, Button, Form, Row, Col } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import "../../style/userTable.css";
 import { callBackend } from "../../apiConfig";
+import TinyTile from "../../common/TinyTile";
+import ManualAddIcon from "./../../assets/images/manual-add-icon.png";
 
 // Form that adds a course with fields: courseCode, courseNumber, courseName, term, year
-const AddTaToCourse = ({ courseNumber, termYear,handleTAChange}) => {
+const AddTaToCourse = ({ courseNumber, termYear, handleTAChange }) => {
     const [show, setShow] = React.useState(false);
     const [taEmail, setTAEmail] = React.useState("");
 
@@ -37,9 +39,12 @@ const AddTaToCourse = ({ courseNumber, termYear,handleTAChange}) => {
 
     return (
         <div>
-            <button className="mb-4 mt-2" onClick={() => setShow(true)}>
-                <AddIcon />
-            </button>
+            <TinyTile
+                value="Manually add a user"
+                image={ManualAddIcon}
+                width="8rem"
+                onClick={() => setShow(true)}
+            ></TinyTile>
 
             <Modal show={show} onHide={() => setShow(false)} dialogClassName="modal-lg" aria-labelledby="example-custom-modal-styling-title">
                 <Modal.Header closeButton>

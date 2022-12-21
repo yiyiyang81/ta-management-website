@@ -34,11 +34,6 @@ const TARow = (
 
   return (
     <tr className="profTable">
-      <td className="column0">
-        <button className="btn btn-secondary" onClick={handleDeleteTA}>
-          <RemoveIcon />
-        </button>
-      </td>
       <td>{ta.student_ID}</td>
       <td>{ta.TA_name}</td>
       <td>{ta.email}</td>
@@ -46,6 +41,11 @@ const TARow = (
       <td>{ta.rating_comments}</td>
       <td>{ta.performance_logs}</td>
       <td>{ta.courses_assigned}</td>
+      <td className="column0">
+        <button className="btn btn-secondary" onClick={handleDeleteTA}>
+          <RemoveIcon />
+        </button>
+      </td>
     </tr>
   );
 };

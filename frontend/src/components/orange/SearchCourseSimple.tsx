@@ -44,7 +44,7 @@ const SearchCourseSimple = (props: {
                             <ErrorBox errorMessage="Course does not exist!"></ErrorBox>
                         </div>
                     )}
-                    <div>
+                    <div className="ta-admin-button-container">
                         <Button
                             width="15rem"
                             type="primary"

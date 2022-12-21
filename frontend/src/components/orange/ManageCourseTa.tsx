@@ -10,6 +10,7 @@ import { callBackend, createBackendUrl } from "../../apiConfig";
 import SearchCourse from "./SearchCourse";
 import Button from "../../common/Button";
 import TARow from "./TARow";
+import "../../style/taAdmin.css"
 
 
 const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
@@ -165,7 +166,7 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
 
 
   return (
-    <div>
+    <div className="ta-admin-container">
       {subPage === "Search" && (
         <div>
           <SearchCourse
@@ -215,33 +216,31 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
 
       {subPage === "Course" && (
         <div>
-          <Button
-            width="15rem"
-            type="primary"
-            value="Go Back"
-            onClick={() => setSubPage("Search")}
-          ></Button>
-
-          <Container className="mt-3">
-            <div className="rowC">
+          <div>
+            <div className="mb-5">
               <h2 style={{ marginBottom: "20px" }}>Current TA</h2>
-              <AddTaToCourse
-                courseNumber={courseInfo.course_number}
-                termYear={courseInfo.term_year}
-                handleTAChange={handleTAChange} />
+              <div className="d-flex flex-wrap align-items-center">
+                <AddTaToCourse
+                  courseNumber={courseInfo.course_number}
+                  termYear={courseInfo.term_year}
+                  handleTAChange={handleTAChange} />
+              </div>
             </div>
+            <hr></hr>
+          </div>
+          <Container>
             <div id="profTable">
               <table className="table table-striped">
                 <thead>
                   <tr>
-                    <th className="column0"></th>
-                    <th >Student Number</th>
+                    <th className="column0" >Student Number</th>
                     <th >Student Name</th>
                     <th >Email</th>
                     <th >Average Rating</th>
                     <th >Rating Comments</th>
                     <th >Performance Logs</th>
                     <th >Courses Assigned</th>
+                    <th >Delete</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -251,6 +250,14 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
                   ))}
                 </tbody>
               </table>
+            </div>
+            <div className="ta-admin-button-container">
+              <Button
+                width="15rem"
+                type="primary"
+                value="Go Back"
+                onClick={() => setSubPage("Search")}
+              ></Button>
             </div>
           </Container>
 

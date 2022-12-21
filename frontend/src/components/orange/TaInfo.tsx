@@ -1,24 +1,16 @@
 import React, { useEffect, useState } from "react";
-import AddTaToCourse from "./AddTaToCourse";
-import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
-import { Course } from "../../classes/Course";
 import { TA, emptyTA } from "../../classes/TA";
-import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
-import { callBackend, createBackendUrl } from "../../apiConfig";
-import SearchCourseSimple from "./SearchCourseSimple";
+import { callBackend } from "../../apiConfig";
 import Button from "../../common/Button";
-import TARow from "./TARow";
 import TAInfoRow from "./TAInfoRow";
 import SearchTA from "./SearchTA";
 import PerformanceLogRow from "./PerformanceLogRow";
 import { PerformanceLog } from "../../classes/PerformanceLog";
 import { Rating } from "../../classes/Rating";
 import RatingRow from "./RatingRow";
-
-
-
+import "../../style/taAdmin.css"
 
 const TAInfo = () => {
 
@@ -27,7 +19,7 @@ const TAInfo = () => {
     const [studentNumber, setStudentNumber] = useState("");
     const [displayErrorSN, setDisplayErrorSN] = useState(false);
     const [displayErrorEmail, setDisplayErrorEmail] = useState(false);
-    const [mode, setMode] = useState("");
+    // const [mode, setMode] = useState("");
     const [ta, setTAInfo] = useState<TA>();
     const [performanceLogs, setPerformanceLogs] = useState<Array<PerformanceLog>>([]);
     const [ratings, setRatings] = useState<Array<Rating>>([]);
@@ -53,9 +45,7 @@ const TAInfo = () => {
                                 performance_logs.push(item);
                             }
                         }
-                        // performance_logs = performance_logs.concat(log.time_date_stamped_comments);
                     }
-                    // taRowInfo["performance_logs"] = performance_logs;
                     setPerformanceLogs(performance_logs);
                 }
                 catch (e) {
@@ -146,7 +136,6 @@ const TAInfo = () => {
     const handleTASNSearchClick = async () => {
 
         setDisplayErrorSN(false)
-        setMode("StudentNumber");
 
         const ta = await checkValidTABySN();
 
@@ -163,7 +152,6 @@ const TAInfo = () => {
     const handleTAEmailSearchClick = async () => {
 
         setDisplayErrorEmail(false);
-        setMode("Email");
 
         const ta = await checkValidTAByEmail();
 
@@ -179,7 +167,7 @@ const TAInfo = () => {
     return (
         <div>
             {subPage === "Search" && (
-                <div>
+                <div  className="ta-admin-container">
                     <SearchTA
                         studentNumber={studentNumber}
                         email={email}
@@ -194,17 +182,19 @@ const TAInfo = () => {
             )}
 
             {subPage === "TA" && (
-                <div>
-                    <Button
-                        width="15rem"
-                        type="primary"
-                        value="Go Back"
-                        onClick={handleGoBack}
-                    ></Button>
+                <div  className="ta-admin-container">
+                    <div className="ta-admin-button-container">
+                        <Button
+                            width="15rem"
+                            type="primary"
+                            value="Go Back"
+                            onClick={handleGoBack}
+                        ></Button>
+                    </div>
 
-                    <Container className="mt-3">
+                    <Container className="mt-5">
                         <div className="rowC">
-                            <h2 style={{ marginBottom: "20px" }}>TA History</h2>
+                            <h2 style={{ marginBottom: "20px" }}>TA Basic Information</h2>
                         </div>
                         <div id="profTable">
                             <table className="table table-striped">
@@ -223,7 +213,7 @@ const TAInfo = () => {
                             </table>
                         </div>
                     </Container>
-                    <Container className="mt-3">
+                    <Container className="mt-5">
                         <div className="rowC">
                             <h2 style={{ marginBottom: "20px" }}>Ratings</h2>
                         </div>

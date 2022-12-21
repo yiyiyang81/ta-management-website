@@ -7,7 +7,6 @@ const TACourseRow = ({ course, loadCoursesData }: { course: CourseQuota; loadCou
     console.log("Delete course");
   };
   
-  console.log(course)
   return (
     <tr className="profTable">
       <td className="column0">
