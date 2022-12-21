@@ -59,7 +59,6 @@ const UseChannel = (props: {
             time_date: p.time_date,
           }
           coursePosts.push(item);
-          console.log("item", item)
         })
 
         setAllPosts(coursePosts);
@@ -105,8 +104,6 @@ const UseChannel = (props: {
         </table>
         </div>
         
-
-
         <LabeledInput
           label="Title"
           required={true}
@@ -130,18 +127,17 @@ const UseChannel = (props: {
             handleChange={handleContentChange}
         ></TextArea>
 
-        <form onSubmit={props.handleAddPost}>
-        <div className="rate-ta-button-container">
-          <Button value="Post to Channel" type="submit-button"></Button>
-        </div>
-        </form>
-        
         {props.postError && (
           <div className="mb-2">
             <ErrorBox errorMessage="* Please fill in all required fields."></ErrorBox>
           </div>
         )}
 
+        <form onSubmit={props.handleAddPost}>
+        <div className="rate-ta-button-container">
+          <Button value="Post to Channel" type="submit-button"></Button>
+        </div>
+        </form>
 
         {props.postSuccess && (
             <div className="d-flex align-items-center mb-4">
