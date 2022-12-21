@@ -182,7 +182,6 @@ const ViewOHResps = (props: {
           </tr>
         </thead>
         <tbody>
-          { console.log("ohs", ohs) }
           {ohs.map((oh: OHResponsibilties, i: number) => (
             <OHRow key={i} oh={oh} fetchOHData={fetchOHData} />
           ))}
@@ -202,7 +201,6 @@ const ViewOHResps = (props: {
           </tr>
         </thead>
         <tbody>
-          { console.log("ohs", ohs) }
           {ohs.map((resp: OHResponsibilties, i: number) => (
             <RespsRow key={i} resp={resp} fetchRespData={fetchOHData} />
           ))}
