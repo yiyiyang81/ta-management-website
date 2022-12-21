@@ -28,7 +28,7 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
       const first_name = record[0]
       const last_name = record[1]
       const email = record[2]
-      const user = await UserHelper.getUserDbByEmail(email,false)
+      const user = await UserHelper.getUserDbByEmail(email, false)
       const username = await UserHelper.generateUsername(first_name, last_name, 1)
       const password = record[3]
       const userTypes = record[4].split("/")
@@ -37,9 +37,9 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
           throw new Error("File upload contains wrong user types.");
         }
       })
-      if (!!user){
-        if (!user.active){
-          await mongoose.model("User").findOneAndUpdate({email : email},{$set : {first_name,last_name,email,username,password,userTypes : userTypes as UserTypes[], active : true}})
+      if (!!user) {
+        if (!user.active) {
+          await mongoose.model("User").findOneAndUpdate({ email: email }, { $set: { first_name, last_name, email, username, password, userTypes: userTypes as UserTypes[], active: true } })
         } else {
           await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes as UserTypes[])
         }
@@ -61,11 +61,14 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
 export const getUserByEmail = asyncHandler(async (req: Request, res: Response) => {
   const user = await UserHelper.getUserDbByEmail(req.params.email, false)
   if (!user) {
-    res.status(404);
-    throw new Error(`User not found with email ${req.params.email}`);
+    res.status(200).json({
+      exists: false
+    })
+    return;
   }
   res.status(200).json({
-    user
+    exists: true,
+    user: user
   });
 });
 
@@ -75,11 +78,14 @@ export const getUserByEmail = asyncHandler(async (req: Request, res: Response) =
 export const getUserByObjectId = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.findOne({ _id: req.params.id })
   if (!user) {
-    res.status(404);
-    throw new Error(`User not found with Object ID ${req.params.id}`);
+    res.status(200).json({
+      exists: false
+    })
+    return;
   }
   res.status(200).json({
-    user
+    exists: true,
+    user: user
   });
 });
 

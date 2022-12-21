@@ -71,6 +71,7 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
             const instructorEmail = record[5];
             let courseInstructor = await User.findOne({ email: instructorEmail }).select("-password");
             if (!courseInstructor) {
+
                 res.status(404);
                 console.log("Instructor not found in the database! Skipping row.");
             } else {
@@ -80,7 +81,8 @@ export const registerCourseFromFile = asyncHandler(async (req: Request, res: Res
                     term_year: record[2] + " " + record[3],
                     course_number: record[4],
                     course_instructor: courseInstructor
-                });
+                }
+                );
                 course.save(); // can be made concurrent
             }
         }
@@ -109,7 +111,7 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
             if (!course_instructor) {
                 course_instructor = await ProfHelper.checkExistsOrCreateSkeleton(user.email, user._id)
             }
-            resultObjectList.push(course_instructor._id);
+            resultObjectList.push(course_instructor);
         }
         return resultObjectList;
     })(course_instructors, res, next);
@@ -117,7 +119,7 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
     const course = new Course({ course_name, course_description, term_year, course_number, course_instructors: instuctorObjectList });
     const newCourse = await course.save();
     for (let i = 0; i < newCourse.course_instructors.length; i++) {
-        let course_instructor = await Professor.findOne({ _id: newCourse.course_instructors[i]});
+        let course_instructor = await Professor.findOne({ _id: newCourse.course_instructors[i] });
         if (course_instructor) {
             ProfHelper.addCourseToProf(course_instructor.email, course._id)
         }

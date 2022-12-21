@@ -59,7 +59,8 @@ export class UserHelper {
 			email: email,
 			username: username,
 			password: password,
-			user_types: userTypes
+			user_types: userTypes,
+			active: true
 		});
 		return await user.save();
 	}
@@ -84,6 +85,7 @@ export class UserHelper {
 			registered_courses: registeredCourses,
 			semester: semester,
 			user_types: userTypes,
+			active: true
 		})
 		return await user.save();
 	}
@@ -102,8 +104,8 @@ export class UserHelper {
 
 	// delete users
 	static async deleteUserDbByEmail(email: string) {
-		// return await User.findOneAndDelete({ email: email });
-		return await User.findOneAndUpdate({ email: email }, { $set: { active: false } });
+		return await User.findOneAndDelete({ email: email });
+		// return await User.findOneAndUpdate({ email: email }, { $set: { active: false } });
 	}
 
 	static async deleteReferencesToUser(email: string) {

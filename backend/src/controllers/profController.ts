@@ -53,11 +53,11 @@ export const registerProfAndCourseFromFile = asyncHandler(async (req: Request, r
             if (!professor) {
                 throw new Error(`Error when creating professor for user ${instructor_user._id}`)
             }
-            let course = await CourseHelper.checkCourseExistsOrCreateSkeleton(course_number, course_name, term_year, [professor._id])
+            let course = await CourseHelper.checkCourseExistsOrCreateSkeleton(course_number, course_name, term_year, [professor])
             if (!course) {
                 throw new Error(`Error when creating course with course number ${course_number}`)
             }
-            await ProfHelper.addCourseToProf(instructor_user.email, course._id)
+            await course.add_prof_to_course(professor)
         }
     } else {
         res.status(500);
@@ -70,16 +70,15 @@ export const registerProfAndCourseFromFile = asyncHandler(async (req: Request, r
 // @Route /api/prof/add
 // @Method POST
 export const addProf = asyncHandler(async (req: Request, res: Response) => {
-    const { email, faculty, department, course_number } = req.body;
+    const { email, faculty, department, course_number, term_year } = req.body;
     // Also think of the case when the email is not that of a prof, how can you handle it?
     console.log(email)
     let instructor = await User.findOne({ email: email }).select("-password");
     if (!instructor) {
-        res.status(404);
-        throw new Error("Instructor not found in the database! Add user and continue.");
+        instructor = await UserHelper.createSkeletonUserDb(email, email, email, course_number, course_number, [UserTypes.Professor])
     }
 
-    let course = await Course.findOne({ course_number: course_number });
+    let course = await Course.findOne({ course_number: course_number, term_year: term_year });
     if (!course) {
         res.status(404);
         throw new Error("Course not found in the database! Add course and continue.");
@@ -117,9 +116,9 @@ export const uploadProf = asyncHandler(async (req: Request, res: Response) => {
             const department = record[2];
             const course_number = record[3];
 
-            const instructor_user = await UserHelper.getUserDbByEmail(email, false)
+            let instructor_user = await UserHelper.getUserDbByEmail(email, false)
             if (!instructor_user) {
-                throw new Error("Instructor not found in the user database! Skipping.");
+               instructor_user = await UserHelper.createSkeletonUserDb(email, email, email, course_number, course_number, [UserTypes.Professor]) 
             }
             let course = await CourseHelper.getCourseIdByCourseNumber(course_number)
             if (!course) {

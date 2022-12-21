@@ -177,7 +177,7 @@ CourseSchema.methods.add_prof_to_course = async function (prof: IProfessor) {
     else {
         console.log("Professor already exist!");
     }
-    return this.updateOne({ $set: { course_TA: current_prof_list } });
+    return this.updateOne({ $set: { course_instructors: current_prof_list } });
 }
 
 CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {

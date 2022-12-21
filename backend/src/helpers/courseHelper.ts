@@ -40,7 +40,7 @@ export class CourseHelper {
 		courseNumber: string,
 		courseName: string,
 		termYear: string,
-		courseInstructors: Schema.Types.ObjectId[]) {
+		courseInstructors: IProfessor[]) {
 		const course = await Course.findOne({ course_number: courseNumber });
 		if (course) {
 			return course;
@@ -76,8 +76,8 @@ export class CourseHelper {
 		const course = await Course.findOne({ _id: courseId })
 		if (course) {
 			const courseProfs = course.course_instructors
-			const filteredCourseProfs = courseProfs.filter((profId) => profId !== professor._id)
-			filteredCourseProfs.push(professor._id)
+			const filteredCourseProfs = courseProfs.filter((prof) => prof._id !== professor._id)
+			filteredCourseProfs.push(professor)
 			const filter = { _id: courseId }
 			const update = {
 				course_instructors: filteredCourseProfs
