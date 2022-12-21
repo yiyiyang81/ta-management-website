@@ -40,7 +40,7 @@ const AddTaToCourse = ({ courseNumber, termYear, handleTAChange }) => {
     return (
         <div>
             <TinyTile
-                value="Manually add a user"
+                value="Manually add a TA"
                 image={ManualAddIcon}
                 width="8rem"
                 onClick={() => setShow(true)}

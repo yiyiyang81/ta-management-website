@@ -193,7 +193,6 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
                     <th >Course Instructor</th>
                     <th >Student Enrolled</th>
                     <th >TA Quota</th>
-                    {/* <th >TA Hisotry</th> */}
                     <th >Manage Course</th>
                   </tr>
                 </thead>

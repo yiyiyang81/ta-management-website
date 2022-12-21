@@ -4,7 +4,7 @@ import Course from "../models/Course";
 import User from "../models/User";
 import Professor from "../models/Professor";
 import { IProfessor } from "../models/Professor";
-import { parse } from 'csv-string';
+import { forEach, parse } from 'csv-string';
 import TA from "../models/TA";
 import mongoose from "mongoose";
 
@@ -175,6 +175,60 @@ export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
         let ta = await course.get_course_TA_info(course_number, term_year);
 
         res.status(200).json(ta
+        );
+    }
+});
+
+// @Desc Get the course's current prof
+// @Route /api/course/:id/prof
+// @Method GET
+export const getCourseProf = asyncHandler(async (req: Request, res: Response) => {
+
+    const term_year = req.query.term_year!;
+    const course_number = req.query.course_number!;
+
+    if (!term_year) {
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+
+        let season: string;
+        if (mm >= 1 && mm <= 4) {
+            season = "Winter";
+        }
+        else if (mm >= 5 && mm <= 8) {
+            season = "Summer";
+        }
+        else {
+            season = "Fall";
+        }
+
+        let current_term_year = season + " " + String(yyyy);
+
+        let course = await Course.findOne({ course_number: course_number, term_year: current_term_year });
+
+        if (!course) {
+            res.status(404);
+            throw new Error("Course not found");
+        }
+
+        let instructors = await course.course_instructors;
+
+        res.status(200).json({ instructors: instructors }
+        );
+    }
+    else {
+        let course = await Course.findOne({ course_number: course_number, term_year: term_year });
+
+        if (!course) {
+            res.status(404);
+            throw new Error("Course not found");
+        }
+
+        let instructors = await course.course_instructors;
+
+        res.status(200).json({ instructors: instructors }
         );
     }
 });

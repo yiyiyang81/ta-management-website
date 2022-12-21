@@ -7,6 +7,8 @@ import LoggedOut from "./pages/LoggedOut";
 import Registration from "./pages/Registration"
 import Header from "./components/Header";
 import Admin from "./pages/Admin";
+import TAManagement from "./pages/TAManagement";
+import { UserTypes } from "./enums/UserTypes";
 import RateTA from "./pages/RateTA";
 import SysopTasks from "./pages/SysopTasks";
 
@@ -17,7 +19,7 @@ interface UserProviderProps {
 
 export const UserContext = React.createContext<UserProviderProps>({
   user: emptyUser,
-  setUser: () => {},
+  setUser: () => { },
 });
 
 const App = () => {
@@ -54,6 +56,7 @@ const App = () => {
           <Route path="/logout" element={<LoggedOut />} />
           <Route path="/register" element={<Registration />} />
           <Route path="/dashboard/ta-administration" element={<Admin />} />
+          <Route path="/dashboard/ta-management" element={<TAManagement />} />
           <Route path="/dashboard/rate-ta" element={<RateTA />} />
           <Route path="/dashboard/sysop-tasks" element={<SysopTasks />} />
         </Routes>

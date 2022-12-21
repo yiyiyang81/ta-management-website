@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import RemoveIcon from "@material-ui/icons/Remove";
+import deleteIcon from "../../assets/images/trash-icon.png";
 import { TA } from "../../classes/TA";
 import { callBackend } from "../../apiConfig";
 
 const TARow = (
-  { ta, term_year, course_number,handleTAChange}: {
+  { ta, term_year, course_number, handleTAChange }: {
     ta: TA; term_year: string, course_number: string,
     handleTAChange: React.Dispatch<React.SetStateAction<any>>;
   }) => {
@@ -42,9 +42,12 @@ const TARow = (
       <td>{ta.performance_logs}</td>
       <td>{ta.courses_assigned}</td>
       <td className="column0">
-        <button className="btn btn-secondary" onClick={handleDeleteTA}>
-          <RemoveIcon />
-        </button>
+        <img
+          src={deleteIcon}
+          style={{ cursor: "pointer" }}
+          height={20}
+          onClick={handleDeleteTA}
+        ></img>
       </td>
     </tr>
   );

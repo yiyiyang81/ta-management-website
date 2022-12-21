@@ -1,11 +1,10 @@
 import express from 'express';
-import { setOHResponsibilities, getCourseOH, getAllOHs, getCourseResponsibilities } from '../controllers/ohResponsibilitiesController';
+import { setOHResponsibilities, getCourseOHResps, getAllOHs } from '../controllers/ohResponsibilitiesController';
 
 const router = express.Router();
 
-router.route("/oh").get(getCourseOH);
+router.route("/get").get(getCourseOHResps);
 router.route("/allohs").get(getAllOHs);
-router.route("/resps").get(getCourseResponsibilities);
 router.route("/set").post(setOHResponsibilities);
 
 export default router;

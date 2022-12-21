@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { callBackend } from "../../apiConfig";
 import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
-import LabeledInput from "../../common/LabeledInput";
 import Select from "../../common/Select";
 
 const SearchCourse = (props: {
@@ -12,17 +12,33 @@ const SearchCourse = (props: {
     handleCourseSearchClick: React.Dispatch<React.SetStateAction<any>>;
     displayError: boolean;
 }) => {
-    const allTermYears = ["Fall2022", "Fall2023", "Winter2022", "Winter2023"];
-    const allCourses = [
-        "COMP307",
-        "COMP310",
-        "COMP462",
-        "COMP598",
-        "COMP360",
-        "COMP303",
-        "COMP302",
-        "COMP432",
-    ];
+    const [allTermYears, setDropDownTermYear] = useState([]);
+    const [allCourses, setDropDownCourses] = useState([]);
+    const fetchDropDownData = async () => {
+        try {
+            const res = await callBackend("/api/course/", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            const data = await res.json();
+            let courses = [];
+            let term_years = [];
+            data.courses.forEach(c => {
+                courses.push((c.course_number));
+                term_years.push((c.term_year));
+            });
+            setDropDownCourses(courses);
+            setDropDownTermYear(term_years);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    useEffect(() => {
+        fetchDropDownData();
+    }, []);
 
     return (
         <>
