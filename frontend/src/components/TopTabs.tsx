@@ -5,6 +5,8 @@ export interface NavObject {
   eventKey: string;
   title: string;
   component: any;
+  disabled?: boolean;
+  hidden?: boolean;
 }
 
 function TopTabs(props: { navArray: Array<NavObject> }) {
@@ -15,6 +17,16 @@ function TopTabs(props: { navArray: Array<NavObject> }) {
         title={navObject.title}
         key={i}
         className="tab-content"
+        disabled={
+          !navObject.disabled
+          ? false
+          : true
+        }
+        hidden={
+          !navObject.hidden
+          ? false
+          : true
+        }
       >
         {navObject.component}
       </Tab>

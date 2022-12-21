@@ -6,5 +6,5 @@ export interface OHResponsibilties {
     email: string;
     office_hours: string;
     location: string;
-    responsibilities: [string];
+    responsibilities: string;
 }

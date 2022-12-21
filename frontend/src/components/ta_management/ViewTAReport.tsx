@@ -2,25 +2,73 @@ import React, { useEffect, useState } from "react";
 import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
+import { createBackendUrl, callBackend } from "../../apiConfig";
+import { TAReport } from "../../classes/TAReport";
+import TAReportRow from "./TAReportRow";
 
 const ViewTAReport = (props: {
     courseName: string;
 }) => {
 
-    const [alCourses, setAllCourses] = React.useState<Array<String>>([]);
-    const allCourses = ["COMP307 Principles of Web Development", "COMP360 Algorithm Design"];
+    const [allTAInfo, setTAInfo] = React.useState<Array<TAReport>>([]);
 
-    const fetchCourseData = async () => {
+    const fetchAllTAData = async () => {
         try {
-            const res = await fetch("http://127.0.0.1:3000/api/course");
+            const courseData = "course_number=" + props.courseName.split(" ")[0];
+            const res = await callBackend("/api/course/1/ta?" + courseData);
             const data = await res.json();
-            const getCourses = new Array();
 
-            data.courses.forEach(c => {
-                getCourses.push((c.courseNumber) + " " + c.courseName);
-            });
+            let TAInfo = new Array();
 
-            setAllCourses(getCourses);
+            for (const t of data.course_TA) {
+              const ohrespsRes = await callBackend("/api/ohresps/get?" + courseData + "&email=" + t.email);
+              const ohresps = await ohrespsRes.json();
+
+              const avgRes = await callBackend("/api/ratings/averageScore/" + t.email + "/" + props.courseName.split(" ")[0]);
+              console.log("avg", )
+              const avg = await avgRes.json();
+
+              const commRes = await callBackend("/api/ratings/comments/" + t.email + "/" + props.courseName.split(" ")[0]);
+              const comm = await commRes.json();
+
+              const perfLogsRes = await callBackend("/api/performancelog/coursecomments?" + courseData + "&TA_email=" + t.email);
+              const perfLogs = await perfLogsRes.json()
+
+              let resps = "No responsibilities yet";
+              let logs = ["No recorded performance logs yet"];
+              let rating = "No rating yet";
+              let comments = "No comments yet"
+
+              if (avg.averageScore !== null) {
+                console.log("avg", avg.averageScore)
+                rating = avg.averageScore;
+              }
+
+              if (!(JSON.stringify(ohresps) === '{}')) {
+                resps = ohresps.oh.responsibilities;
+              }
+
+              if (comm.comments.length != 0) {
+                console.log("comm",comm)
+                comments = comm.comments.join(" ");
+                console.log("allcomm", comments)
+              }
+
+              if (!(JSON.stringify(perfLogs) === '{}')) {
+                logs = perfLogs.performance_log_comments;
+              }
+
+              let item = {
+                full_name: t.TA_name,
+                responsibilities: resps,
+                performance_logs: logs,
+                avg_student_rating: rating,
+                student_comments: comments,
+              }
+              TAInfo.push(item);
+            }
+
+            setTAInfo(TAInfo);
             
         }  catch (err) {
             console.error(err);
@@ -28,42 +76,36 @@ const ViewTAReport = (props: {
     };
 
   useEffect(() => {
-    fetchCourseData();
-  }, []);
+    fetchAllTAData();
+  }, [props.courseName]);
 
   return (
     <div>
       <Container className="mt-3">
+        <div className="mb-4">
         <h1> All TAs Report </h1>
         View information about course teaching assistants.
+        </div>
 
+        <div style={{ overflow: "scroll", height: "600px" }}>
         <table className="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">TA Name</th>
-            <th scope="col">Responsibilities</th>
-            <th scope="col">Performance Logs</th>
-            <th scope="col">Rating</th>
-            <th scope="col">Student Comments</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <th scope="row">Santa Claus</th>
-            <td>Bake cookies, buy a new sleigh, feed the reindeers.</td>
-            <td>Brought good cookies to our weekly meetings.</td>
-            <td>5.0</td>
-            <td>Wholesome dude.</td>
-          </tr>
-          <tr>
-            <th scope="row">Rudolph Reindeer</th>
-            <td>Make sure other reindeers know about the meet-up spot.</td>
-            <td>Good leader.</td>
-            <td>4.5</td>
-            <td>Answered emails within the hour.</td>
-          </tr>
-        </tbody>
-      </table>
+          <thead>
+            <tr>
+              <th className="column0"></th>
+              <th className="column1">TA Name</th>
+              <th className="column2">Responsibilities</th>
+              <th className="column3">Performance Logs</th>
+              <th className="column4">Average Rating</th>
+              <th className="column5">Student Comments</th>
+            </tr>
+          </thead>
+          <tbody>
+            {allTAInfo.map((taData: TAReport, i: number) => (
+              <TAReportRow key={i} taData={taData} fetchAllTAData={fetchAllTAData} />
+            ))}
+          </tbody>
+        </table>
+        </div>
       </Container>
     </div>
   );

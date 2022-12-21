@@ -1,13 +1,8 @@
 import express from 'express';
 import {
     getAllCourses, addCourse, registerCourseFromFile,
-<<<<<<< HEAD
     getCourseTA, getCourseProf, getCoursesByInstructorEmail,
-    getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse
-=======
-    getCourseTA, getCoursesByInstructorEmail,
     getCoursesByTaEmail, addTaToCourse, deleteTaFromCourse, getCourseById
->>>>>>> main
 } from '../controllers/courseController';
 import multer from "multer";
 const upload = multer();

@@ -30,8 +30,11 @@ export const addTAToWishlist = asyncHandler(async (req: Request, res: Response) 
         });
 
     } else { 
-        tawl.TA_names.push(TA_name);
-        tawl.TA_emails.push(TA_email);
+        if (!tawl.TA_emails.includes(TA_email)) {
+            tawl.TA_names.push(TA_name);
+            tawl.TA_emails.push(TA_email);
+            await tawl.save();
+        }
 
         await tawl.save();
         res.status(200).json({

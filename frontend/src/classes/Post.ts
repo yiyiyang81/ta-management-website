@@ -1,6 +1,6 @@
 export interface Post {
-    authorName: string;
+    author_name: string;
     title: string;
     content: string;
-    timeDate: string;
+    time_date: string;
 }

@@ -5,12 +5,14 @@ import Select from "../../common/Select";
 import Button from "../../common/Button";
 import { createBackendUrl, callBackend } from "../../apiConfig";
 import ErrorBox from "../../common/ErrorBox";
+import CheckIcon from "../../assets/images/check-icon.png";
 
 const AddTAToWishlist = (props: {
     handleTA: React.Dispatch<React.SetStateAction<any>>;
     handleAddTA: React.Dispatch<React.SetStateAction<any>>;
     handleTerm: React.Dispatch<React.SetStateAction<any>>;
     handleYear: React.Dispatch<React.SetStateAction<any>>;
+    wishedTASuccess: boolean;
     missingInfoError: boolean;
     courseName: string;
     wishedTA: string
@@ -32,7 +34,7 @@ const AddTAToWishlist = (props: {
             let courseTAs = new Array();
             const data = await res.json();
             data.course_TA.forEach(c => {
-                courseTAs.push(c.name + " " + c.email);
+                courseTAs.push(c.TA_name + " " + c.email);
             })
 
             setAllTAs(courseTAs);
@@ -49,8 +51,10 @@ const AddTAToWishlist = (props: {
   return (
     <div>
       <Container className="mt-3">
+      <div className="mb-4">
         <h1> Add TA to Wishlist </h1>
         Indicate instructor's TA preferences for next semester.
+        </div>
         <div style={{width: "40%"}}>
         <div className="form-horizontal-container">
           <div className="form-horizontal-subcontainer">
@@ -99,6 +103,15 @@ const AddTAToWishlist = (props: {
                 value="Save Preferences"
               ></Button>
             </form>
+
+            {props.wishedTASuccess && (
+            <div className="d-flex align-items-center mb-4">
+                <img src={CheckIcon} height="20"></img>
+                <div className="review-submitted-text">
+                <b>Your preferences have been saved!</b>
+                </div>
+            </div>
+        )}
         </div>
       </Container>
     </div>
