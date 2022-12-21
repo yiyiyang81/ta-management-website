@@ -20,7 +20,6 @@ export const Dashboard = (props: {
    */
   const { user } = useContext(UserContext);
   const userTypes = user.user_types;
-  console.log(user);
   const checkType = (type: UserTypes) => {
     if (userTypes.filter((val) => val === type).length > 0) {
       return true;

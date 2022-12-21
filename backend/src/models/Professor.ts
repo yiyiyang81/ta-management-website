@@ -39,7 +39,14 @@ const ProfessorSchema = new mongoose.Schema({
     course: {
         type: Schema.Types.ObjectId,
         required: false,
+        default: null,
         ref: "Course"
+    },
+
+    active: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 }, {
     timestamps: true

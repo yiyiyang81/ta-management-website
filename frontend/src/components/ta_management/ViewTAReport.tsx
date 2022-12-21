@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
-import Select from "../../common/Select";
-import { createBackendUrl, callBackend } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import { TAReport } from "../../classes/TAReport";
 import TAReportRow from "./TAReportRow";
 
@@ -20,7 +19,7 @@ const ViewTAReport = (props: {
             const res = await callBackend("/api/course/1/ta?" + courseData);
             const data = await res.json();
 
-            let TAInfo = new Array();
+            let TAInfo = [];
 
             for (const t of data.course_TA) {
               const ohrespsRes = await callBackend("/api/ohresps/get?" + courseData + "&email=" + t.email);
@@ -49,7 +48,7 @@ const ViewTAReport = (props: {
                 resps = ohresps.oh.responsibilities;
               }
 
-              if (comm.comments.length != 0) {
+              if (comm.comments.length !== 0) {
                 comments = comm.comments.join(" ");
               }
 
@@ -68,9 +67,9 @@ const ViewTAReport = (props: {
             }
 
             setTAInfo(TAInfo);
-            
+
         }  catch (err) {
-            console.error(err);
+            //console.error(err);
         }
     };
 

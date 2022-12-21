@@ -1,1 +1,2 @@
-mathieu@comp307.com,Science,Computer Science,COMP307
+mathieu.blanchette@hotmail.com,Science,Computer Science,COMP303
+marlene.liang@mail.mcgill.ca,Science,Computer Science,COMP402

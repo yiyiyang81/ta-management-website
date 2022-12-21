@@ -1,6 +1,8 @@
 import Professor from "../models/Professor";
 import { Schema } from 'mongoose';
 import Course from "../models/Course";
+import { deleteProf } from "../controllers/profController";
+import { CourseHelper } from "./courseHelper";
 
 export class ProfHelper {
 	static async createProfDb(user: Schema.Types.ObjectId, email: string, faculty: string, department: string, course: Schema.Types.ObjectId) {
@@ -22,28 +24,45 @@ export class ProfHelper {
 		}
 		else {
 			const prof = new Professor({
-    			professor: userId,
-				email: email
+				professor: userId,
+				email: email,
 			})
 			return await prof.save()
 		}
 	}
 
-	static async addCourseToProf(email:String, courseId: Schema.Types.ObjectId) {
+	static async addCourseToProf(email: String, courseId: Schema.Types.ObjectId) {
 		let instructorId = await Professor.findOne({ email: email })
 		if (!instructorId) {
 			throw new Error(`No instructor found with email: ${email}`)
 		}
 		let course = await Course.findOne({ _id: courseId })
-		if (!courseId) {
-			throw new Error(`No course found with id: ${courseId}`)
+		if (course) {
+			const filter = { email: email }
+			const update = {
+				course: course._id
+				
+			}
+			await Professor.findOneAndUpdate(filter, update);
 		}
-		const filter = { email: email }
-		const update = {
-			course: course
 
+	}
+
+	static async deleteProf(email: String) {
+		let instructor = await Professor.findOne({ email: email })
+		if (!instructor) {
+			throw new Error("Instructor not found in the database! Add user and continue.");
 		}
-		await Professor.findOneAndUpdate(filter, update);
 
+		if (instructor.course) {
+			let course = await Course.findOne({ _id: instructor.course });
+			if (!course) {
+			}
+			else {
+				course.delete_prof_from_course(instructor)
+			}
+		}
+
+		await Professor.findOneAndDelete({ email: email })
 	}
 }

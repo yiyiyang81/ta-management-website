@@ -19,7 +19,7 @@ const hasSelectedOne = (object) => {
   return Object.values(object).filter((el) => el).length > 0;
 };
 
-function EditUserForm({ loadUserData, user }) {
+function EditUserForm({ loadAllData, user }) {
   const [show, setShow] = useState(false);
   const { user: contextUser } = useContext(UserContext);
   const [firstName, setFirstName] = useState<string>(user.first_name);
@@ -151,7 +151,7 @@ function EditUserForm({ loadUserData, user }) {
         if (status === 200) {
           validFields = true;
           setTimeout(() => {
-            loadUserData();
+            loadAllData();
           });
           setShow(false);
         }
@@ -173,7 +173,7 @@ function EditUserForm({ loadUserData, user }) {
       <img
         src={editIcon}
         height={15}
-        style={{ margin: "1rem", cursor: "pointer" }}
+        style={{cursor: "pointer" }}
         onClick={() => setShow(true)}
       ></img>
 

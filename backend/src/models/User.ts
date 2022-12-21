@@ -20,6 +20,7 @@ export interface IUser extends mongoose.Document {
     user_types: Array<UserTypes>,
     createdAt: Date,
     updatedAt: Date,
+    active : boolean,
     compare_password(enteredPassword: string): Promise<Boolean>
 }
 
@@ -69,6 +70,11 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         required: true,
     },
+    active : {
+        type: Boolean,
+        required : true,
+        default : true
+    }
 }, {
     timestamps: true
 })
@@ -76,6 +82,8 @@ const UserSchema = new mongoose.Schema({
 export interface IUserRequest extends Request {
     user?: any
 }
+
+
 
 UserSchema.pre("save", async function (next) {
     const user = this as unknown as IUser;

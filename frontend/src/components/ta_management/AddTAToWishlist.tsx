@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
@@ -12,6 +12,7 @@ const AddTAToWishlist = (props: {
   handleAddTA: React.Dispatch<React.SetStateAction<any>>;
   handleTerm: React.Dispatch<React.SetStateAction<any>>;
   handleYear: React.Dispatch<React.SetStateAction<any>>;
+  adminWishlistError: boolean;
   wishedTASuccess: boolean;
   missingInfoError: boolean;
   courseName: string;
@@ -33,9 +34,8 @@ const AddTAToWishlist = (props: {
       const url = createBackendUrl("/api/course/1/ta?" + courseData);
       const res = await callBackend(url);
 
-      let courseTAs = new Array();
+      let courseTAs = [];
       const data = await res.json();
-      console.log(data)
       data.course_TA.forEach(c => {
         courseTAs.push(c.TA_name + " " + c.email);
       });
@@ -111,6 +111,12 @@ const AddTAToWishlist = (props: {
               value="Save Preferences"
             ></Button>
           </form>
+
+          {props.adminWishlistError && (
+            <div className="mb-2">
+              <ErrorBox errorMessage="* Only the selected course's professors can add to their TA wishlist."></ErrorBox>
+            </div>
+          )}
 
           {props.wishedTASuccess && (
             <div className="d-flex align-items-center mb-4">

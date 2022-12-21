@@ -14,6 +14,7 @@ const UseChannel = (props: {
     handleAddPost: React.Dispatch<React.SetStateAction<any>>;
     handleTitle: React.Dispatch<React.SetStateAction<any>>;
     handleContent: React.Dispatch<React.SetStateAction<any>>;
+    adminChannelError: boolean;
     postSuccess: boolean;
     courseName: string;
     title: string;
@@ -50,7 +51,7 @@ const UseChannel = (props: {
         const res = await callBackend(url);
         const data = await res.json();
 
-        let coursePosts = new Array();
+        let coursePosts = [];
         data.posts.forEach(p => {
           let item = {
             author_name: p.author_name,
@@ -62,9 +63,9 @@ const UseChannel = (props: {
         })
 
         setAllPosts(coursePosts);
-            
+
       }  catch (err) {
-          console.error(err);
+          //console.error(err);
       }
     };
 
@@ -74,7 +75,7 @@ const UseChannel = (props: {
 
   useEffect(() => {
     props.handleContent(typedContent);
-  }, [typedContent]) 
+  }, [typedContent])
 
   return (
     <div>
@@ -84,7 +85,7 @@ const UseChannel = (props: {
         Communicate with the teaching staff.
         </div>
 
-        
+
         <div style={{ overflow: "scroll", height: "300px" }}>
           <table className="table table-striped">
           <thead>
@@ -103,7 +104,7 @@ const UseChannel = (props: {
           </tbody>
         </table>
         </div>
-        
+
         <LabeledInput
           label="Title"
           required={true}
@@ -139,6 +140,12 @@ const UseChannel = (props: {
         </div>
         </form>
 
+        {props.adminChannelError && (
+          <div className="mb-2">
+            <ErrorBox errorMessage="* Only the selected course's teaching staff can post in the channel."></ErrorBox>
+          </div>
+        )}
+
         {props.postSuccess && (
             <div className="d-flex align-items-center mb-4">
                 <img src={CheckIcon} height="20"></img>
@@ -148,7 +155,7 @@ const UseChannel = (props: {
             </div>
         )}
       </Container>
-  
+
     </div>
   );
 };

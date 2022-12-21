@@ -5,6 +5,7 @@ import generateToken from "../utils/generateToken";
 import { parse } from 'csv-string';
 import { UserHelper } from "../helpers/userHelper";
 import { CourseHelper } from "../helpers/courseHelper";
+import mongoose from "mongoose";
 
 // @Desc Get all users
 // @Route /api/users
@@ -27,6 +28,7 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
       const first_name = record[0]
       const last_name = record[1]
       const email = record[2]
+      const user = await UserHelper.getUserDbByEmail(email,false)
       const username = await UserHelper.generateUsername(first_name, last_name, 1)
       const password = record[3]
       const userTypes = record[4].split("/")
@@ -35,7 +37,15 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
           throw new Error("File upload contains wrong user types.");
         }
       })
-      await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes as UserTypes[])
+      if (!!user){
+        if (!user.active){
+          await mongoose.model("User").findOneAndUpdate({email : email},{$set : {first_name,last_name,email,username,password,userTypes : userTypes as UserTypes[], active : true}})
+        } else {
+          await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes as UserTypes[])
+        }
+      } else {
+        await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes as UserTypes[])
+      }
     }
   } else {
     res.status(500);
@@ -60,7 +70,7 @@ export const getUserByEmail = asyncHandler(async (req: Request, res: Response) =
 });
 
 // @Desc Get User by Object ID
-// @Route /api/users/:id
+// @Route /api/users/id/:id
 // @Method GET
 export const getUserByObjectId = asyncHandler(async (req: Request, res: Response) => {
   const user = await User.findOne({ _id: req.params.id })
@@ -177,7 +187,7 @@ export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
     res.status(404);
     throw new Error(`User with email ${req.params.email} not found`);
   }
-  await UserHelper.deleteReferencesToUser(req.params.email)
+  // await UserHelper.deleteReferencesToUser(req.params.email)
   await UserHelper.deleteUserDbByEmail(req.params.email)
   res.status(200).send();
 })
