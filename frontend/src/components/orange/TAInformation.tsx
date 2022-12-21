@@ -12,7 +12,7 @@ import RatingRow from "./RatingRow";
 import "../../style/taAdmin.css"
 import "../../style/userTable.css";
 
-const TAInfo = () => {
+const TAInformation = () => {
 
     const [subPage, setSubPage] = useState("Search");
     const [email, setEmail] = useState("");
@@ -182,7 +182,6 @@ const TAInfo = () => {
         }
     };
 
-
     const handleTAEmailSearchClick = async () => {
         setDisplayErrorEmail(false);
         const ta = await checkValidTAByEmail();
@@ -301,4 +300,4 @@ const TAInfo = () => {
     );
 };
 
-export default TAInfo;
+export default TAInformation;

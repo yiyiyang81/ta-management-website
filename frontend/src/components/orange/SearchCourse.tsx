@@ -12,8 +12,11 @@ const SearchCourse = (props: {
     handleCourseSearchClick: React.Dispatch<React.SetStateAction<any>>;
     displayError: boolean;
 }) => {
+
     const [allTermYears, setDropDownTermYear] = useState([]);
     const [allCourses, setDropDownCourses] = useState([]);
+
+    //populate dropdowns with existing term year and courses from DB
     const fetchDropDownData = async () => {
         try {
             const res = await callBackend("/api/course/", {

@@ -9,6 +9,7 @@ import "../../style/taAdmin.css"
 const AdminImportFile = (props: {}) => {
     const [fileType, setFileType] = useState("tacohort");
 
+    //switch color when tile is selected
     return (
         <div className="ta-admin-container">
             <div className="rowC">

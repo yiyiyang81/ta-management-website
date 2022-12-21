@@ -2,6 +2,7 @@ import React from "react";
 import { CourseQuota } from "../../classes/CourseQuota";
 import Button from "../../common/Button";
 
+//used in Manage Course TA
 const CoursePlainRow = (
   { course,
     handleCourseInfoChange,
@@ -27,14 +28,6 @@ const CoursePlainRow = (
       <td>{course.course_instructors}</td>
       <td>{course.course_enrollment_num}</td>
       <td>{course.TA_quota}</td>
-      {/* <td>
-        <Button
-          width="15rem"
-          type="secondary"
-          value="View"
-          onClick={() => { handleCourseNumberChange(course.course_number); }}
-        ></Button>
-      </td> */}
       <td>
         <Button
           width="15rem"

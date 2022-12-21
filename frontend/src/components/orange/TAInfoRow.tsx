@@ -1,5 +1,6 @@
 import { TA } from "../../classes/TA";
 
+//used in second page of TA Information for basic TA info
 const TAInfoRow = (
   { ta }: {
     ta: TA;

@@ -132,7 +132,7 @@ export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
 
     const term_year = req.query.term_year!;
     const course_number = req.query.course_number!;
-
+    //if term_year was not provided will calculate the current one
     if (!term_year) {
         var today = new Date();
         var dd = today.getDate();
@@ -301,7 +301,7 @@ export const addTaToCourse = asyncHandler(async (req: Request, res: Response) =>
     res.status(201).json({});
 });
 
-// @Desc delete a TA to a Course
+// @Desc delete a TA from a Course
 // @Route /api/course/:term_year/:cousre_number/ta/:email
 // @Method DELETE
 export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Response) => {

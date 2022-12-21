@@ -11,6 +11,8 @@ const SearchCourseSimple = (props: {
 }) => {
 
     const [allCourses, setDropDownCourses] = useState([]);
+
+    //populate dropdown with existing courses from DB
     const fetchDropDownData = async () => {
         try {
             const res = await callBackend("/api/course/", {

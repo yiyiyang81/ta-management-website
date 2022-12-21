@@ -25,7 +25,7 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
   const [tas, setTas] = useState<Array<TA>>([]);
   const [taChange, setTAChange] = useState(false);
 
-  //fetch current Term Year and Course Number info that exists in DB for dropdown selection
+  //fetch data for the course selected
   const fetchCourseData = async () => {
     try {
       const res = await callBackend("/api/course/", {

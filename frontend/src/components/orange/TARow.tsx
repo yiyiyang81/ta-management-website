@@ -3,6 +3,7 @@ import deleteIcon from "../../assets/images/trash-icon.png";
 import { TA } from "../../classes/TA";
 import { callBackend } from "../../apiConfig";
 
+//used to manage TAs second page of Manage Course TA
 const TARow = (
   { ta, term_year, course_number, handleTAChange }: {
     ta: TA; term_year: string, course_number: string,
