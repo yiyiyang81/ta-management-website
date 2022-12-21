@@ -17,12 +17,23 @@ import { NavObject } from "../components/TopTabs";
 const TAManagement: React.FC = () => {
     const { user, setUser } = useContext(UserContext);
 
-    // return whether the user is a prof/TA
+    // return user type (sysop > admin > prof)
     function findUserType() {
+        let adminSysop = false;
+        let prof = false;
+    
         for (let i = 0; i < user.user_types.length; i++) {
-            if (user.user_types[i] === UserTypes.Professor) {
-                return UserTypes.Professor;
+            if (user.user_types[i] === UserTypes.Sysop || user.user_types[i] === UserTypes.Admin){
+                adminSysop = true;
+            } else if (user.user_types[i] === UserTypes.Professor) {
+                prof = true;
             }
+        }
+
+        if (adminSysop) {
+            return UserTypes.Admin; // admin & sysop treated the same (for this section)
+        } else if (prof) {
+            return UserTypes.Professor;
         }
         return UserTypes.TA;
     }
@@ -33,7 +44,6 @@ const TAManagement: React.FC = () => {
 
     // Course Selection
     const [courseName, setCourse] = useState("default");
-    const [courseNum, setCourseNum] = useState("");
     const [disabled, setDisabled] = useState(true);
 
     // OH and Responsibilities
@@ -41,7 +51,7 @@ const TAManagement: React.FC = () => {
     const [officeHours, setOH] = useState("");
     const [responsibilities, setResponsibilities] = useState("");
     const [officeLocation, setLocation] = useState("");
-    const [isInstructor, setTAOrInstructor] = useState(currentProfile == UserTypes.Professor);
+    const [isInstructor, setInstructor] = useState(user.user_types.includes(UserTypes.Professor));
     const [missingFieldsError, setMissingError] = useState(false);
     const [ohrespsSuccess, setOHRespsSuccess] = useState(false);
 
@@ -53,7 +63,6 @@ const TAManagement: React.FC = () => {
     const handleSetOHResps = async () => {
         if (displayName !== "" && officeHours !== "" && responsibilities !== "" && officeLocation !== "" && responsibilities !== "") {
             try {
-
                 const url = createBackendUrl("/api/ohresps/set");
                 const res = await fetch(url, {
                     method: "POST",
@@ -76,7 +85,6 @@ const TAManagement: React.FC = () => {
                 }
                 
             }  catch (err) {
-                // TODO: Message error when missing fields
                 console.error(err);
             }
         } else {
@@ -99,8 +107,6 @@ const TAManagement: React.FC = () => {
         if (loggedTA !== "" && performanceLog !== "") {
             try {
                 const url = createBackendUrl("/api/performancelog/add");
-
-                const now = new Date();
                 const res = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -122,6 +128,7 @@ const TAManagement: React.FC = () => {
             } catch (err) {
                 console.log(err);
             }
+        
         } else {
             setMissingTA(true);
         }
@@ -228,15 +235,18 @@ const TAManagement: React.FC = () => {
     // a TA has access to different tabs than a prof
     if (currentProfile == UserTypes.TA) {
         taManagementNav = [
-            { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse} isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} />},
+            { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse}
+            isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} currentProfile={currentProfile} />},
             { eventKey: "viewOHResps", title: "OH and Responsibilities", component: <ViewOHResps handleDisplayName={setName} handleOH={setOH} handleOfficeLocation={setLocation} handleResponsibilities={setResponsibilities} handleOHResponsibilities={handleSetOHResps}
             user={user} ohrespsSuccess={ohrespsSuccess} missingFieldsError={missingFieldsError} courseName={courseName} displayName={displayName} officeHours={officeHours} officeLocation={officeLocation} responsibilities={responsibilities} />, disabled: disabled},
-            { eventKey: "useChannel", title: "Channel", component: <UseChannel postSuccess={postSuccess} postError={postError} handleTitle={setTitle} handleContent={setContent} handleAddPost={handleAddPost} courseName={courseName} title={title} content={content} />, disabled: disabled},
+            { eventKey: "useChannel", title: "Channel", component: <UseChannel handleTitle={setTitle} handleContent={setContent} handleAddPost={handleAddPost}
+            courseName={courseName} title={title} content={content}  postSuccess={postSuccess} postError={postError} />, disabled: disabled},
         ];
 
     } else {
         taManagementNav = [
-            { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse} isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} />},
+            { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse}
+            isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} currentProfile={currentProfile} />},
             { eventKey: "viewOHResps", title: "OH and Responsibilities", component: <ViewOHResps handleDisplayName={setName} handleOH={setOH} handleOfficeLocation={setLocation} handleResponsibilities={setResponsibilities} handleOHResponsibilities={handleSetOHResps}
             user={user} ohrespsSuccess={ohrespsSuccess} missingFieldsError={missingFieldsError} courseName={courseName} displayName={displayName} officeHours={officeHours} officeLocation={officeLocation} responsibilities={responsibilities} />, disabled: disabled},
             { eventKey: "addPerformanceLog", title: "Performance Log", component: <AddPerformanceLog handleAddLog={handleAddLog} handleLog={setPerformanceLog} handleLoggedTA={setLoggedTA} courseName={courseName} performanceLogSuccess={performanceLogSuccess}
@@ -244,7 +254,8 @@ const TAManagement: React.FC = () => {
             { eventKey: "addTAToWishlist", title: "TA Wishlist", component: <AddTAToWishlist handleTA={setWishedTA} handleAddTA={handleAddTA} handleTerm={setWishedTerm} handleYear={setWishedYear}
             wishedTASuccess={wishedTASuccess} missingInfoError={missingInfoError} wishedTA={wishedTA} courseName={courseName} wishedTerm={wishedTerm} wishedYear={wishedYear} />, disabled: disabled},
             { eventKey: "taReport", title: "All TAs Report", component: <ViewTAReport courseName={courseName} />, disabled: disabled},
-            { eventKey: "useChannel", title: "Channel", component: <UseChannel postSuccess={postSuccess} postError={postError} handleTitle={setTitle} handleContent={setContent} handleAddPost={handleAddPost} courseName={courseName} title={title} content={content} />, disabled: disabled},
+            { eventKey: "useChannel", title: "Channel", component: <UseChannel handleTitle={setTitle} handleContent={setContent} handleAddPost={handleAddPost}
+            courseName={courseName} title={title} content={content}  postSuccess={postSuccess} postError={postError}   />, disabled: disabled},
         ];
     }
 
