@@ -21,7 +21,7 @@ const ChooseCourse = (props: {
         try {
           if (props.currentProfile == UserTypes.Admin || props.currentProfile == UserTypes.Sysop) {
             // get all current courses
-            const res = await callBackend("http://localhost:3001/api/course");
+            const res = await callBackend("/api/course");
             const data = await res.json();
 
             let currentCourses = new Array();
