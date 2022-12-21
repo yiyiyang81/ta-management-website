@@ -1,6 +1,6 @@
 import ManageCourseTa from "../components/orange/ManageCourseTa";
 import CourseTaHistory from "../components/orange/CourseTaHistory";
-import TaInfo from "../components/orange/TAInfo";
+import TaInfo from "../components/orange/TAInformation";
 import TaAdminImportFile from "../components/orange/AdminImportFile";
 import TopTabs from "../components/TopTabs";
 import { NavObject } from "../components/TopTabs";
