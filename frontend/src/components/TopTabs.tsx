@@ -22,11 +22,6 @@ function TopTabs(props: { navArray: Array<NavObject> }) {
           ? false
           : true
         }
-        hidden={
-          !navObject.hidden
-          ? false
-          : true
-        }
       >
         {navObject.component}
       </Tab>

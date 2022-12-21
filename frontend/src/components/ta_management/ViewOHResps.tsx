@@ -29,8 +29,8 @@ const ViewOHResps = (props: {
 }) => {
 
     const [ohs, setOHs] = useState<Array<OHResponsibilties>>([]);
-    const [resps, setResps] = useState<Array<OHResponsibilties>>([]);
 
+    // get OH and Responsibilities for each member of the teaching staff
     const fetchOHData = async () => {
       try {
 
@@ -41,8 +41,6 @@ const ViewOHResps = (props: {
 
         const resProf = await callBackend(urlProf);
         const resTA = await callBackend(urlTA)
-
-        console.log(resProf)
       
         const dataProf = await resProf.json();
         const dataTA = await resTA.json();
@@ -85,7 +83,6 @@ const ViewOHResps = (props: {
           }
         }
 
-        console.log("final ohs", ohs);
         setOHs(ohs);
           
       } catch (err) {
@@ -173,7 +170,7 @@ const ViewOHResps = (props: {
         
       </Container>
 
-      <div style={{ width:"50%", float:"right", fontSize:"15px", paddingRight:"10px"}}>
+      <div style={{ width:"50%", float:"right", fontSize:"15px"}}>
 
       <table className="table table-striped">
         <thead>

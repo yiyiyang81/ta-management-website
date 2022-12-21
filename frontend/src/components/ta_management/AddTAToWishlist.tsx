@@ -25,6 +25,8 @@ const AddTAToWishlist = (props: {
     const allTerms = ["Winter", "Fall", "Summer"]
     const allYears = [new Date().getFullYear().toString(), (new Date().getFullYear() + 1).toString()]
 
+    // get all TAs associated with the selected course
+    // goal: want a dropdown of all TAs off the selected course for the prof to pick
     const fetchTAData = async () => {
         try {
             const courseData = "course_number=" + props.courseName.split(" ")[0].toString();

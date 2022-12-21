@@ -26,7 +26,7 @@ export const addPerformanceLog = asyncHandler(async (req: Request, res: Response
             TA_email: new_log.TA_email,
             time_date_stamped_comments: new_log.time_date_stamped_comments
         });
-    } else {
+    } else { // add new log to the existing document containing all logs by prof about same TA
         log.time_date_stamped_comments.push(time_date_stamped_comment);
         await log.save()
         res.status(200).json({
@@ -66,7 +66,7 @@ export const getPerformanceLogs = asyncHandler(async (req: Request, res: Respons
     const log = await PerformanceLog.find({ TA_email: TA_email });
 
     if (!log.length) {
-        res.status(404).json({}); // prof didn't record any logs about this TA
+        res.status(200).json({}); // prof didn't record any logs about this TA
     } else {
         res.status(200).json({ all_performance_logs: JSON.stringify(log) });
     }

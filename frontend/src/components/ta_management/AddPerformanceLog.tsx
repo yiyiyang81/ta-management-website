@@ -22,12 +22,15 @@ const AddPerformanceLog = (props: {
     const [allTAs, setAllTAs] = React.useState<Array<String>>([]);
     const [log, setLog] = useState(""); 
 
+    // goal: want user to see what they're typing in the text box
     const handleLogChange = (event: {
         target: { value: React.SetStateAction<string> };
       }) => {
         setLog(event.target.value);
     };
     
+    // get all TAs associated with the selected course
+    // goal: want to give a dropdown of all TAs for the prof to pick from
     const fetchTAData = async () => {
         try {
             const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
@@ -47,10 +50,12 @@ const AddPerformanceLog = (props: {
         }
     };
 
+    // TAs associated with the course is retrieved when course selected
     useEffect(() => {
         fetchTAData();
     }, [props.courseName]);
 
+    // update the log with the prof's notes when they submit
     useEffect(() => {
         props.handleLog(log);
     }, [log])

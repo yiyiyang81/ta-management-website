@@ -16,8 +16,8 @@ import { NavObject } from "../components/TopTabs";
 
 const TAManagement: React.FC = () => {
     const { user, setUser } = useContext(UserContext);
-    console.log("WHO AM I", user)
 
+    // return whether the user is a prof/TA
     function findUserType() {
         for (let i = 0; i < user.user_types.length; i++) {
             if (user.user_types[i] === UserTypes.Professor) {
@@ -30,17 +30,6 @@ const TAManagement: React.FC = () => {
     // Set a default profile
     const [currentProfile, setCurrentProfile] = useState<UserTypes>(findUserType());
     const [userEmail, setUserEmail] = useState(user.email);
-    const [hiddenTabs, setHiddenTabs] = useState(false);
-    console.log("WHO AM I", currentProfile)
-
-    const tabsPerProfile = new Map<UserTypes, Array<string>>([
-        [UserTypes.Professor, ["Course Selection", "OH and Responsibilities", "TA Wishlist", "All TAs Report", "Channel"]],
-        [UserTypes.TA, ["Course Selection", "OH and Responsibilities", "Channel"]]
-    ]);
-
-    const [currentTabs, setCurrentTabs] = useState<Array<string>>(
-        tabsPerProfile.get(currentProfile)!
-    );
 
     // Course Selection
     const [courseName, setCourse] = useState("default");
@@ -60,8 +49,8 @@ const TAManagement: React.FC = () => {
         setOHRespsSuccess(false);
     }, [displayName, officeHours, responsibilities, officeLocation])
 
+    // set the office hours and responsibilities of the user
     const handleSetOHResps = async () => {
-
         if (displayName !== "" && officeHours !== "" && responsibilities !== "" && officeLocation !== "" && responsibilities !== "") {
             try {
 
@@ -105,10 +94,9 @@ const TAManagement: React.FC = () => {
         setPerformanceLogSuccess(false);
     }, [loggedTA, performanceLog])
 
+    // add a performance log about a TA
     const handleAddLog = async () => {
         if (loggedTA !== "" && performanceLog !== "") {
-            console.log("loggedta", loggedTA)
-            console.log("perfm", performanceLog)
             try {
                 const url = createBackendUrl("/api/performancelog/add");
 
@@ -150,8 +138,8 @@ const TAManagement: React.FC = () => {
         setWishedTASuccess(false);
     }, [wishedTA, wishedTerm, wishedYear])
     
+    // add a TA to the prof's wishlist
     const handleAddTA = async () => {
-        
         if (wishedTA !== "default" && wishedTerm !== "default" && wishedYear !== "default") {
             try {
                 const url = createBackendUrl("/api/tawishlist/add");
@@ -188,14 +176,12 @@ const TAManagement: React.FC = () => {
     const [postError, setPostError] = useState(false);
     const [postSuccess, setPostSuccess] = useState(false);
 
+    // add a new Post to the course channel
     const handleAddPost  = async () => {
-
         if (title !== "" && content !== "") {
             try {
-
                 const channelURL = createBackendUrl("/api/channel/create?course_number=" + courseName.split(" ")[0].toString());
-
-                const creationRes = await fetch(channelURL, {
+                const creationRes = await fetch(channelURL, { // create channel if needed
                     method: "POST",
                     headers: {
                     "Content-Type": "application/json",
@@ -206,7 +192,6 @@ const TAManagement: React.FC = () => {
                 });
 
                 const url = createBackendUrl("/api/channel/post")
-
                 const res = await fetch(url, {
                     method: "POST",
                     headers: {
@@ -230,6 +215,7 @@ const TAManagement: React.FC = () => {
                 console.error(err);
             }
         } else {
+            // error box will pop up
             setPostError(true);
         }
     }
@@ -239,7 +225,7 @@ const TAManagement: React.FC = () => {
     }, [title, content])
 
     let taManagementNav = new Array<NavObject>();
-
+    // a TA has access to different tabs than a prof
     if (currentProfile == UserTypes.TA) {
         taManagementNav = [
             { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse} isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} />},
@@ -254,14 +240,15 @@ const TAManagement: React.FC = () => {
             { eventKey: "viewOHResps", title: "OH and Responsibilities", component: <ViewOHResps handleDisplayName={setName} handleOH={setOH} handleOfficeLocation={setLocation} handleResponsibilities={setResponsibilities} handleOHResponsibilities={handleSetOHResps}
             user={user} ohrespsSuccess={ohrespsSuccess} missingFieldsError={missingFieldsError} courseName={courseName} displayName={displayName} officeHours={officeHours} officeLocation={officeLocation} responsibilities={responsibilities} />, disabled: disabled},
             { eventKey: "addPerformanceLog", title: "Performance Log", component: <AddPerformanceLog handleAddLog={handleAddLog} handleLog={setPerformanceLog} handleLoggedTA={setLoggedTA} courseName={courseName} performanceLogSuccess={performanceLogSuccess}
-            missingTAError={missingTAError} loggedTA={loggedTA} performanceLog={performanceLog} />, disabled: disabled, hidden: hiddenTabs},
+            missingTAError={missingTAError} loggedTA={loggedTA} performanceLog={performanceLog} />, disabled: disabled},
             { eventKey: "addTAToWishlist", title: "TA Wishlist", component: <AddTAToWishlist handleTA={setWishedTA} handleAddTA={handleAddTA} handleTerm={setWishedTerm} handleYear={setWishedYear}
-            wishedTASuccess={wishedTASuccess} missingInfoError={missingInfoError} wishedTA={wishedTA} courseName={courseName} wishedTerm={wishedTerm} wishedYear={wishedYear} />, disabled: disabled, hidden: hiddenTabs},
-            { eventKey: "taReport", title: "All TAs Report", component: <ViewTAReport courseName={courseName} />, disabled: disabled, hidden: hiddenTabs},
+            wishedTASuccess={wishedTASuccess} missingInfoError={missingInfoError} wishedTA={wishedTA} courseName={courseName} wishedTerm={wishedTerm} wishedYear={wishedYear} />, disabled: disabled},
+            { eventKey: "taReport", title: "All TAs Report", component: <ViewTAReport courseName={courseName} />, disabled: disabled},
             { eventKey: "useChannel", title: "Channel", component: <UseChannel postSuccess={postSuccess} postError={postError} handleTitle={setTitle} handleContent={setContent} handleAddPost={handleAddPost} courseName={courseName} title={title} content={content} />, disabled: disabled},
         ];
     }
 
+    // when a course is selected, we 'un-disable' all tabs
     useEffect(() => {
         let newDisabled = true;
         if (courseName !== "default") {
@@ -272,9 +259,7 @@ const TAManagement: React.FC = () => {
     }, [courseName]);
 
     return (  
-        <>
         <TopTabs navArray={taManagementNav}></TopTabs>
-        </>
     );
 };
 

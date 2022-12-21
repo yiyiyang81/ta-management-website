@@ -12,6 +12,8 @@ const ViewTAReport = (props: {
 
     const [allTAInfo, setTAInfo] = React.useState<Array<TAReport>>([]);
 
+    // for each TA of the course, get their name, responsibilities, avg student rating, and student comments
+    // if previously set
     const fetchAllTAData = async () => {
         try {
             const courseData = "course_number=" + props.courseName.split(" ")[0];
@@ -25,7 +27,6 @@ const ViewTAReport = (props: {
               const ohresps = await ohrespsRes.json();
 
               const avgRes = await callBackend("/api/ratings/averageScore/" + t.email + "/" + props.courseName.split(" ")[0]);
-              console.log("avg", )
               const avg = await avgRes.json();
 
               const commRes = await callBackend("/api/ratings/comments/" + t.email + "/" + props.courseName.split(" ")[0]);
@@ -34,6 +35,7 @@ const ViewTAReport = (props: {
               const perfLogsRes = await callBackend("/api/performancelog/coursecomments?" + courseData + "&TA_email=" + t.email);
               const perfLogs = await perfLogsRes.json()
 
+              // define default values
               let resps = "No responsibilities yet";
               let logs = ["No recorded performance logs yet"];
               let rating = "No rating yet";
@@ -49,9 +51,7 @@ const ViewTAReport = (props: {
               }
 
               if (comm.comments.length != 0) {
-                console.log("comm",comm)
                 comments = comm.comments.join(" ");
-                console.log("allcomm", comments)
               }
 
               if (!(JSON.stringify(perfLogs) === '{}')) {

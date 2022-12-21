@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import OHResponsibilities from "../models/OHResponsibilities";
 
-export function getTermYear() { // Yiyi's function :)
+// Helper function written by Yiyi :) which gets the current term and year, e.g., "Fall 2022"
+export function getTermYear() { 
     var today = new Date();
         var dd = today.getDate();
         var mm = today.getMonth() + 1; //January is 0!
@@ -21,6 +22,7 @@ export function getTermYear() { // Yiyi's function :)
 
         return season + " " + String(yyyy);
 }
+
 // @Desc Set OHs and Responsibilities for an individual
 // @Route /api/ohresps/set
 // @Method POST
@@ -30,7 +32,7 @@ export const setOHResponsibilities = asyncHandler(async (req: Request, res: Resp
 
     const term_year = getTermYear();
 
-    if(!ohresps) {
+    if(!ohresps) { // sets the OHs and responsibilities for the first time
         const ohr = new OHResponsibilities({ term_year, course_number, is_instructor, full_name, email, office_hours, location, responsibilities});
         await ohr.save();
         res.status(201).json({
@@ -77,7 +79,7 @@ export const getCourseOHResps = asyncHandler(async (req: Request, res: Response)
     const oh = await OHResponsibilities.findOne({ course_number: course_number, email: email });
 
     if (!oh) {
-        res.status(200).json({});
+        res.status(200).json({}); // no OHs and Reponsibilities set yet
     } else {
         res.status(200).json({ oh });
     }
@@ -91,7 +93,7 @@ export const getAllOHs = asyncHandler(async (req: Request, res: Response) => {
     const ohs = await OHResponsibilities.find({ email: email });
 
     if (!ohs) {
-        res.status(200).json({});
+        res.status(200).json({}); // no OHs set for individual yet
     } else {
         let all = new String();
         all += '{'

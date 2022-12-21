@@ -13,6 +13,8 @@ const ChooseCourse = (props: {
 
     const [allCourses, setAllCourses] = React.useState<Array<String>>([]);
 
+    // get all courses TA/prof is associated with
+    // goal: prof/TA can only select a course they're involved with
     const fetchCourseData = async () => {
         try {
             const courseData = "email=" + props.userEmail; 
