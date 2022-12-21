@@ -56,6 +56,28 @@ export const getRatingsCommentsByEmailAndCourseNumber = asyncHandler(async (req:
 	});
 });
 
+// @Desc Get a list of comments about the TA associated with the course 
+// by the email of a TA and a course number 
+// @Route /api/ratings/averageScore/:email/:courseNumber
+// @Method GET
+export const getRatingScoreAverageByEmailAndCourseNumber = asyncHandler(async (req: Request, res: Response) => {
+	const { email, courseNumber } = req.params
+	const ratings = await Rating.find({ email: email, course_number: courseNumber })
+	
+	let scores = 0
+	for (let i = 0; i < ratings.length; i++) {
+		scores += ratings[i].rating_score
+	}
+
+	let averageScore = scores / ratings.length
+
+	res.status(200).json({
+		email: email,
+		course_number: courseNumber,
+		averageScore: averageScore
+	});
+});
+
 // @Desc Add a rating
 // @Route /api/ratings/add
 // @Method POST
