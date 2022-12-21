@@ -230,6 +230,7 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
           <div>
             <div className="mb-5">
               <h2 style={{ marginBottom: "20px" }}>Current TA</h2>
+              <h4>Assign TA to course. TA must be already imported with TAcohort.</h4>
               <div className="d-flex flex-wrap align-items-center">
                 <AddTaToCourse
                   courseNumber={courseInfo.course_number}
