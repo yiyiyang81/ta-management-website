@@ -115,7 +115,11 @@ TASchema.pre('save', async function (next) {
     next();
 })
 
-
+// TASchema.pre("deleteOne",function(next) {
+//     const userId = this.getQuery()["_id"];
+//     mongoose.model("Course").updateMany({},{ $pull : {'course_TA' : userId}})
+//     next()
+// })
 const TA = mongoose.model<ITA>("TA", TASchema);
 
 export default TA;

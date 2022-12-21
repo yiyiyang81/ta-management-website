@@ -5,7 +5,7 @@ import ImportForm from "./ImportForm";
 import AddUserForm from "./AddUserForm";
 import { createBackendUrl } from "../../apiConfig";
 
-const ManageUsers = (props: { loadUserData: Function; users: Array<User> }) => {
+const ManageUsers = (props: { loadAllData: Function; users: Array<User> }) => {
   return (
     <div>
       <div className="mb-5">
@@ -15,10 +15,10 @@ const ManageUsers = (props: { loadUserData: Function; users: Array<User> }) => {
           <ImportForm
             taskName="Users"
             uploadUrl={createBackendUrl("/api/users/upload")}
-            loadFunction={props.loadUserData}
+            loadFunction={props.loadAllData}
           />
           <div className="px-3"></div>
-          <AddUserForm loadUserData={props.loadUserData} />
+          <AddUserForm loadUserData={props.loadAllData} />
         </div>
       </div>
       <hr></hr>
@@ -44,7 +44,7 @@ const ManageUsers = (props: { loadUserData: Function; users: Array<User> }) => {
                   <UserRow
                     key={i}
                     rowUser={user}
-                    loadUserData={props.loadUserData}
+                    loadAllData={props.loadAllData}
                   />
                 );
               }

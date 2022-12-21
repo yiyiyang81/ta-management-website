@@ -1,44 +1,37 @@
-import React, { useState, useEffect } from "react";
-import RemoveIcon from "@material-ui/icons/Remove";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import "../../style/userTable.css";
 import { Professor } from "../../classes/Professor";
-import { Course } from "../../classes/Course";
-import deleteIcon from "../../assets/images/trash-icon.png"
+import deleteIcon from "../../assets/images/trash-icon.png";
+import { ProfHelper } from "../../helpers/ProfHelper";
 
 const ProfRow = ({
   professor,
-  loadProfsData,
+  loadAllData,
 }: {
   professor: Professor;
-  loadProfsData: Function;
+  loadAllData: Function;
 }) => {
-  const [show, setShow] = useState(false);
-  const [courses, setCourses] = useState<Array<Course>>([]);
-
-  const handleDeleteProf = () => {
-    try {
-      // make API call to delete prof
-    } catch (e) {}
+  const handleDeleteProf = async () => {
+    await ProfHelper.deleteProfByEmail(professor.email);
+    loadAllData();
   };
-
+  
   return (
-    <tr className="body">
-      <td className="column0">{professor.email}</td>
-      <td className="column1">{professor.firstName}</td>
-      <td className="column2">{professor.lastName}</td>
-      <td className="column3">{professor.faculty}</td>
-      <td className="column4">{professor.department}</td>
+
+      <tr className="body">
+      <td className="column0">{professor.email ? professor.email : '-'}</td>
+      <td className="column1">{professor.firstName ? professor.firstName : 'No Last Name'}</td>
+      <td className="column2">{professor.lastName ? professor.firstName : "No First Name"}</td>
+      <td className="column3">{professor.faculty ? professor.faculty : "No Faculty"}</td>
+      <td className="column4">{professor.department ? professor.department: "No Department"}</td>
       <td className="column5 course-button">
         <>
-          <button className="courses" onClick={() => setShow(true)}>
-            <OpenInFullIcon fontSize="small" /> View Courses
-          </button>
+          {professor.hasCourse &&
+            `${professor.courseNumber}: ${professor.courseName} - ${professor.termYear}`}
         </>
-      </td>
-
+        </td>
+        
       <td className="column6 text-center">
-        <img
+      <img
           src={deleteIcon}
           style={{ cursor: "pointer" }}
           height={20}
