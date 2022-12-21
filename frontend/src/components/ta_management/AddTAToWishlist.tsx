@@ -12,6 +12,7 @@ const AddTAToWishlist = (props: {
     handleAddTA: React.Dispatch<React.SetStateAction<any>>;
     handleTerm: React.Dispatch<React.SetStateAction<any>>;
     handleYear: React.Dispatch<React.SetStateAction<any>>;
+    adminWishlistError: boolean;
     wishedTASuccess: boolean;
     missingInfoError: boolean;
     courseName: string;
@@ -40,9 +41,9 @@ const AddTAToWishlist = (props: {
             });
 
             setAllTAs(courseTAs);
-            
+
         }  catch (err) {
-            console.error(err);
+            //console.error(err);
         }
     };
 
@@ -110,6 +111,12 @@ const AddTAToWishlist = (props: {
                 value="Save Preferences"
               ></Button>
             </form>
+
+            {props.adminWishlistError && (
+              <div className="mb-2">
+                <ErrorBox errorMessage="* Only the selected course's professors can add to their TA wishlist."></ErrorBox>
+              </div>
+            )}
 
             {props.wishedTASuccess && (
             <div className="d-flex align-items-center mb-4">

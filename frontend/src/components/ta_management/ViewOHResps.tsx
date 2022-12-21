@@ -18,6 +18,7 @@ const ViewOHResps = (props: {
     handleOfficeLocation: React.Dispatch<React.SetStateAction<any>>;
     handleResponsibilities: React.Dispatch<React.SetStateAction<any>>;
     handleOHResponsibilities: React.FormEventHandler;
+    adminOHError: boolean;
     ohrespsSuccess: boolean;
     user: User;
     missingFieldsError: boolean;
@@ -35,13 +36,13 @@ const ViewOHResps = (props: {
       try {
 
         // get instructor and TAs associated with the course
-        const courseData = "course_number=" + props.courseName.split(" ")[0].toString(); 
+        const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
         const urlProf = createBackendUrl("/api/course/1/prof?" + courseData);
         const urlTA = createBackendUrl("/api/course/1/ta?" + courseData);
 
         const resProf = await callBackend(urlProf);
         const resTA = await callBackend(urlTA)
-      
+
         const dataProf = await resProf.json();
         const dataTA = await resTA.json();
 
@@ -84,9 +85,9 @@ const ViewOHResps = (props: {
         }
 
         setOHs(ohs);
-          
+
       } catch (err) {
-        console.error(err);
+        //console.error(err);
       }
   };
 
@@ -158,6 +159,12 @@ const ViewOHResps = (props: {
               ></Button>
             </form>
 
+            {props.adminOHError && (
+              <div className="mb-2">
+                <ErrorBox errorMessage="* Only the selected course's teaching staff can save their data."></ErrorBox>
+              </div>
+            )}
+
           {props.ohrespsSuccess && (
           <div className="d-flex align-items-center mb-4">
               <img src={CheckIcon} height="20"></img>
@@ -167,7 +174,7 @@ const ViewOHResps = (props: {
           </div>
           )}
         </div>
-        
+
       </Container>
 
       <div style={{ width:"50%", float:"right", fontSize:"15px"}}>
