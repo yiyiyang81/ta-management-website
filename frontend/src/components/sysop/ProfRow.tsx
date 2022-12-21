@@ -1,29 +1,26 @@
-import React, { useState, useEffect } from "react";
-import RemoveIcon from "@material-ui/icons/Remove";
-import OpenInFullIcon from "@mui/icons-material/OpenInFull";
 import "../../style/userTable.css";
 import { Professor } from "../../classes/Professor";
-import { Course } from "../../classes/Course";
-import deleteIcon from "../../assets/images/trash-icon.png"
+import deleteIcon from "../../assets/images/trash-icon.png";
+import { ProfHelper } from "../../helpers/ProfHelper";
 
 const ProfRow = ({
   professor,
   loadProfsData,
+  loadCoursesData,
 }: {
   professor: Professor;
   loadProfsData: Function;
+  loadCoursesData: Function;
 }) => {
-  const [show, setShow] = useState(false);
-  const [courses, setCourses] = useState<Array<Course>>([]);
-
-  const handleDeleteProf = () => {
-    try {
-      // make API call to delete prof
-    } catch (e) {}
+  const handleDeleteProf = async () => {
+    await ProfHelper.deleteProfByEmail(professor.email);
+    loadProfsData();
+    loadCoursesData();
   };
-
+  
   return (
-    <tr className="body">
+
+      <tr className="body">
       <td className="column0">{professor.email}</td>
       <td className="column1">{professor.firstName}</td>
       <td className="column2">{professor.lastName}</td>
@@ -31,14 +28,13 @@ const ProfRow = ({
       <td className="column4">{professor.department}</td>
       <td className="column5 course-button">
         <>
-          <button className="courses" onClick={() => setShow(true)}>
-            <OpenInFullIcon fontSize="small" /> View Courses
-          </button>
+          {professor.hasCourse &&
+            `${professor.courseNumber}: ${professor.courseName}`}
         </>
-      </td>
-
+        </td>
+        
       <td className="column6 text-center">
-        <img
+      <img
           src={deleteIcon}
           style={{ cursor: "pointer" }}
           height={20}

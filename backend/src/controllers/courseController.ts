@@ -1,20 +1,23 @@
 import { NextFunction, Request, Response } from "express";
 import asyncHandler from "express-async-handler";
 import Course from "../models/Course";
-import User from "../models/User";
+import User, { UserTypes } from "../models/User";
 import Professor from "../models/Professor";
 import { IProfessor } from "../models/Professor";
 import { parse } from 'csv-string';
 import TA from "../models/TA";
+import { ProfHelper } from "../helpers/profHelper";
+import { UserHelper } from "../helpers/userHelper";
 
 // @Desc Get all Courses
 // @Route /api/course
 // @Method GET
 export const getAllCourses = asyncHandler(async (req: Request, res: Response) => {
     let any_course = await Course.findOne({});
+
     if (!any_course) {
-        res.status(404);
-        throw new Error("No course in the database!");
+        res.status(200).json({ courses: [] })
+        return;
     }
 
     let courses = await any_course.get_list_of_need_to_fix_courses();
@@ -22,18 +25,22 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
     res.status(200).json({ courses });
 });
 
-// @Desc Get all Courses
+
+
+// @Desc Get course by ID
 // @Route /api/course/:id
 // @Method GET
-export const getCourseById= asyncHandler(async (req: Request, res: Response) => {
-    let course = await Course.findOne({_id: req.params.id});
+export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
+    let course = await Course.findOne({ _id: req.params.id });
     if (!course) {
-        res.status(404);
-        throw new Error(`No course with Object ID ${req.params.id} in the database!`);
+        res.status(200).json({ exists: false })
+        return;
     }
-    res.status(200).json({ course });
+    res.status(200).json({
+        exists: true,
+        course: course
+    });
 });
-
 
 
 // @Desc Save multiple courses
@@ -80,23 +87,22 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
             let userId = await User.findOne({ email: email }).select("_id");
             let course_instructor = await Professor.findOne({ professor: userId });
             if (!course_instructor) {
-                try {
-                    res.status(404);
-                    throw new Error("Instructor not found in the database! Add user and continue.");
-                }
-                catch (e) {
-                    next(e);
-                }
+                const user = await UserHelper.createSkeletonUserDb(course_number, course_number, email, course_number, course_number, [UserTypes.Professor])
+                course_instructor = await ProfHelper.checkExistsOrCreateSkeleton(user.email, user._id)
             }
-            else {
-                resultObjectList.push(course_instructor);
-            }
+            resultObjectList.push(course_instructor._id);
         }
         return resultObjectList;
     })(course_instructors, res, next);
 
     const course = new Course({ course_name, course_description, term_year, course_number, course_instructors: instuctorObjectList });
     await course.save();
+    for (let i = 0; i < course_instructors; i++) {
+        let course_instructor = await Professor.findOne({ email: course_instructors[i].email });
+        if (course_instructor) {
+            ProfHelper.addCourseToProf(course_instructor.email, course._id)
+        }
+    }
     res.status(201).json({
         id: course._id,
         course_name: course.course_name,
@@ -105,6 +111,7 @@ export const addCourse = asyncHandler(async (req: Request, res: Response, next: 
         course_number: course.course_number,
         course_instructors: course.course_instructors
     });
+    return
 });
 
 // @Desc Get the course's current TA
@@ -162,17 +169,18 @@ export const getCourseTA = asyncHandler(async (req: Request, res: Response) => {
 });
 
 // @Desc Delete Course
-// @Route /api/course/:id
+// @Route /api/course/delete/:courseNumber
 // @Method DELETE
 export const deleteCourse = asyncHandler(async (req: Request, res: Response) => {
-    const { courseNumber } = req.body;
+    const courseNumber = req.params.courseNumber;
 
     let course = await Course.findOne({ course_number: courseNumber });
     if (!course) {
         res.status(404);
         throw new Error("Course not found");
     }
-    await User.findOneAndDelete({ courseNumber });
+    await Course.findOneAndDelete({ course_number: courseNumber });
+
     res.status(201).json({});
 });
 
@@ -252,4 +260,22 @@ export const deleteTaFromCourse = asyncHandler(async (req: Request, res: Respons
     course.delete_ta_from_course(ta);
     res.status(200).json({}
     );
+});
+
+// @Desc Check if course number is already used by a Course
+// @Route /api/course/checkValidCourse/:courseNumber/:term/:year
+// @Method GET
+export const checkValidCourse = asyncHandler(async (req: Request, res: Response) => {
+    const course = await Course.exists({
+        course_number: req.params.courseNumber,
+        term: req.params.term,
+        year: req.params.year
+    })
+    let courseExists = false
+    if (course) {
+        courseExists = true
+    }
+    res.status(200).json({
+        courseExists: courseExists,
+    });
 });

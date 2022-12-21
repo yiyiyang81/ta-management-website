@@ -16,20 +16,6 @@ export abstract class CourseHelper {
 				term: term_year[0],
 				year: term_year[1],
 			};
-			// Uncomment if you need instructors
-			// let instructorNames = [];
-			// for (const prof of d.course_instructors) {
-			// 	const instructorRes = await callBackend("/api/users/" + prof.email);
-			// 	if (instructorRes) {
-			// 		const instructorData = await instructorRes.json();
-			// 		instructorNames.push(
-			// 			instructorData.user.first_name +
-			// 			" " +
-			// 			instructorData.user.last_name
-			// 		);
-			// 	}
-			// }
-			// item["instructorNames"] = instructorNames.join(",");
 			return item;
 
 		} catch (err) {
@@ -62,14 +48,20 @@ export abstract class CourseHelper {
 				};
 				let instructorNames = [];
 				for (const prof of d.course_instructors) {
-					const instructorRes = await callBackend("/api/users/" + prof.email);
+					const instructorRes = await callBackend("/api/prof/" + prof);
 					if (instructorRes) {
 						const instructorData = await instructorRes.json();
-						instructorNames.push(
-							instructorData.user.first_name +
-							" " +
-							instructorData.user.last_name
-						);
+						if (instructorData.exists) {
+							const userRes = await callBackend("/api/users/" + instructorData.prof.email);
+							if (userRes) {
+								const userData = await userRes.json()
+								instructorNames.push(
+									userData.user.first_name +
+									" " +
+									userData.user.last_name
+								);
+							}
+						}
 					}
 				}
 				item["instructorNames"] = instructorNames.join(",");
@@ -108,15 +100,53 @@ export abstract class CourseHelper {
 	}
 
 	public static convertCourseFullNamesToCourseNumbers(courses: string[]) {
-		if (courses.length > 0) 
-		{
+		if (courses.length > 0) {
 			return courses.map((course) => {
-				return (course.split(":")[0])});
+				return (course.split(":")[0])
+			});
 
 		} else {
 			return courses;
 		}
 	};
+
+	public static async deleteCourseByCourseNumber(courseNumber: string): Promise<any> {
+		try {
+			const res = await callBackend(`/api/course/delete/${courseNumber}`, {
+				method: "DELETE",
+				headers: {
+					"Content-Type": "application/json",
+				},
+			});
+			if (res.status === 201) {
+				CourseHelper.fetchCourseData();
+				setTimeout(() => {
+				}, 500);
+			} else {
+				alert("Error while deleting course.");
+			}
+		} catch (e) {
+			console.log(e)
+		}
+	}
+
+	public static async checkUniqueCourse(courseNumber: string, term: string, year: string): Promise<any> {
+		try {
+			const res = await callBackend(
+				`/api/course/checkValidCourse/${courseNumber}/${term}/${year}`,
+				{
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				}
+			);
+			return await res.json();
+		} catch (err) {
+			console.log(err);
+		}
+	};
+
 }
 
 

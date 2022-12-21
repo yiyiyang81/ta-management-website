@@ -16,7 +16,7 @@ const UserRow = ({
 }) => {
   const { user } = useContext(UserContext);
   const handleDeleteUser = async () => {
-    await UserHelper.deleteUserByEmail(user.email);
+    await UserHelper.deleteUserByEmail(rowUser.email);
     loadUserData();
   };
 

@@ -173,7 +173,7 @@ function EditUserForm({ loadUserData, user }) {
       <img
         src={editIcon}
         height={15}
-        style={{ margin: "1rem", cursor: "pointer" }}
+        style={{cursor: "pointer" }}
         onClick={() => setShow(true)}
       ></img>
 

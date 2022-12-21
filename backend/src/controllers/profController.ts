@@ -18,6 +18,23 @@ export const getAllProfs = asyncHandler(async (req: Request, res: Response) => {
     });
 });
 
+// @Desc Get profa by Obejct Id
+// @Route /api/prof/:id
+// @Method GET
+export const getProfById = asyncHandler(async (req: Request, res: Response) => {
+    const prof = await Professor.findOne({_id: req.params.id});
+    if (prof){
+        res.status(200).json({
+            exists: true,
+            prof: prof
+        });
+    } else {
+        res.status(200).json({
+            exists: false
+        })
+    }
+    });
+
 // @Desc Register or create professor and course from file
 // @Route /api/prof/uploadProfAndCourse
 // @Method POST
@@ -55,6 +72,7 @@ export const registerProfAndCourseFromFile = asyncHandler(async (req: Request, r
 export const addProf = asyncHandler(async (req: Request, res: Response) => {
     const { email, faculty, department, course_number } = req.body;
     // Also think of the case when the email is not that of a prof, how can you handle it?
+    console.log(email)
     let instructor = await User.findOne({ email: email }).select("-password");
     if (!instructor) {
         res.status(404);
@@ -68,6 +86,7 @@ export const addProf = asyncHandler(async (req: Request, res: Response) => {
     }
 
     const prof = await ProfHelper.createProfDb(instructor._id, email, faculty, department, course._id)
+    course.add_prof_to_course(prof)
     res.status(200).json({
         id: prof._id,
         instructor: prof.professor,
@@ -75,6 +94,14 @@ export const addProf = asyncHandler(async (req: Request, res: Response) => {
         term: prof.department,
         course: prof.course,
     });
+});
+
+// @Desc Delete Professor
+// @Route /api/prof/delete/:email
+// @Method DELETE
+export const deleteProf = asyncHandler(async (req: Request, res: Response) => {
+    await ProfHelper.deleteProf(req.params.email)
+    res.status(200).send()
 });
 
 // @Desc Upload Professor from file
@@ -89,11 +116,11 @@ export const uploadProf = asyncHandler(async (req: Request, res: Response) => {
             const faculty = record[1];
             const department = record[2];
             const course_number = record[3];
-            
+
             const instructor_user = await UserHelper.getUserDbByEmail(email, false)
             if (!instructor_user) {
                 throw new Error("Instructor not found in the user database! Skipping.");
-            } 
+            }
             let course = await CourseHelper.getCourseIdByCourseNumber(course_number)
             if (!course) {
                 throw new Error(`Course with course number ${course_number} not found in the user database! Skipping.`);
@@ -109,3 +136,18 @@ export const uploadProf = asyncHandler(async (req: Request, res: Response) => {
     }
     res.status(200).json({});
 })
+
+// @Desc Check if email is already used by a Professor
+// @Route /api/prof/checkValidEmail/:email
+// @Method GET
+export const checkValidEmail = asyncHandler(async (req: Request, res: Response) => {
+    const email = await Professor.exists({ email: req.params.email })
+    let emailExists = false
+    if (email) {
+        emailExists = true
+    }
+
+    res.status(200).json({
+        emailExists: emailExists,
+    });
+});

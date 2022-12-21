@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 export interface IProfessor extends mongoose.Document {
     professor: IUser,
-    email:string,
+    email: string,
     faculty: string, // think about what happens when profs are cross appointed 
     department: string,
     course: string,
@@ -39,7 +39,14 @@ const ProfessorSchema = new mongoose.Schema({
     course: {
         type: Schema.Types.ObjectId,
         required: false,
+        default: null,
         ref: "Course"
+    },
+
+    active: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 }, {
     timestamps: true

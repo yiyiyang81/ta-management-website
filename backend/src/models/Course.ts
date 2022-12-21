@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { IProfessor } from "./Professor";
-import { ITA } from "./TA";
+import TA, { ITA } from "./TA";
 import User, { IUser } from './User';
 import TAWishlist, { ITAWishlist } from './TAWishlist';
 import QueryString from 'qs';
@@ -39,7 +39,9 @@ export interface ICourse extends mongoose.Document {
     get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
     add_wishlist_to_course(course_number: String, term_year: String): Promise<string>,
     add_ta_to_course(ta: ITA): Promise<string>,
+    add_prof_to_course(prof: IProfessor): Promise<string>,
     delete_ta_from_course(ta: ITA): Promise<string>,
+    delete_prof_from_course(prof: IProfessor): Promise<string>,
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -98,6 +100,12 @@ const CourseSchema = new mongoose.Schema({
     TA_wishlist: {
         type: Schema.Types.ObjectId,
         ref: 'TAWishlist'
+    },
+
+    active : {
+        type: Boolean,
+        required : true,
+        default : true
     }
 }, {
     timestamps: true
@@ -154,6 +162,17 @@ CourseSchema.methods.add_ta_to_course = async function (ta: ITA) {
     return this.updateOne({ $set: { course_TA: current_ta_list } });
 }
 
+CourseSchema.methods.add_prof_to_course = async function (prof: IProfessor) {
+    let current_prof_list = this.course_instructors;
+    if (!current_prof_list.find((i: { email: string; }) => i.email == prof.email)) {
+        current_prof_list.push(prof);
+    }
+    else {
+        console.log("Professor already exist!");
+    }
+    return this.updateOne({ $set: { course_TA: current_prof_list } });
+}
+
 CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {
     let current_ta_list = this.course_TA;
     if (!current_ta_list.find((i: { email: string; }) => i.email === ta.email)) {
@@ -165,6 +184,19 @@ CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {
         );
     }
     return this.updateOne({ $set: { course_TA: current_ta_list } });
+}
+
+CourseSchema.methods.delete_prof_from_course = async function (prof: IProfessor) {
+    let current_prof_list = this.course_instructors;
+    if (!current_prof_list.find((i: { email: string; }) => i.email === prof.email)) {
+        console.log("Prof not in course!");
+    }
+    else {
+        current_prof_list = current_prof_list.filter((i: { email: string; }) =>
+            i.email !== prof.email
+        );
+    }
+    return this.updateOne({ $set: { course_TA: current_prof_list } });
 }
 
 //setting is_need_fix variable by calculating the TA per person ratio
@@ -179,6 +211,11 @@ CourseSchema.pre('save', function (next) {
     next();
 })
 
+// CourseSchema.pre("deleteOne",function(next) {
+//     const userId = this.getQuery()["_id"];
+//     mongoose.model("Professor").updateMany({course : userId},{ $unset : {course : ""}})
+//     next()
+// })
 const Course = mongoose.model<ICourse>("Course", CourseSchema);
 
 export default Course;

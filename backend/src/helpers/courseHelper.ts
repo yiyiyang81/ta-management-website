@@ -11,7 +11,7 @@ export class CourseHelper {
 			throw new Error("Course not found!");
 		}
 	}
-	
+
 	static async getCoursesByCourseIds(courseIds: Schema.Types.ObjectId[]) {
 		return await Promise.all((courseIds).map(courseId => this.getCourseByCourseId(courseId)))
 	}
@@ -54,6 +54,25 @@ export class CourseHelper {
 			return await course.save()
 		}
 	}
+
+	static async deleteProfessorFromCourse(courseId: Schema.Types.ObjectId, professorEmail: String) {
+		const course = await Course.findOne({ _id: courseId })
+		if (course) {
+			const courseProfs = course.course_instructors
+			const filteredCourseProfs = courseProfs.filter((profObject) => profObject.email !== professorEmail)
+			const filter = { _id: courseId }
+			const update = {
+				courses_instructors: filteredCourseProfs
+			}
+			await Course.findOneAndUpdate(filter, update);
+		}
+		else {
+			throw new Error("Course not found!")
+		}
+	}
+
+	
+
 
 
 

@@ -7,13 +7,14 @@
 }
 
 #profTable th {
-  font-weight  : bold;
-  border-bottom: 2px solid #B9B9B9;
+  font-weight     : bold;
+  border-bottom   : 2px solid #B9B9B9;
   background-color: #FFFFFF;
 }
 
 #profTable td {
-  color        : black;
+  color  : black;
+  padding: 1rem;
 }
 
 #profTable tr:nth-child(odd) {
