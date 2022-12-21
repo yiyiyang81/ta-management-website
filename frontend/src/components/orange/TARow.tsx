@@ -9,7 +9,6 @@ const TARow = (
     handleTAChange: React.Dispatch<React.SetStateAction<any>>;
   }) => {
 
-  const [isSuccess, setIsSuccess] = useState(false);
 
   const handleDeleteTA = async () => {
     try {
@@ -21,7 +20,6 @@ const TARow = (
       });
 
       if (res.status === 200) {
-        setIsSuccess(true);
         handleTAChange(true);
         alert("TA deleted successfully");
       } else {

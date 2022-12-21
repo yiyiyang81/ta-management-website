@@ -26,8 +26,6 @@ function AdminImportForm({ taskName, uploadUrl, fileType }: { taskName: string, 
     const formData = new FormData();
     formData.append('csvFile', file);
     try {
-      // CAUTION: Do not hard code the URLs, rather use routers
-      console.log(uploadUrl);
       const res = await fetch(uploadUrl + `/${fileType}`, {
         method: "POST",
         body: formData
@@ -35,6 +33,8 @@ function AdminImportForm({ taskName, uploadUrl, fileType }: { taskName: string, 
 
       if (res.status === 200) {
         const data = await res.json();
+        let message = data.return_messages.join("\n");
+        alert(message);
       } else {
         if (fileType === "tacohort") {
           alert("Error while adding TA.");

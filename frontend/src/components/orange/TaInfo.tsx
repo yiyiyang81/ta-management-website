@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../style/userTable.css";
 import { TA, emptyTA } from "../../classes/TA";
 import { Container } from "react-bootstrap";
 import { callBackend } from "../../apiConfig";
@@ -11,6 +10,7 @@ import { PerformanceLog } from "../../classes/PerformanceLog";
 import { Rating } from "../../classes/Rating";
 import RatingRow from "./RatingRow";
 import "../../style/taAdmin.css"
+import "../../style/userTable.css";
 
 const TAInfo = () => {
 
@@ -19,7 +19,6 @@ const TAInfo = () => {
     const [studentNumber, setStudentNumber] = useState("");
     const [displayErrorSN, setDisplayErrorSN] = useState(false);
     const [displayErrorEmail, setDisplayErrorEmail] = useState(false);
-    // const [mode, setMode] = useState("");
     const [ta, setTAInfo] = useState<TA>();
     const [performanceLogs, setPerformanceLogs] = useState<Array<PerformanceLog>>([]);
     const [ratings, setRatings] = useState<Array<Rating>>([]);
@@ -167,7 +166,7 @@ const TAInfo = () => {
     return (
         <div>
             {subPage === "Search" && (
-                <div  className="ta-admin-container">
+                <div className="ta-admin-container">
                     <SearchTA
                         studentNumber={studentNumber}
                         email={email}
@@ -182,7 +181,7 @@ const TAInfo = () => {
             )}
 
             {subPage === "TA" && (
-                <div  className="ta-admin-container">
+                <div className="ta-admin-container">
                     <div className="ta-admin-button-container">
                         <Button
                             width="15rem"

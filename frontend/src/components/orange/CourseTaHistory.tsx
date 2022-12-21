@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from "react";
-import AddTaToCourse from "./AddTaToCourse";
-import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
 import "../../style/taAdmin.css"
 import { CourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
-import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
-import { callBackend, createBackendUrl } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import SearchCourseSimple from "./SearchCourseSimple";
 import Button from "../../common/Button";
 import TAPlainRow from "./TAHistoryRow";
-
 
 
 const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
@@ -24,7 +20,7 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
     const [coursesInfo, setCoursesInfo] = useState<Array<CourseQuota>>([]);
     const [tas, setTas] = useState<Array<TA>>([]);
 
-
+    
     useEffect(() => {
         const fetchHistoryTAData = async () => {
             try {

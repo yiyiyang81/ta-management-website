@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Tile from "../../common/Tile";
 import TeachingAssitantIcon from "../../assets/images/ta-icon.png";
 import TeachingAssistantAdminIcon from "../../assets/images/ta-admin-icon.png";
 import AdminImportForm from "./AdminImportForm";
-import { callBackend, createBackendUrl } from "../../apiConfig";
+import { createBackendUrl } from "../../apiConfig";
 import "../../style/taAdmin.css"
-import TinyTile from "../../common/TinyTile";
-import { Container } from "react-bootstrap";
 
-const TaAdminImportFile = (props: {}) => {
+const AdminImportFile = (props: {}) => {
     const [fileType, setFileType] = useState("tacohort");
 
     return (
@@ -68,4 +66,4 @@ const TaAdminImportFile = (props: {}) => {
     )
 };
 
-export default TaAdminImportFile;
+export default AdminImportFile;

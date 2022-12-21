@@ -4,9 +4,8 @@ import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
 import { CourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
-import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
-import { callBackend, createBackendUrl } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import SearchCourse from "./SearchCourse";
 import Button from "../../common/Button";
 import TARow from "./TARow";
@@ -21,7 +20,6 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
 
   const [courses, setCourses] = useState<Array<CourseQuota>>([]);
   const [termYear, setTermYear] = useState("default");
-  // const [courseNumber, setCourseNumber] = useState("default");
   const [displayError, setDisplayError] = useState(false);
   const [courseInfo, setCourseInfo] = useState<CourseQuota>();
   const [tas, setTas] = useState<Array<TA>>([]);
@@ -38,7 +36,6 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
       const data = await res.json();
       const courseObject = [];
       for (const d of data.courses) {
-        // const instructorRes = await callBackend("/api/users/" + d.courseInstructor);
         let item = {
           course_number: d.course_number,
           course_name: d.course_name,
