@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from "react";
-import { Container, Navbar, Tab, Tabs } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
 import "../style/subTopbar.css";
 import { UserContext } from "../App";
 import { UserTypes } from "../enums/UserTypes";
@@ -66,13 +64,13 @@ const TAManagement: React.FC = () => {
             setMissingError(false);
             let access = true;
             // check if user is sysop/admin, and whether they are prof for selected coursed
-            if (currentProfile == UserTypes.Admin) {
+            if (currentProfile === UserTypes.Admin) {
                 try {
                     const res = await callBackend("/api/course/prof/1?email=" + user.email);
 
-                    if (!(res.status == 404)) { // user is a prof
+                    if (!(res.status === 404)) { // user is a prof
                         const data = await res.json();
-                        const currentCourses = new Array();
+                        const currentCourses = [];
                         data.forEach(c => {
                             currentCourses.push(c.course_number);
                         });
@@ -109,7 +107,7 @@ const TAManagement: React.FC = () => {
                         }),
                     });
 
-                    if (res.status == 200 || res.status == 201) {
+                    if (res.status === 200 || res.status === 201) {
                         setOHRespsSuccess(true);
                     }
 
@@ -142,14 +140,14 @@ const TAManagement: React.FC = () => {
             setMissingTA(false);
             let access = true;
             // check if user is sysop/admin, and whether they are prof for selected coursed
-            if (currentProfile == UserTypes.Admin) {
+            if (currentProfile === UserTypes.Admin) {
                 try {
 
                     const res = await callBackend("/api/course/prof/1?email=" + user.email);
 
-                    if (!(res.status == 404)) { // user is a prof
+                    if (!(res.status === 404)) { // user is a prof
                         const data = await res.json();
-                        const currentCourses = new Array();
+                        const currentCourses = [];
                         data.forEach(c => {
                             currentCourses.push(c.course_number);
                         });
@@ -183,7 +181,7 @@ const TAManagement: React.FC = () => {
                         }),
                     });
 
-                    if (res.status == 200 || res.status == 201) {
+                    if (res.status === 200 || res.status === 201) {
                         setPerformanceLogSuccess(true);
                         setMissingTA(false);
                     }
@@ -218,14 +216,14 @@ const TAManagement: React.FC = () => {
             setMissingInfo(false);
             let access = true;
             // check if user is sysop/admin, and whether they are prof for selected coursed
-            if (currentProfile == UserTypes.Admin) {
+            if (currentProfile === UserTypes.Admin) {
                 try {
 
                     const res = await callBackend("/api/course/prof/1?email=" + user.email);
 
-                    if (!(res.status == 404)) { // user is a prof
+                    if (!(res.status === 404)) { // user is a prof
                         const data = await res.json();
-                        const currentCourses = new Array();
+                        const currentCourses = [];
                         data.forEach(c => {
                             currentCourses.push(c.course_number);
                         });
@@ -261,7 +259,7 @@ const TAManagement: React.FC = () => {
                         }),
                     });
 
-                    if (res.status == 200 || res.status == 201) {
+                    if (res.status === 200 || res.status === 201) {
                         setWishedTASuccess(true);
                     }
 
@@ -292,14 +290,14 @@ const TAManagement: React.FC = () => {
             setPostError(false);
             let access = true;
             // check if user is sysop/admin, and whether they are prof for selected coursed
-            if (currentProfile == UserTypes.Admin) {
+            if (currentProfile === UserTypes.Admin) {
                 try {
 
                     const res = await callBackend("/api/course/prof/1?email=" + user.email);
 
-                    if (!(res.status == 404)) { // user is a prof
+                    if (!(res.status === 404)) { // user is a prof
                         const data = await res.json();
-                        const currentCourses = new Array();
+                        const currentCourses = [];
                         data.forEach(c => {
                             currentCourses.push(c.course_number);
                         });
@@ -345,7 +343,7 @@ const TAManagement: React.FC = () => {
                         }),
                     });
 
-                    if (res.status == 200 || res.status == 201) {
+                    if (res.status === 200 || res.status === 201) {
                         setPostSuccess(true);
                         setPostError(false);
                     }
@@ -368,7 +366,7 @@ const TAManagement: React.FC = () => {
 
     let taManagementNav = new Array<NavObject>();
     // a TA has access to different tabs than a prof
-    if (currentProfile == UserTypes.TA) {
+    if (currentProfile === UserTypes.TA) {
         taManagementNav = [
             { eventKey: "chooseCourse", title: "Choose Course", component: <ChooseCourse handleCourse={setCourse}
             isInstructor={isInstructor} userEmail={userEmail} courseName={courseName} currentProfile={currentProfile} />},

@@ -51,7 +51,7 @@ const UseChannel = (props: {
         const res = await callBackend(url);
         const data = await res.json();
 
-        let coursePosts = new Array();
+        let coursePosts = [];
         data.posts.forEach(p => {
           let item = {
             author_name: p.author_name,

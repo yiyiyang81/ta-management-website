@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
@@ -19,12 +19,12 @@ const ChooseCourse = (props: {
     // goal: prof/TA can only select a course they're involved with
     const fetchCourseData = async () => {
         try {
-          if (props.currentProfile == UserTypes.Admin || props.currentProfile == UserTypes.Sysop) {
+          if (props.currentProfile === UserTypes.Admin || props.currentProfile === UserTypes.Sysop) {
             // get all current courses
             const res = await callBackend("/api/course");
             const data = await res.json();
 
-            let currentCourses = new Array();
+            let currentCourses = [];
             data.courses.forEach( c => {
               currentCourses.push((c.course_number) + " " + c.course_name);
             })
@@ -43,7 +43,7 @@ const ChooseCourse = (props: {
             const res = await callBackend(url);
             const data = await res.json();
 
-            const getCourses = new Array();
+            const getCourses = [];
             data.forEach(c => {
                 getCourses.push((c.course_number) + " " + c.course_name);
             });

@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import AddTaToCourse from "./AddTaToCourse";
 import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
-import { CourseQuota } from "../../classes/CourseQuota";
+import { CourseQuota, emptyCourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
-import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
-import { callBackend, createBackendUrl } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import SearchCourse from "./SearchCourse";
 import Button from "../../common/Button";
 import TARow from "./TARow";
@@ -17,16 +16,16 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
   courseNumber: string;
   setCourseNumber: React.Dispatch<React.SetStateAction<any>>
 }) => {
-  const [subPage, setSubPage] = useState("Search");
 
+  const [subPage, setSubPage] = useState("Search");
   const [courses, setCourses] = useState<Array<CourseQuota>>([]);
   const [termYear, setTermYear] = useState("default");
-  // const [courseNumber, setCourseNumber] = useState("default");
   const [displayError, setDisplayError] = useState(false);
   const [courseInfo, setCourseInfo] = useState<CourseQuota>();
   const [tas, setTas] = useState<Array<TA>>([]);
   const [taChange, setTAChange] = useState(false);
 
+  //fetch data for the course selected
   const fetchCourseData = async () => {
     try {
       const res = await callBackend("/api/course/", {
@@ -38,7 +37,6 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
       const data = await res.json();
       const courseObject = [];
       for (const d of data.courses) {
-        // const instructorRes = await callBackend("/api/users/" + d.courseInstructor);
         let item = {
           course_number: d.course_number,
           course_name: d.course_name,
@@ -66,9 +64,15 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
     }
   };
 
-
   useEffect(() => {
-    const fetchCurrentTAData = async () => {
+    fetchCourseData();
+  }, []);
+
+
+  //when a course is set, a list of TA is set as current state and we fetch their info
+  //their info is stored in TA object and used in Rows
+  useEffect(() => {
+    const fetchCurrentTAsData = async () => {
       try {
         if (courseInfo) {
           const course_query = "term_year=" + courseInfo.term_year + "&course_number=" + courseInfo.course_number;
@@ -104,19 +108,24 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
               courses_assigned = ["Not Available"];
             }
 
-            const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
-            const all_ratings = await ratings_res.json();
-            for (let rating of all_ratings.ratings) {
-              average_rating = average_rating + rating.rating_score;
-              rating_comments.push(rating.comment);
-            }
-            if (all_ratings.ratings.length === 0) {
+            try {
+              const ratings_res = await callBackend(`/api/ratings/${ta.email}`);
+              const all_ratings = await ratings_res.json();
+              for (let rating of all_ratings.ratings) {
+                average_rating = Number(average_rating) + Number(rating.rating_score);
+                rating_comments.push(rating.comment);
+              }
+              if (all_ratings.ratings.length === 0) {
+                ta["average_rating"] = -1;
+                ta["rating_comments"] = ["Not Available"];
+              }
+              else {
+                ta["average_rating"] = Number(average_rating) / all_ratings.ratings.length;
+                ta["rating_comments"] = rating_comments.join(", ");
+              }
+            } catch (e) {
               ta["average_rating"] = -1;
               ta["rating_comments"] = ["Not Available"];
-            }
-            else {
-              ta["average_rating"] = average_rating / all_ratings.ratings.length;
-              ta["rating_comments"] = rating_comments.join(", ");
             }
           }
           setTas(data.course_TA);
@@ -125,9 +134,10 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
         console.error(err);
       }
     }
-    fetchCurrentTAData();
+    fetchCurrentTAsData();
   }, [courseInfo, taChange]);
 
+  //verify if the Term Year - Course Number combo is valid
   const checkValidCourse = async () => {
     try {
       const res = await callBackend(`/api/course/search/${termYear}/${courseNumber}`, {
@@ -136,15 +146,14 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
           "Content-Type": "application/json",
         },
       });
-
       return await res.json();
     } catch (e) {
       console.log(e);
     }
   };
 
+  //set the state of current course and switch page
   const handleCourseSearchClick = async () => {
-
     setDisplayError(false)
     const course = await checkValidCourse();
     if (course !== null && course !== undefined) {
@@ -156,14 +165,17 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
     }
   };
 
-  useEffect(() => {
-    fetchCourseData();
-  }, []);
-
+  //rerender the page if TA was added/deleted
   const handleTAChange = () => {
     taChange ? setTAChange(false) : setTAChange(true)
   }
 
+  //reset all states to initial values
+  const handleGoBack = () => {
+    setSubPage("Search");
+    setCourseInfo(emptyCourseQuota);
+    setTas([]);
+  }
 
   return (
     <div className="ta-admin-container">
@@ -255,7 +267,7 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
                 width="15rem"
                 type="primary"
                 value="Go Back"
-                onClick={() => setSubPage("Search")}
+                onClick={handleGoBack}
               ></Button>
             </div>
           </Container>

@@ -1,5 +1,6 @@
 import { Rating } from "../../classes/Rating";
 
+//used in second page of TA Information
 const RatingRow = (
     { rating }: {
         rating: Rating;

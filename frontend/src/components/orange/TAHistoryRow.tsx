@@ -1,5 +1,6 @@
 import { TA } from "../../classes/TA";
 
+//used in second page of Course TA History
 const TAHistoryRow = (
   { ta, course_number }: {
     ta: TA; course_number: string

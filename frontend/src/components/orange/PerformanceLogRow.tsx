@@ -1,5 +1,6 @@
 import { PerformanceLog } from "../../classes/PerformanceLog";
 
+//used in second page of TA Information
 const PerformanceLogRow = (
     { performance_log }: {
         performance_log: PerformanceLog;

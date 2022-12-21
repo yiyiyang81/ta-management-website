@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import AddIcon from "@mui/icons-material/Add";
 import "../../style/userTable.css";
 import { callBackend } from "../../apiConfig";
 import TinyTile from "../../common/TinyTile";
@@ -13,7 +12,6 @@ const AddTaToCourse = ({ courseNumber, termYear, handleTAChange }) => {
 
     const handleAddTA = async (e) => {
         try {
-            console.log(taEmail);
             const res = await callBackend("/api/course/:id/ta/:id", {
                 method: "POST",
                 headers: {

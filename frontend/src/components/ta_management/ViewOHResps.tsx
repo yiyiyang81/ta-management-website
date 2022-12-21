@@ -46,7 +46,7 @@ const ViewOHResps = (props: {
         const dataProf = await resProf.json();
         const dataTA = await resTA.json();
 
-        let emails = new Array();
+        let emails = [];
 
         for (const p of dataProf.instructors) {
           emails.push(p.email);
@@ -56,7 +56,7 @@ const ViewOHResps = (props: {
           emails.push(t.email);
         }
 
-        let ohs = new Array();
+        let ohs = [];
 
         // get their office hours and responsibilities by their emails
         for (const e of emails) {

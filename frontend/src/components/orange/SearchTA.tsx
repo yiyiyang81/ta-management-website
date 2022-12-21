@@ -3,6 +3,7 @@ import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
 import LabeledInput from "../../common/LabeledInput";
 
+//used in first page of TA Information 
 const SearchTA = (props: {
     studentNumber: string;
     email: string;

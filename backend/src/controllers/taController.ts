@@ -23,9 +23,9 @@ export const getAllTAs = asyncHandler(async (req: Request, res: Response) => {
 export const registerTAFromFile = asyncHandler(async (req: Request, res: Response) => {
     const csv = req.file;
     const type = req.params.fileType;  //need to pass the file type info from frontend
+    let return_messages: string[] = [];
 
-    console.log("csv", csv)
-    console.log("type", type)
+
     if (!csv) {
         res.status(500);
         throw new Error("File upload unsuccessful.");
@@ -37,13 +37,12 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             const taEmail = record[4];
             const courses_applied = record[13].split(" ");
             const term_year = record[0];
-            console.log("courses_applied", courses_applied);
             let courses_applied_for_list: ICourse[] = []
             // doing checks before adding the information to database
             for (let course_number of courses_applied) {
                 let course = await Course.findOne({ course_number: course_number, term_year: term_year });
                 if (!course) {
-                    console.log(`Course not found in the database! Skipping course ${course_number}.`);
+                    return_messages.push(`Course not found in the database! Skipping course ${course_number}.`);
                 }
                 else {
                     courses_applied_for_list.push(course);
@@ -85,7 +84,7 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             let any_prof = await Professor.findOne();//need an instance to invoke schema method
             let course = await Course.findOne({ course_number: course_number, term_year: term_year });
             if (!course) {
-                console.log("Course not found in the database! Skipping row.");
+                return_messages.push(`Course ${course_number} not found in the database! Skipping row.\n`);
                 continue;
             }
             else {
@@ -93,12 +92,12 @@ export const registerTAFromFile = asyncHandler(async (req: Request, res: Respons
             }
         }
     }
-    //should be removed later
     else {
         res.status(500);
         throw new Error("Incorrect type received.");
     }
-    res.status(200).json({});
+    return_messages.push("Import Successful.");
+    res.status(200).json({ return_messages });
 });
 
 // @Desc Add TA
@@ -177,9 +176,7 @@ export const getTAByEmail = asyncHandler(async (req: Request, res: Response) => 
 // @Method GET
 export const getTAByStudentNumber = asyncHandler(async (req: Request, res: Response) => {
     const student_number = req.params.student_number;
-    console.log(student_number)
     const TAs = await TA.findOne({ student_ID: student_number });
-    console.log(TAs)
     res.status(200).json({
         TAs
     });
