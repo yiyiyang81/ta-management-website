@@ -25,8 +25,8 @@ const ProfRow = ({
       <td className="column4">{professor.department ? professor.department: "No Department"}</td>
       <td className="column5 course-button">
         <>
-          {professor.hasCourse &&
-            `${professor.courseNumber}: ${professor.courseName} - ${professor.termYear}`}
+          {professor.hasCourse ?
+            `${professor.courseNumber}: ${professor.courseName} - ${professor.termYear}` : 'No Courses'}
         </>
         </td>
         

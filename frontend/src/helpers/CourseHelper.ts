@@ -8,7 +8,6 @@ export abstract class CourseHelper {
 			const res = await callBackend(`/api/course/${courseId}`);
 			const data = await res.json();
 			const d = data.course
-			console.log("COURSe", data.course)
 			const term_year = d.term_year.split(" ");
 			let item = {
 				courseNumber: d.course_number,
@@ -49,20 +48,14 @@ export abstract class CourseHelper {
 				};
 				let instructorNames = [];
 				for (const prof of d.course_instructors) {
-					const instructorRes = await callBackend("/api/prof/" + prof);
-					if (instructorRes) {
-						const instructorData = await instructorRes.json();
-						if (instructorData.exists) {
-							const userRes = await callBackend("/api/users/" + instructorData.prof.email);
-							if (userRes) {
-								const userData = await userRes.json()
-								instructorNames.push(
-									userData.user.first_name +
-									" " +
-									userData.user.last_name
-								);
-							}
-						}
+					const userRes = await callBackend("/api/users/" + prof.email);
+					const userData = await userRes.json()
+					if (userData.exists) {
+						instructorNames.push(
+							userData.user.first_name +
+							" " +
+							userData.user.last_name
+						);
 					}
 				}
 				item["instructorNames"] = instructorNames.join(",");
@@ -100,6 +93,10 @@ export abstract class CourseHelper {
 		return `${courseNumber}: ${courseName}`
 	}
 
+	public static createCourseFullNameWithTerm(courseNumber: string, courseName: string, term: string, year: string) {
+		return `${courseNumber}: ${courseName} - ${term} ${year}`
+	}
+
 	public static convertCourseFullNamesToCourseNumbers(courses: string[]) {
 		if (courses.length > 0) {
 			return courses.map((course) => {
@@ -110,6 +107,14 @@ export abstract class CourseHelper {
 			return courses;
 		}
 	};
+
+	public static convertCourseNameTerm(courseTemp: string) {
+		const splitCourse = courseTemp.split("-")
+		const course = splitCourse[0]
+		const courseNumber = course.split(":")[0]
+		const termYear = splitCourse[1].trim()
+		return { courseNumber, termYear }
+	}
 
 	public static async deleteCourseByCourseNumber(courseNumber: string): Promise<any> {
 		try {

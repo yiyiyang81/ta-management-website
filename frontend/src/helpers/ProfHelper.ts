@@ -9,36 +9,38 @@ export abstract class ProfHelper {
 			const profObject = [];
 			for (const d of data.profs) {
 				const instructorRes = await callBackend("/api/users/" + d.email);
-				let course = { hasCourse: false }
-				if (d.course) {
-					const courseRes = await callBackend("api/course/" + d.course)
-					if (courseRes) {
-						const courseData = await courseRes.json()
-						if (courseData.exists) {
-							course["hasCourse"] = true
-							course["courseName"] = courseData.course.course_name
-							course["courseNumber"] = courseData.course.course_number
-							course["termYear"] = courseData.course.term_year
+				const instructorData = await instructorRes.json()
+				if (instructorData.exists) {
+					let course = { hasCourse: false }
+					if (d.course) {
+						const courseRes = await callBackend("api/course/" + d.course)
+						if (courseRes) {
+							const courseData = await courseRes.json()
+							if (courseData.exists) {
+								course["hasCourse"] = true
+								course["courseName"] = courseData.course.course_name
+								course["courseNumber"] = courseData.course.course_number
+								course["termYear"] = courseData.course.term_year
+							}
 						}
 					}
-				}
-				let item = {
-					faculty: d.faculty,
-					department: d.department,
-				};
+					let item = {
+						faculty: d.faculty,
+						department: d.department,
+					};
 
-				if (instructorRes) {
-					const instructorData = await instructorRes.json();
-					item["firstName"] = instructorData.user.first_name;
-					item["lastName"] = instructorData.user.last_name;
-					item["email"] = instructorData.user.email;
-				} else {
-					item["firstName"] = "";
-					item["lastName"] = "";
-					item["email"] = "";
+					if (instructorData.exists) {
+						item["firstName"] = instructorData.user.first_name;
+						item["lastName"] = instructorData.user.last_name;
+						item["email"] = instructorData.user.email;
+					} else {
+						item["firstName"] = "";
+						item["lastName"] = "";
+						item["email"] = "";
+					}
+					const newItem = Object.assign(item, course)
+					profObject.push(newItem);
 				}
-				const newItem = Object.assign(item, course)
-				profObject.push(newItem);
 			}
 			return (profObject)
 		} catch (err) {

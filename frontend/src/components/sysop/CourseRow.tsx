@@ -20,10 +20,10 @@ const CourseRow = ({
     <tr className="body">
       <td className="column0">{course.courseNumber}</td>
       <td className="column1">{course.courseName}</td>
-      <td className="column2">{course.courseDesc}</td>
+      <td className="column2">{course.courseDesc ? course.courseDesc: "No Course Description"}</td>
       <td className="column3">{course.term}</td>
       <td className="column4">{course.year}</td>
-      <td className="column5">{course.instructorNames}</td>
+      <td className="column5">{course.instructorNames ? course.instructorNames : "No Course Instructors"}</td>
       <td className="column6 text-center">
         <img
           src={deleteIcon}

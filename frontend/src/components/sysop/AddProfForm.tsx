@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Modal, Form, Row, Col } from "react-bootstrap";
 import React from "react";
 import "../../style/userTable.css";
@@ -10,18 +10,30 @@ import Select from "../../common/Select";
 import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
 import { ProfHelper } from "../../helpers/ProfHelper";
+import { CourseHelper } from "../../helpers/CourseHelper";
 
 function AddProfForm({ loadProfsData }) {
   const [show, setShow] = useState(false);
   const [tempEmail, setTempEmail] = useState<string>();
   const [tempFaculty, setTempFaculty] = useState<string>("default");
   const [tempDept, setTempDept] = useState<string>("default");
-  const [tempCourses, setTempCourses] = useState<string>();
+  const [tempCourses, setTempCourses] = useState<string>("default");
+  const [allCourses, setAllCourses] = useState();
   const allFaculties = ["Science", "Engineering", "Arts"];
   const allDept = ["Computer Science", "Mathematics", "Physics"];
-
   const [uniqueEmailError, setUniqueEmailError] = useState(false);
   const [displayEmptyFieldsError, setEmptyFieldsError] = useState(false);
+  
+  const loadCourseNames = async () => {
+    const allCourses = await CourseHelper.fetchCourseNames()
+    const allNames = allCourses.map(course => CourseHelper.createCourseFullNameWithTerm(course.courseNumber, course.courseName, course.term, course.year))
+    setAllCourses(allNames)
+  }
+
+  useEffect(() => {
+   loadCourseNames()
+  },[]);
+
 
   let validFields =
     tempEmail !== "" &&
@@ -35,6 +47,7 @@ function AddProfForm({ loadProfsData }) {
     if (validFields) {
       const { emailExists } = await ProfHelper.checkUniqueEmail(tempEmail);
       emailExists ? setUniqueEmailError(true) : setUniqueEmailError(false);
+      const {courseNumber, termYear} = CourseHelper.convertCourseNameTerm(tempCourses)
       if (!emailExists) {
         try {
           const res = await callBackend("/api/prof/add", {
@@ -46,7 +59,8 @@ function AddProfForm({ loadProfsData }) {
               email: tempEmail,
               faculty: tempFaculty,
               department: tempDept,
-              course_number: tempCourses,
+              course_number: courseNumber,
+              term_year: termYear,
             }),
           });
           if (res.status === 200) {
@@ -128,15 +142,15 @@ function AddProfForm({ loadProfsData }) {
             </Row>
             <Row>
               <Col>
-                <LabeledInput
+                <Select
+                  label="Course"
                   required={true}
-                  label="Course Number"
-                  id="course-number"
                   name="course-number"
+                  id="course-number"
+                  options={allCourses}
                   value={tempCourses}
-                  type="text"
                   handleChange={setTempCourses}
-                ></LabeledInput>
+                ></Select>
               </Col>
             </Row>
             <Row>
