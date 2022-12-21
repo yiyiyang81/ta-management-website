@@ -4,9 +4,9 @@ import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import { User, emptyUser } from "./classes/User";
 import LoggedOut from "./pages/LoggedOut";
-import Registration from "./pages/Registration";
-import AdminCourse from "./pages/AdminCourse";
+import Registration from "./pages/Registration"
 import Header from "./components/Header";
+import Admin from "./pages/Admin";
 import TAManagement from "./pages/TAManagement";
 import { UserTypes } from "./enums/UserTypes";
 import RateTA from "./pages/RateTA";
@@ -19,7 +19,7 @@ interface UserProviderProps {
 
 export const UserContext = React.createContext<UserProviderProps>({
   user: emptyUser,
-  setUser: () => {},
+  setUser: () => { },
 });
 
 const App = () => {
@@ -55,12 +55,8 @@ const App = () => {
           />
           <Route path="/logout" element={<LoggedOut />} />
           <Route path="/register" element={<Registration />} />
-          <Route path="/course" element={<AdminCourse />} />
+          <Route path="/dashboard/ta-administration" element={<Admin />} />
           <Route path="/dashboard/ta-management" element={<TAManagement />} />
-          <Route
-            path="/dashboard/ta-administration"
-            element={<AdminCourse />}
-          />
           <Route path="/dashboard/rate-ta" element={<RateTA />} />
           <Route path="/dashboard/sysop-tasks" element={<SysopTasks />} />
         </Routes>

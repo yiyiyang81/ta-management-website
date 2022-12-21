@@ -68,6 +68,6 @@ export const getPerformanceLogs = asyncHandler(async (req: Request, res: Respons
     if (!log.length) {
         res.status(200).json({}); // prof didn't record any logs about this TA
     } else {
-        res.status(200).json({ all_performance_logs: JSON.stringify(log) });
+        res.status(200).json({ log });
     }
 });

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 export interface IProfessor extends mongoose.Document {
     professor: IUser,
-    email:string,
+    email: string,
     faculty: string, // think about what happens when profs are cross appointed 
     department: string,
     course: string,
@@ -39,7 +39,14 @@ const ProfessorSchema = new mongoose.Schema({
     course: {
         type: Schema.Types.ObjectId,
         required: false,
+        default: null,
         ref: "Course"
+    },
+
+    active: {
+        type: Boolean,
+        required: true,
+        default: true
     }
 }, {
     timestamps: true
@@ -47,7 +54,7 @@ const ProfessorSchema = new mongoose.Schema({
 
 ProfessorSchema.methods.get_prof_by_email = async function (email: string) {
     const user_id = await User.findOne({ email: email }, { _id: 1 });
-    return Professor.findOne({ professor: user_id });
+    return await Professor.findOne({ professor: user_id });
 }
 
 ProfessorSchema.methods.get_prof_by_name = async function (name: string) {
@@ -60,7 +67,7 @@ ProfessorSchema.methods.get_prof_by_name = async function (name: string) {
             $regex: new RegExp(last_name, "i")
         }
     }, { _id: 1 });
-    return Professor.findOne({ professor: user_id });
+    return await Professor.findOne({ professor: user_id });
 }
 
 const Professor = mongoose.model<IProfessor>("Professor", ProfessorSchema);

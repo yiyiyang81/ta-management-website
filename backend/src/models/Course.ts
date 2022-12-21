@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { IProfessor } from "./Professor";
-import { ITA } from "./TA";
+import TA, { ITA } from "./TA";
 import User, { IUser } from './User';
 import TAWishlist, { ITAWishlist } from './TAWishlist';
 import QueryString from 'qs';
@@ -34,12 +34,14 @@ export interface ICourse extends mongoose.Document {
     course_instructors: [IProfessor],
     course_TA: [ITA],
     TA_wishlist: [ITA]
-    update_course_quota(term_year: string, course_number: string, course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
+    update_course_quota(course_type: string, course_enrollment_num: number, TA_quota: number): Promise<string>,
     get_course_TA_info(course_number: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[], term_year: string | string[] | QueryString.ParsedQs | QueryString.ParsedQs[]): Promise<Array<any>>,
     get_list_of_need_to_fix_courses(): Promise<Array<IUser>>,
     add_wishlist_to_course(course_number: String, term_year: String): Promise<string>,
     add_ta_to_course(ta: ITA): Promise<string>,
+    add_prof_to_course(prof: IProfessor): Promise<string>,
     delete_ta_from_course(ta: ITA): Promise<string>,
+    delete_prof_from_course(prof: IProfessor): Promise<string>,
 }
 
 const CourseSchema = new mongoose.Schema({
@@ -51,7 +53,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_description: {
         type: String,
-        // required: true,
+        required: false,
     },
 
     term_year: {
@@ -66,7 +68,7 @@ const CourseSchema = new mongoose.Schema({
 
     course_type: {
         type: String,
-        // required: true,
+        required: false,
     },
 
     course_enrollment_num: {
@@ -98,6 +100,12 @@ const CourseSchema = new mongoose.Schema({
     TA_wishlist: {
         type: Schema.Types.ObjectId,
         ref: 'TAWishlist'
+    },
+
+    active : {
+        type: Boolean,
+        required : true,
+        default : true
     }
 }, {
     timestamps: true
@@ -105,9 +113,16 @@ const CourseSchema = new mongoose.Schema({
 
 
 //Database Methods
-CourseSchema.methods.update_course_quota = function (term_year: string, course_number: string,
+CourseSchema.methods.update_course_quota = async function (
+    // term_year: string, course_number: string,
     course_type: string, course_enrollment_num: number, TA_quota: number) {
-    return Course.updateOne({ "term_year": term_year, "course_number": course_number },
+
+    console.log("course_enrollment_num", course_enrollment_num);
+    console.log("course_type", course_type)
+    console.log("TA_quota", TA_quota)
+
+    return await this.updateOne(
+        // { "term_year": term_year, "course_number": course_number },
         { $set: { course_type: course_type, course_enrollment_num: course_enrollment_num, TA_quota: TA_quota } }
     );
 }
@@ -151,7 +166,18 @@ CourseSchema.methods.add_ta_to_course = async function (ta: ITA) {
     else {
         console.log("TA already exist!");
     }
-    return this.updateOne({ $set: { course_TA: current_ta_list } });
+    return await this.updateOne({ $set: { course_TA: current_ta_list } });
+}
+
+CourseSchema.methods.add_prof_to_course = async function (prof: IProfessor) {
+    let current_prof_list = this.course_instructors;
+    if (!current_prof_list.find((i: { email: string; }) => i.email == prof.email)) {
+        current_prof_list.push(prof);
+    }
+    else {
+        console.log("Professor already exist!");
+    }
+    return this.updateOne({ $set: { course_TA: current_prof_list } });
 }
 
 CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {
@@ -167,6 +193,19 @@ CourseSchema.methods.delete_ta_from_course = async function (ta: ITA) {
     return this.updateOne({ $set: { course_TA: current_ta_list } });
 }
 
+CourseSchema.methods.delete_prof_from_course = async function (prof: IProfessor) {
+    let current_prof_list = this.course_instructors;
+    if (!current_prof_list.find((i: { email: string; }) => i.email === prof.email)) {
+        console.log("Prof not in course!");
+    }
+    else {
+        current_prof_list = current_prof_list.filter((i: { email: string; }) =>
+            i.email !== prof.email
+        );
+    }
+    return this.updateOne({ $set: { course_TA: current_prof_list } });
+}
+
 //setting is_need_fix variable by calculating the TA per person ratio
 CourseSchema.pre('save', function (next) {
     const TA_per_student = this.course_enrollment_num / this.TA_quota;
@@ -179,6 +218,11 @@ CourseSchema.pre('save', function (next) {
     next();
 })
 
+// CourseSchema.pre("deleteOne",function(next) {
+//     const userId = this.getQuery()["_id"];
+//     mongoose.model("Professor").updateMany({course : userId},{ $unset : {course : ""}})
+//     next()
+// })
 const Course = mongoose.model<ICourse>("Course", CourseSchema);
 
 export default Course;

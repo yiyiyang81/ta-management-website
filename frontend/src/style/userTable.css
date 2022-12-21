@@ -7,13 +7,14 @@
 }
 
 #profTable th {
-  font-weight  : bold;
-  border-bottom: 2px solid #B9B9B9;
+  font-weight     : bold;
+  border-bottom   : 2px solid #B9B9B9;
   background-color: #FFFFFF;
 }
 
 #profTable td {
-  color        : black;
+  color  : black;
+  padding: 1rem;
 }
 
 #profTable tr:nth-child(odd) {
@@ -56,43 +57,59 @@ td {
   border-radius: 5px;
 }
 
+
 /* padding for sysop add professor form */
+
 .modal-content .row {
-  padding: 10px;
+    padding: 10px;
 }
+
 
 /* padding for sysop add course form */
+
 .modal-body .form-group {
-  padding: 10px;
+    padding: 10px;
 }
+
 
 /* styling to place wishlist button inline with course name */
+
 .inline {
-  float: left !important;
+    float: left !important;
 }
+
 
 /* TA Admin page title spacing */
+
 .course-name {
-  padding: 20px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
 }
+
 
 /* view wishlist button spacing */
+
 .view-wishlist {
-  padding: 24px 20px 20px 20px;
+    padding: 24px 20px 20px 20px;
 }
 
+
 /* button spacing used on multiple pages*/
+
 .button-spacing {
   padding-left: 15px;
   float       : right !important;
 }
 
+
 /* add TA button pages*/
+
 .add-ta-button {
-  padding-left: 15px;
+    padding-left: 15px;
 }
 
+
 /* removes blue highlighting when clicking on dropdown */
+
 .dropdown-item:active {
   color           : black !important;
   background-color: #dee2e6 !important;
@@ -109,6 +126,7 @@ td {
   border-radius   : 5px;
 }
 
+
 /* TA Admin. have beginning of table always line up with course name */
 @media (min-width: 1200px) {
 
@@ -121,19 +139,25 @@ td {
   }
 }
 
+
 /* prevent new line */
+
 .prof-log-add {
-  display: flex;
+    display: flex;
 }
 
+
 /* styling for professor log modal back button */
+
 .log-back {
   padding-bottom: 15px;
 }
 
+
 /* styling for professor log modal add button */
+
 .log-add {
-  color: green;
+    color: green;
 }
 
 .rowC {

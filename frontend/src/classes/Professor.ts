@@ -1,4 +1,8 @@
 export interface Professor {
+  termYear: string;
+  hasCourse: boolean;
+  courseName?: string;
+  courseNumber?: string;
   uuid: string;
   firstName: string;
   lastName: string;

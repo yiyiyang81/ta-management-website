@@ -16,7 +16,7 @@ export class UserHelper {
 	}
 
 	static async generateEmail(firstName: string, lastName: string, identifier: number): Promise<string> {
-		let generatedEmail = (firstName + "." + lastName + identifier.toString() +"@mail.mcgill.ca").split(" ").join('').toLowerCase()
+		let generatedEmail = (firstName + "." + lastName + identifier.toString() + "@mail.mcgill.ca").split(" ").join('').toLowerCase()
 		let user = await User.exists({ email: generatedEmail });
 		if (!user) {
 			return generatedEmail
@@ -29,10 +29,10 @@ export class UserHelper {
 	// get users
 	static async getAllUsersDb(includePasswords: boolean) {
 		if (includePasswords) {
-			return await User.find({});
+			return await User.find({ active: true });
 		}
 		else {
-			return await User.find({}).select("-password");
+			return await User.find({ active: true }).select("-password");
 		}
 	}
 
@@ -89,7 +89,7 @@ export class UserHelper {
 	}
 
 	static async checkExistsOrCreateSkeleton(firstName: string, lastName: string, userTypes: UserTypes[]) {
-		let user = await User.findOne({first_name: firstName, last_name: lastName})
+		let user = await User.findOne({ first_name: firstName, last_name: lastName })
 		if (user) {
 			return user
 		} else {
@@ -99,14 +99,16 @@ export class UserHelper {
 			return await this.createSkeletonUserDb(firstName, lastName, email, username, password, userTypes)
 		}
 	}
+
 	// delete users
 	static async deleteUserDbByEmail(email: string) {
-		return await User.findOneAndDelete({ email: email });
+		// return await User.findOneAndDelete({ email: email });
+		return await User.findOneAndUpdate({ email: email }, { $set: { active: false } });
 	}
 
 	static async deleteReferencesToUser(email: string) {
-		await TA.findOneAndDelete({email:email})
-		await Professor.findOneAndDelete({email:email})
+		await TA.findOneAndDelete({ email: email })
+		await Professor.findOneAndDelete({ email: email })
 	}
 
 

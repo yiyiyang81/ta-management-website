@@ -1,0 +1,2 @@
+Fall2022,Yiyi Yang,260923855,Yiyi Yang,yiyi.yang3@mail.mcgill.ca,ugrad,Joseph Vybihal,yes,90,2022-09-01,montreal,6138905384,degree,COMP310 COMP303 COMP426,yes,sample_notes
+Fall2023,Yiyi Yang,260923855,Yiyi Yang,yiyi.yang3@mail.mcgill.ca,ugrad,Joseph Vybihal,yes,90,2022-09-01,montreal,6138905384,degree,COMP310 COMP303 COMP426,yes,sample_notes

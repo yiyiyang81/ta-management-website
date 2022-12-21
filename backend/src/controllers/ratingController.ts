@@ -4,6 +4,7 @@ import { CourseHelper } from "../helpers/courseHelper";
 import Rating from "../models/Rating";
 import { TAHelper } from "../helpers/taHelper";
 import { RatingHelper } from "../helpers/ratingHelper";
+import Course from "../models/Course";
 
 // @Desc Get all ratings
 // @Route /api/ratings
@@ -63,7 +64,7 @@ export const getRatingsCommentsByEmailAndCourseNumber = asyncHandler(async (req:
 export const getRatingScoreAverageByEmailAndCourseNumber = asyncHandler(async (req: Request, res: Response) => {
 	const { email, courseNumber } = req.params
 	const ratings = await Rating.find({ email: email, course_number: courseNumber })
-	
+
 	let scores = 0
 	for (let i = 0; i < ratings.length; i++) {
 		scores += ratings[i].rating_score
@@ -82,12 +83,16 @@ export const getRatingScoreAverageByEmailAndCourseNumber = asyncHandler(async (r
 // @Route /api/ratings/add
 // @Method POST
 export const addRating = asyncHandler(async (req: Request, res: Response) => {
-	const { course_number, email, rating_score, comment } = req.body
-	const courseId = await CourseHelper.getCourseIdByCourseNumber(course_number)
-	const teachingAssistantId = await TAHelper.getTAIdByEmail(email)
-	
-	const rating = await RatingHelper.createRatingsDb(course_number, courseId, email, teachingAssistantId, rating_score, comment)
-	res.status(200).json({
-		rating
-	});
+	const { course_number, term_year, email, rating_score, comment } = req.body
+	const course = await Course.findOne({ course_number: course_number, term_year: term_year })
+	if (course) {
+		const teachingAssistantId = await TAHelper.getTAIdByEmail(email)
+		const rating = await RatingHelper.createRatingsDb(course_number, course._id, email, teachingAssistantId, rating_score, comment)
+		res.status(200).json({
+			rating
+		});
+	}
+	else {
+		res.status(404)
+	}
 });

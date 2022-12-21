@@ -10,6 +10,7 @@ import { UserHelper } from "../helpers/UserHelper";
 import { CourseHelper } from "../helpers/CourseHelper";
 import { Course } from "../classes/Course";
 import { Professor } from "../classes/Professor";
+import QuickImport from "../components/sysop/QuickImport";
 
 const SysopTasks = () => {
   const [users, setUsers] = useState<Array<User>>([]);
@@ -26,32 +27,55 @@ const SysopTasks = () => {
     setProfs(profs);
   };
 
-  const loadCourses = async() => {
+  const loadCourses = async () => {
     const courses = await CourseHelper.fetchCourseData();
     setCourses(courses);
-  }
+  };
+
+  const loadAllData = async () => {
+    loadUsers();
+    loadCourses();
+    loadProfs();
+  };
 
   useEffect(() => {
-    loadUsers();
-    loadProfs();
-    loadCourses();
+    loadAllData()
   }, []);
 
   const studentNav: Array<NavObject> = [
     {
       eventKey: "manageUsers",
       title: "Manage Users",
-      component: <ManageUsers users={users} loadUserData={loadUsers} />,
+      component: <ManageUsers users={users} loadAllData={loadAllData}/>,
+    },
+    {
+      eventKey: "quickImport",
+      title: "Quick Import",
+      component: (
+        <QuickImport
+          loadAllData={loadAllData}
+        />
+      ),
     },
     {
       eventKey: "manageProfessors",
       title: "Manage Professors",
-      component: <ManageProfessors loadProfsData={loadProfs} profs={profs} />,
+      component: (
+        <ManageProfessors
+          loadAllData={loadAllData}
+          profs={profs}
+        />
+      ),
     },
     {
       eventKey: "manageCourses",
       title: "Manage Courses",
-      component: <ManageCourses loadCoursesData={loadCourses} courses={courses} />,
+      component: (
+        <ManageCourses
+          loadAllData={loadAllData}
+          courses={courses}
+        />
+      ),
     },
   ];
 
