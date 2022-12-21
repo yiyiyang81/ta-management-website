@@ -3,9 +3,11 @@ import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
 import { createBackendUrl, callBackend } from "../../apiConfig";
+import { UserTypes } from "../../enums/UserTypes";
 
 const ChooseCourse = (props: {
     handleCourse: React.Dispatch<React.SetStateAction<any>>;
+    currentProfile: UserTypes;
     isInstructor: boolean;
     courseName: string;
     userEmail: string;
@@ -17,27 +19,37 @@ const ChooseCourse = (props: {
     // goal: prof/TA can only select a course they're involved with
     const fetchCourseData = async () => {
         try {
+          if (props.currentProfile == UserTypes.Admin || props.currentProfile == UserTypes.Sysop) {
+            // get all current courses
+            const res = await callBackend("http://localhost:3001/api/course");
+            const data = await res.json();
+
+            let currentCourses = new Array();
+            data.courses.forEach( c => {
+              currentCourses.push((c.course_number) + " " + c.course_name);
+            })
+            setAllCourses(currentCourses);
+
+          } else {
             const courseData = "email=" + props.userEmail; 
 
             let url = "";
             if (props.isInstructor) {
               url = createBackendUrl("/api/course/prof/1?" + courseData);
-              
             } else {
               url = createBackendUrl("/api/course/ta/1?" + courseData);
             }
 
             const res = await callBackend(url);
-          
             const data = await res.json();
+            
             const getCourses = new Array();
-
             data.forEach(c => {
                 getCourses.push((c.course_number) + " " + c.course_name);
             });
-
             setAllCourses(getCourses);
-            
+  
+          }
         }  catch (err) {
             console.error(err);
         }
