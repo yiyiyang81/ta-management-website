@@ -1,4 +1,4 @@
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import combinedLogos from "../assets/images/combined-logos.png";
 import socsLogo from "../assets/images/socs-logo.png";
 import mcgillLogo from "../assets/images/mcgill-logo.png";
@@ -9,6 +9,8 @@ import RegisterCourses from "../components/registration/RegisterCourses";
 import RegisterRoles from "../components/registration/RegisterRoles";
 import { callBackend } from "../apiConfig";
 import RegistrationCompleted from "../components/registration/RegistrationCompleted";
+import { UserTypes, convertUserTypes } from "../enums/UserTypes";
+import { CourseHelper } from "../helpers/CourseHelper";
 
 const Registration: React.FC = () => {
   const [formState, setFormState] = useState("Account Registration");
@@ -27,7 +29,6 @@ const Registration: React.FC = () => {
   const [uniqueUsernameError, setUniqueUsernameError] = useState(false);
   const [uniqueEmailError, setUniqueEmailError] = useState(false);
 
-
   // Course Registration
   const [term, setTerm] = useState("default");
   const [year, setYear] = useState("default");
@@ -42,16 +43,6 @@ const Registration: React.FC = () => {
     }
   };
 
-  // Role Registration
-  // TODO: Implement role validation method
-  enum DisplayedRoleEnums {
-    "Student" = "stud",
-    "Teaching Assistant" = "ta",
-    "Professor" = "prof",
-    "TA Administrator" = "admin",
-    "System Operator" = "sysop",
-  }
-
   const availableRoles = [
     "Student",
     "Teaching Assistant",
@@ -60,14 +51,16 @@ const Registration: React.FC = () => {
     "Sysop",
   ];
 
-  const [roles, setRoles] = useState([]);
+  const [roles, setRoles] = useState<Array<UserTypes>>([]);
   const [roleError, setRoleError] = useState(false);
-  const handleRoles = (value: string) => {
-    if (roles.filter((val) => val === value).length > 0) {
-      setRoles(roles.filter((val) => val !== value));
+  const handleRoles = (event: any) => {
+    let updatedRoles = [...roles];
+    if (event.target.checked) {
+      updatedRoles.push(event.target.value)
     } else {
-      setRoles(roles.concat([value]));
+      updatedRoles.splice(roles.indexOf(event.target.value), 1);
     }
+    setRoles(updatedRoles);
   };
 
   const isValidAccountFields =
@@ -80,13 +73,16 @@ const Registration: React.FC = () => {
 
   const checkUniqueAccount = async () => {
     try {
-      const res = await callBackend(`/api/users/checkValidAccount/${email}/${username}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      return await res.json()
+      const res = await callBackend(
+        `/api/users/checkValidAccount/${email}/${username}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      return await res.json();
     } catch (err) {
       console.log(err);
     }
@@ -94,20 +90,18 @@ const Registration: React.FC = () => {
   // Navigation handlers
   const handleRegisterCoursesClick = async () => {
     if (isValidAccountFields) {
-      setAccountError(false)
-      const {emailExists, usernameExists} = await checkUniqueAccount()
-      emailExists ? setUniqueEmailError(true) : setUniqueEmailError(false)
-      usernameExists ? setUniqueUsernameError(true) : setUniqueUsernameError(false)
-      if (!emailExists && !usernameExists){     
+      setAccountError(false);
+      const { emailExists, usernameExists } = await checkUniqueAccount();
+      emailExists ? setUniqueEmailError(true) : setUniqueEmailError(false);
+      usernameExists
+        ? setUniqueUsernameError(true)
+        : setUniqueUsernameError(false);
+      if (!emailExists && !usernameExists) {
         setFormState("Course Registration");
       }
     } else {
       setAccountError(true);
     }
-  };
-
-  const convertRoles = (roles: string[]) => {
-    return roles.map((role) => DisplayedRoleEnums[role]);
   };
 
   const submitRegistration = async (e: any) => {
@@ -124,8 +118,8 @@ const Registration: React.FC = () => {
             first_name: firstName,
             last_name: lastName,
             password: password,
-            registered_courses: [],
-            roles: convertRoles(roles),
+            registered_courses: CourseHelper.convertCourseFullNamesToCourseNumbers(registeredCourses),
+            roles: convertUserTypes(roles),
             student_id: studentId,
             term: term,
             username: username,
@@ -159,65 +153,70 @@ const Registration: React.FC = () => {
         </div>
         {!isSuccess && (
           <div className="left-background">
-          <form onSubmit={submitRegistration}>
-            <div className="form-inner mt-2">
-              {formState === "Account Registration" && (
-                <RegisterAccount
-                  firstName={firstName}
-                  lastName={lastName}
-                  email={email}
-                  studentId={studentId}
-                  username={username}
-                  password={password}
-                  handleFirstName={setFirstName}
-                  handleLastName={setLastName}
-                  handleEmail={setEmail}
-                  handleStudentId={setStudentId}
-                  handleUsername={setUsername}
-                  handlePassword={setPassword}
-                  handleRegisterCoursesClick={handleRegisterCoursesClick}
-                  displayAccountError={accountError}
-                  displayUniqueEmailError={uniqueEmailError}
-                  displayUniqueUsernameError={uniqueUsernameError}
-                ></RegisterAccount>
-              )}
+            <form onSubmit={submitRegistration}>
+              <div className="form-inner mt-2">
+                {formState === "Account Registration" && (
+                  <RegisterAccount
+                    firstName={firstName}
+                    lastName={lastName}
+                    email={email}
+                    studentId={studentId}
+                    username={username}
+                    password={password}
+                    handleFirstName={setFirstName}
+                    handleLastName={setLastName}
+                    handleEmail={setEmail}
+                    handleStudentId={setStudentId}
+                    handleUsername={setUsername}
+                    handlePassword={setPassword}
+                    handleRegisterCoursesClick={handleRegisterCoursesClick}
+                    displayAccountError={accountError}
+                    displayUniqueEmailError={uniqueEmailError}
+                    displayUniqueUsernameError={uniqueUsernameError}
+                  ></RegisterAccount>
+                )}
 
-              {formState === "Course Registration" && (
-                <RegisterCourses
-                  handleTerm={setTerm}
-                  handleYear={setYear}
-                  handleRegisteredCourses={handleRegisteredCourses}
-                  term={term}
-                  year={year}
-                  registeredCourses={registeredCourses}
-                  handleRegisterRolesClick={() =>
-                    setFormState("Role Registration")
-                  }
-                  handleRegisterAccountClick={() =>
-                    setFormState("Account Registration")
-                  }
-                ></RegisterCourses>
-              )}
+                {formState === "Course Registration" && (
+                  <RegisterCourses
+                    handleTerm={setTerm}
+                    handleYear={setYear}
+                    handleRegisteredCourses={handleRegisteredCourses}
+                    term={term}
+                    year={year}
+                    registeredCourses={registeredCourses}
+                    handleRegisterRolesClick={() =>
+                      setFormState("Role Registration")
+                    }
+                    handleRegisterAccountClick={() =>
+                      setFormState("Account Registration")
+                    }
+                  ></RegisterCourses>
+                )}
 
-              {formState === "Role Registration" && (
-                <RegisterRoles
-                  handleRegisterCoursesClick={() =>
-                    setFormState("Course Registration")
-                  }
-                  handleRoles={handleRoles}
-                  firstName={firstName}
-                  lastName={lastName}
-                  roles={roles}
-                  availableRoles={availableRoles}
-                  displayRoleError={roleError}
-                ></RegisterRoles>
-              )}
-            </div>
-          </form>
+                {formState === "Role Registration" && (
+                  <RegisterRoles
+                    handleRegisterCoursesClick={() =>
+                      setFormState("Course Registration")
+                    }
+                    handleRoles={handleRoles}
+                    firstName={firstName}
+                    lastName={lastName}
+                    roles={roles}
+                    availableRoles={availableRoles}
+                    displayRoleError={roleError}
+                  ></RegisterRoles>
+                )}
+              </div>
+            </form>
           </div>
         )}
         <div className="text-center">
-          {isSuccess &&<div className="left-background"> <RegistrationCompleted></RegistrationCompleted></div>}
+          {isSuccess && (
+            <div className="left-background">
+              {" "}
+              <RegistrationCompleted></RegistrationCompleted>
+            </div>
+          )}
         </div>
       </div>
     </div>

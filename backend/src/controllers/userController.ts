@@ -24,13 +24,18 @@ export const registerUsersFromFile = asyncHandler(async (req: Request, res: Resp
   if (csv) {
     const fileContent = parse(csv.buffer.toString('utf-8'));
     for (let record of fileContent) {
-        const first_name = record[0]
-        const last_name = record[1]
-        const email = record[2]
-        const username = await UserHelper.generateUsername(first_name, last_name, 1)
-        const password = record[3]
-        const userTypes = record[4].split("/") as UserTypes[]
-        await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes)
+      const first_name = record[0]
+      const last_name = record[1]
+      const email = record[2]
+      const username = await UserHelper.generateUsername(first_name, last_name, 1)
+      const password = record[3]
+      const userTypes = record[4].split("/")
+      userTypes.forEach((usertype) => {
+        if (!(<any>Object).values(UserTypes).includes(usertype)) {
+          throw new Error("File upload contains wrong user types.");
+        }
+      })
+      await UserHelper.createSkeletonUserDb(first_name, last_name, email, username, password, userTypes as UserTypes[])
     }
   } else {
     res.status(500);
@@ -47,10 +52,39 @@ export const getUserByEmail = asyncHandler(async (req: Request, res: Response) =
   const user = await UserHelper.getUserDbByEmail(req.params.email, false)
   if (!user) {
     res.status(404);
-    throw new Error("User not found");
+    throw new Error(`User not found with email ${req.params.email}`);
   }
   res.status(200).json({
     user
+  });
+});
+
+// @Desc Get User by Object ID
+// @Route /api/users/:id
+// @Method GET
+export const getUserByObjectId = asyncHandler(async (req: Request, res: Response) => {
+  const user = await User.findOne({ _id: req.params.id })
+  if (!user) {
+    res.status(404);
+    throw new Error(`User not found with Object ID ${req.params.id}`);
+  }
+  res.status(200).json({
+    user
+  });
+});
+
+// @Desc Check if email is already used by a User
+// @Route /api/users/checkValidEmail/:email
+// @Method GET
+export const checkValidEmail = asyncHandler(async (req: Request, res: Response) => {
+  const email = await User.exists({ email: req.params.email })
+  let emailExists = false
+  if (email) {
+    emailExists = true
+  }
+
+  res.status(200).json({
+    emailExists: emailExists,
   });
 });
 
@@ -58,8 +92,8 @@ export const getUserByEmail = asyncHandler(async (req: Request, res: Response) =
 // @Route /api/users/checkValidAccount/:email/:username
 // @Method GET
 export const checkValidAccount = asyncHandler(async (req: Request, res: Response) => {
-  const email = await User.exists({email: req.params.email})
-  const username = await User.exists({username: req.params.username})
+  const email = await User.exists({ email: req.params.email })
+  const username = await User.exists({ username: req.params.username })
   let emailExists = false
   let usernameExists = false
   if (email) {
@@ -85,8 +119,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
     semester = term + " " + year
   }
   const converted_registered_courses = await CourseHelper.getCoursesIdsByCourseNumbers(registered_courses)
-  const user = await UserHelper.createUserDb(first_name, last_name, email, student_id, username, password, converted_registered_courses, semester, roles) 
-
+  const user = await UserHelper.createUserDb(first_name, last_name, email, student_id, username, password, converted_registered_courses, semester, roles)
   res.status(200).json({
     first_name: user.first_name,
     last_name: user.last_name,
@@ -106,7 +139,7 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 // @Method POST
 export const login = asyncHandler(async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  const user = await User.findOne({email: email });
+  const user = await User.findOne({ email: email });
   if (!user) {
     res.status(404);
     throw new Error("User not found");
@@ -139,13 +172,18 @@ async function validateUserByEmail(req: Request, res: Response): Promise<void> {
 // @Route /api/users/:email/delete
 // @Method DELETE
 export const deleteUser = asyncHandler(async (req: Request, res: Response) => {
-  await validateUserByEmail(req, res)
+  const user = await UserHelper.getUserDbByEmail(req.params.email, false)
+  if (!user) {
+    res.status(404);
+    throw new Error(`User with email ${req.params.email} not found`);
+  }
+  await UserHelper.deleteReferencesToUser(req.params.email)
   await UserHelper.deleteUserDbByEmail(req.params.email)
   res.status(200).send();
 })
 
 // @Desc Edit user information
-// @Route /api/users/:email/editUser
+// @Route /api/users/editUser/:email
 // @Method PUT
 export const editUser = asyncHandler(async (req: Request, res: Response) => {
   await validateUserByEmail(req, res)
@@ -162,10 +200,13 @@ export const editUser = asyncHandler(async (req: Request, res: Response) => {
     email: email,
     student_id: student_id,
     username: username,
-    password: password,
     registered_courses: await CourseHelper.getCoursesIdsByCourseNumbers(registered_courses),
     semester: semester,
     user_types: roles,
+  }
+
+  if (password.length !== 0) {
+    Object.assign(update, { password: password })
   }
 
   await User.findOneAndUpdate(filter, update);
@@ -173,7 +214,7 @@ export const editUser = asyncHandler(async (req: Request, res: Response) => {
 })
 
 // @Desc Edit a user's registered courses
-// @Route /api/users/:email/editUserCourses
+// @Route /api/users/editUserCourses/:email
 // @Method PUT
 export const editUserCourses = asyncHandler(async (req: Request, res: Response) => {
   await validateUserByEmail(req, res)

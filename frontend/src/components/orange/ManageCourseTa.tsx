@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddTaToCourse from "./AddTaToCourse";
 import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
-import { Course } from "../../classes/Course";
+import { CourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
 import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
@@ -18,11 +18,11 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
 }) => {
   const [subPage, setSubPage] = useState("Search");
 
-  const [courses, setCourses] = useState<Array<Course>>([]);
+  const [courses, setCourses] = useState<Array<CourseQuota>>([]);
   const [termYear, setTermYear] = useState("default");
   // const [courseNumber, setCourseNumber] = useState("default");
   const [displayError, setDisplayError] = useState(false);
-  const [courseInfo, setCourseInfo] = useState<Course>();
+  const [courseInfo, setCourseInfo] = useState<CourseQuota>();
   const [tas, setTas] = useState<Array<TA>>([]);
   const [taChange, setTAChange] = useState(false);
 
@@ -197,7 +197,7 @@ const ManageCourseTa = ({ courseNumber, setCourseNumber }: {
                   </tr>
                 </thead>
                 <tbody>
-                  {courses.map((course: Course, i: number) => (
+                  {courses.map((course: CourseQuota, i: number) => (
                     <CoursePlainRow
                       key={i}
                       course={course}

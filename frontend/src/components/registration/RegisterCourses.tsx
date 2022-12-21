@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../common/Button";
+import CoursesDropdown from "../../common/CoursesDropdown";
 import Select from "../../common/Select";
 
 const RegisterCourses = (props: {
@@ -12,18 +13,13 @@ const RegisterCourses = (props: {
   year: string;
   registeredCourses: string[];
 }) => {
-  // TODO: get all terms, years, and courses
-  const allTerms = ["Fall", "Winter"];
-  const allYears = ["2022", "2023"];
-  const allCourses = [
-    "COMP307",
-    "COMP462",
-    "COMP598",
-    "COMP360",
-    "COMP303",
-    "COMP302",
-    "COMP432",
-  ];
+  const allTerms = ["Fall", "Winter", "Summer"];
+  const allYears = () => {
+    const now = new Date().getUTCFullYear();
+    return Array(now - (now - 5))
+      .fill("")
+      .map((v, idx) => now - idx) as Array<number>;
+  };
 
   return (
     <>
@@ -49,23 +45,16 @@ const RegisterCourses = (props: {
               required={false}
               name="year"
               id="year"
-              options={allYears}
+              options={allYears()}
               value={props.year}
               handleChange={props.handleYear}
             ></Select>
           </div>
         </div>
-        <Select
-          label="Registered Courses"
-          required={false}
-          name="registeredCourses"
-          id="registeredCourses"
-          options={allCourses}
-          value={props.registeredCourses}
-          handleChange={props.handleRegisteredCourses}
-          isMultiple={true}
-        ></Select>
-
+        <CoursesDropdown
+          registeredCourses={props.registeredCourses}
+          handleRegisteredCourses={props.handleRegisteredCourses}
+        ></CoursesDropdown>
         <div className="register-courses-buttons">
           <div className="mb-2">
             <Button

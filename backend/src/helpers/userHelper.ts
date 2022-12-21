@@ -1,4 +1,6 @@
 import { Schema } from "mongoose";
+import Professor from "../models/Professor";
+import TA from "../models/TA";
 import User, { UserTypes } from "../models/User";
 
 export class UserHelper {
@@ -99,7 +101,12 @@ export class UserHelper {
 	}
 	// delete users
 	static async deleteUserDbByEmail(email: string) {
-		await User.findOneAndDelete({ email: email });
+		return await User.findOneAndDelete({ email: email });
+	}
+
+	static async deleteReferencesToUser(email: string) {
+		await TA.findOneAndDelete({email:email})
+		await Professor.findOneAndDelete({email:email})
 	}
 
 

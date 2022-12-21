@@ -1,5 +1,5 @@
 import React from "react";
-import { Course } from "../../classes/Course";
+import { CourseQuota } from "../../classes/CourseQuota";
 import Button from "../../common/Button";
 
 const CoursePlainRow = (
@@ -9,7 +9,7 @@ const CoursePlainRow = (
     handleCourseNumberChange,
     handleTermYearChange }:
     {
-      course: Course;
+      course: CourseQuota;
       handleCourseInfoChange: React.Dispatch<React.SetStateAction<any>>;
       handleSubPageChange: React.Dispatch<React.SetStateAction<any>>;
       handleCourseNumberChange: React.Dispatch<React.SetStateAction<any>>;

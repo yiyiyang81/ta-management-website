@@ -11,6 +11,7 @@ const upload = multer();
 const router = express.Router();
 
 router.route("/").get(getAllCourses);
+router.route("/:id").get(getCourseById);
 router.route("/:id/ta/").get(getCourseTA);
 router.route("/add").post(addCourse);
 router.route("/upload").post(upload.single("csvFile"), registerCourseFromFile);

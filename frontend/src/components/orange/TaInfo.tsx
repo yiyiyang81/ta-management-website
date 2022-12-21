@@ -84,7 +84,7 @@ const TAInfo = () => {
                 }
                 else {
                     for (let rating of all_ratings.ratings) {
-                        let course = await callBackend(`/api/course/course-id/${rating.course.toString()}`);
+                        let course = await callBackend(`/api/course/${rating.course.toString()}`);
                         let course_res = await course.json();
                         console.log(course_res);
                         let item = {

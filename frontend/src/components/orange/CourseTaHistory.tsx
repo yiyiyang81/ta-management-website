@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddTaToCourse from "./AddTaToCourse";
 import CoursePlainRow from "./CoursePlainRow";
 import "../../style/userTable.css";
-import { Course } from "../../classes/Course";
+import { CourseQuota } from "../../classes/CourseQuota";
 import { TA } from "../../classes/TA";
 import ImportForm from "../sysop/ImportForm";
 import { Container } from "react-bootstrap";
@@ -23,7 +23,7 @@ const CourseTaHistory = ({ courseNumber, setCourseNumber }: {
 
     // const [courseNumber, setCourseNumber] = useState("default");
     const [displayError, setDisplayError] = useState(false);
-    const [coursesInfo, setCoursesInfo] = useState<Array<Course>>([]);
+    const [coursesInfo, setCoursesInfo] = useState<Array<CourseQuota>>([]);
     const [tas, setTas] = useState<Array<TA>>([]);
 
 

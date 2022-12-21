@@ -1,73 +1,59 @@
+#profTable {
+  max-width: max-content
+}
+
 #profTable table td {
-    border: 1px solid #e9ecee;
-    border-left: none;
-    border-right: none;
+  font-family: 'Lato';
 }
 
 #profTable th {
-    font-weight: normal;
-    border: 1px solid #e9ecee;
-    border-left: none;
-    border-right: none;
-    background-color: #EFEFEF;
+  font-weight  : bold;
+  border-bottom: 2px solid #B9B9B9;
+  background-color: #FFFFFF;
 }
 
 #profTable td {
-    font-weight: 300;
-    color: black;
-    border: 1px solid #e9ecee;
+  color        : black;
 }
 
 #profTable tr:nth-child(odd) {
-    background-color: #fff;
-}
-
-#profTable tr:nth-child(even) {
-    background-color: #EFEFEF;
-}
-
-#profTable .column0 {
-    border: none;
-}
-
-a {
-    color: black;
-    font-weight: 150;
+  background-color: #F5F5F5;
 }
 
 th,
 td {
-    padding-left: 15px;
-    padding-right: 15px;
+  padding-left : 15px;
+  padding-right: 15px;
+
 }
 
 .btn.btn-secondary {
-    appearance: none;
-    background: none;
-    border: none;
-    outline: none;
-    color: #B71A29;
+  appearance: none;
+  background: none;
+  border    : none;
+  outline   : none;
+  color     : #B71A29;
 }
 
 .mb-4.mt-2 {
-    padding-left: 27px;
-    color: green;
+  padding-left: 27px;
+  color       : green;
 }
 
 .wishlist-add {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 0px;
-    color: green;
+  padding-top   : 10px;
+  padding-bottom: 10px;
+  padding-left  : 0px;
+  color         : green;
 }
 
 .courses {
-    color: #a5a4a1;
-    font-size: 13px;
-    font-weight: bold;
-    border: 1.5px solid #dfdfdf;
-    box-shadow: 0px 0px 2px 0px #dfdfdf;
-    border-radius: 5px;
+  color        : #a5a4a1;
+  font-size    : 13px;
+  font-weight  : bold;
+  border       : 1.5px solid #dfdfdf;
+  box-shadow   : 0px 0px 2px 0px #dfdfdf;
+  border-radius: 5px;
 }
 
 
@@ -109,8 +95,8 @@ td {
 /* button spacing used on multiple pages*/
 
 .button-spacing {
-    padding-left: 15px;
-    float: right !important;
+  padding-left: 15px;
+  float       : right !important;
 }
 
 
@@ -124,32 +110,32 @@ td {
 /* removes blue highlighting when clicking on dropdown */
 
 .dropdown-item:active {
-    color: black !important;
-    background-color: #dee2e6 !important;
+  color           : black !important;
+  background-color: #dee2e6 !important;
 }
 
 .dropdown-toggle.courses,
 .dropdown-menu.courses {
-    background-color: white !important;
-    color: #a5a4a1 !important;
-    font-size: 13px;
-    font-weight: bold;
-    border: 1.5px solid #dfdfdf;
-    box-shadow: 0px 0px 2px 0px #dfdfdf;
-    border-radius: 5px;
+  background-color: white !important;
+  color           : #a5a4a1 !important;
+  font-size       : 13px;
+  font-weight     : bold;
+  border          : 1.5px solid #dfdfdf;
+  box-shadow      : 0px 0px 2px 0px #dfdfdf;
+  border-radius   : 5px;
 }
 
 
 /* TA Admin. have beginning of table always line up with course name */
-
 @media (min-width: 1200px) {
-    .container,
-    .container-lg,
-    .container-md,
-    .container-sm,
-    .container-xl {
-        max-width: 1140px !important;
-    }
+
+  .container,
+  .container-lg,
+  .container-md,
+  .container-sm,
+  .container-xl {
+    max-width: 1140px !important;
+  }
 }
 
 
@@ -163,7 +149,7 @@ td {
 /* styling for professor log modal back button */
 
 .log-back {
-    padding-bottom: 15px;
+  padding-bottom: 15px;
 }
 
 
@@ -174,6 +160,6 @@ td {
 }
 
 .rowC {
-    display: flex;
-    flex-direction: row;
+  display       : flex;
+  flex-direction: row;
 }

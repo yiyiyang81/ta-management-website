@@ -4,6 +4,7 @@ import "../../style/registration.css";
 import Button from "../../common/Button";
 import LabeledInput from "../../common/LabeledInput";
 import ErrorBox from "../../common/ErrorBox";
+import Password from "../../common/Password";
 
 const RegisterAccount = (props: {
   firstName: string;
@@ -23,39 +24,6 @@ const RegisterAccount = (props: {
   displayUniqueEmailError: boolean;
   displayUniqueUsernameError: boolean;
 }) => {
-  const [showPassword, setShowPassword] = useState(false);
-  const handlePasswordCheck = (e: any) => {
-    e.target.checked ? setShowPassword(true) : setShowPassword(false);
-  };
-
-  const renderPassword = () => {
-    if (showPassword) {
-      return (
-        <LabeledInput
-          label="Password"
-          required={true}
-          type="text"
-          name="password"
-          id="password"
-          value={props.password}
-          handleChange={props.handlePassword}
-        ></LabeledInput>
-      );
-    } else {
-      return (
-        <LabeledInput
-          label="Password"
-          required={true}
-          type="password"
-          name="password"
-          id="password"
-          value={props.password}
-          handleChange={props.handlePassword}
-        ></LabeledInput>
-      );
-    }
-  };
-
   return (
     <>
       <h1 className="">Register your Account </h1>
@@ -115,19 +83,10 @@ const RegisterAccount = (props: {
           value={props.username}
           handleChange={props.handleUsername}
         ></LabeledInput>
-
-        {renderPassword()}
-        <div className="d-flex">
-          <div>
-            <input
-              type="checkbox"
-              id="showPassword"
-              name="showPassword"
-              onClick={handlePasswordCheck}
-            ></input>
-          </div>
-          <div className="show-password"> Show Password</div>
-        </div>
+        <Password
+          password={props.password}
+          handlePassword={props.handlePassword}
+        ></Password>
       </div>
       <div className="bottom-form-container">
         {props.displayAccountError && (

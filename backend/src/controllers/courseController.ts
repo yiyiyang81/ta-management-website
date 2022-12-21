@@ -24,7 +24,7 @@ export const getAllCourses = asyncHandler(async (req: Request, res: Response) =>
 });
 
 // @Desc Get Course by term year and course number
-// @Route /api/course/:term_year/:course_number
+// @Route /api/course/search/:term_year/:course_number
 // @Method GET
 export const getCourse = asyncHandler(async (req: Request, res: Response) => {
     const term_year = req.params.term_year!;
@@ -39,6 +39,20 @@ export const getCourse = asyncHandler(async (req: Request, res: Response) => {
 
     res.status(200).json({ course });
 });
+
+// @Desc Get all Courses
+// @Route /api/course/:id
+// @Method GET
+export const getCourseById= asyncHandler(async (req: Request, res: Response) => {
+    let course = await Course.findOne({_id: req.params.id});
+    if (!course) {
+        res.status(404);
+        throw new Error(`No course with Object ID ${req.params.id} in the database!`);
+    }
+    res.status(200).json({ course });
+});
+
+
 
 // @Desc Save multiple courses
 // @Route /api/course/upload
@@ -181,7 +195,7 @@ export const deleteCourse = asyncHandler(async (req: Request, res: Response) => 
 });
 
 
-// @Desc Get all the coruses of a prof
+// @Desc Get all the courses of a prof
 // @Route /api/course/prof/:id
 // @Method GET
 export const getCoursesByInstructorEmail = asyncHandler(async (req: Request, res: Response) => {
@@ -278,18 +292,18 @@ export const getCoursesByCourseNumber = asyncHandler(async (req: Request, res: R
     res.status(200).json({ course });
 });
 
-// @Desc Get Course by id
-// @Route /api/course/course-id/:id
-// @Method GET
-export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
-    const id = new mongoose.Types.ObjectId(req.params.id!);
+// // @Desc Get Course by id
+// // @Route /api/course/course-id/:id
+// // @Method GET
+// export const getCourseById = asyncHandler(async (req: Request, res: Response) => {
+//     const id = new mongoose.Types.ObjectId(req.params.id!);
 
-    let course = await Course.findOne({ _id: id });
+//     let course = await Course.findOne({ _id: id });
 
-    if (!course) {
-        res.status(404);
-        throw new Error("Course not found!");
-    }
+//     if (!course) {
+//         res.status(404);
+//         throw new Error("Course not found!");
+//     }
 
-    res.status(200).json({ course });
-});
+//     res.status(200).json({ course });
+// });

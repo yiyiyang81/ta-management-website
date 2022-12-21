@@ -1,60 +1,58 @@
-import React, { useEffect } from "react";
 import "../../style/userTable.css";
 import { User } from "../../classes/User";
 import UserRow from "./UserRow";
 import ImportForm from "./ImportForm";
-import { Container } from "react-bootstrap";
 import AddUserForm from "./AddUserForm";
-import { callBackend, createBackendUrl } from "../../apiConfig";
+import { createBackendUrl } from "../../apiConfig";
 
-const ManageUsers = () => {
-  const [users, setUsers] = React.useState<Array<User>>([]);
-
-  const fetchUserData = async () => {
-    try {
-      const res = await callBackend("/api/users");
-      const json = await res.json();
-      setUsers(json.users);
-    } catch (err) {
-      console.log(err);
-    }
-  }; 
-
-  useEffect(() => {
-    // Load data
-    fetchUserData();
-  }, []);
-
+const ManageUsers = (props: { loadUserData: Function; users: Array<User> }) => {
   return (
     <div>
-      <ImportForm taskName="Users" uploadUrl={createBackendUrl("/api/users/upload")}/>
-      <Container className="mt-3">
-        <div className="rowC">
-          <h2 style={{ marginBottom: "20px" }}>All Users</h2> 
-          <AddUserForm fetchUserData={fetchUserData} />
+      <div className="mb-5">
+        <h2>Add Users</h2>
+        <h6> Import a CSV file to add users or manually add a user.</h6>
+        <div className="d-flex flex-wrap align-items-center">
+          <ImportForm
+            taskName="Users"
+            uploadUrl={createBackendUrl("/api/users/upload")}
+            loadFunction={props.loadUserData}
+          />
+          <div className="px-3"></div>
+          <AddUserForm loadUserData={props.loadUserData} />
         </div>
-        <div id="profTable">
-          <table>
-            <thead>
-              <tr>
-                <th className="column0"></th>
-                <th className="column1">Email</th>
-                <th className="column2">First name</th>
-                <th className="column3">Last name</th>
-                <th className="column4">User Type</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user: User, i: number) => {
-                if (user) {
-                  return <UserRow key={i} user={user} fetchUserData={fetchUserData} />;
-                }
-                return null;
-              })}
-            </tbody>
-          </table>
-        </div>
-      </Container>
+      </div>
+      <hr></hr>
+      <div className="rowC align-items-top justify-content-between">
+        <h2>All Users</h2>
+      </div>
+      <div id="profTable">
+        <table>
+          <thead>
+            <tr>
+              <th className="column0">Email</th>
+              <th className="column1">First Name</th>
+              <th className="column2">Last Name</th>
+              <th className="column3">User Type</th>
+              <th className="column4 text-center">Edit</th>
+              <th className="column5 text-center">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            {props.users.map((user: User, i: number) => {
+              if (user) {
+                return (
+                  <UserRow
+                    key={i}
+                    rowUser={user}
+                    loadUserData={props.loadUserData}
+                  />
+                );
+              }
+              return null;
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
