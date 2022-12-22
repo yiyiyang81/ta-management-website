@@ -1,0 +1,2 @@
+Fall 2022,COMP598,Probabilistic Programming,Scrooge Cheminey
+Fall 2022,COMP206,Introduction to Computer Systems,Krampus Forest

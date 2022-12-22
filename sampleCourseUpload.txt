@@ -1,0 +1,4 @@
+Principles of Web Development,The course discusses the major technologies that underlie web development and students receive practical hands-on experience through a project.,Fall,2022,COMP307,santa.claus@mcgill.ca
+Algorithm Design,Advanced algorithm design and analysis.,Fall,2022,COMP360,jack.frost@mcgill.ca
+Probability,Using Bayes' Theorem.,Fall,2022,MATH323,saint.nicholas@mcgill.ca
+Artificial Intelligence,Introduction to search methods and knowledge representation using logic and probability. Planning and decision making under uncertainty.,Fall,2022,COMP424,jingle.bell@mcgill.ca

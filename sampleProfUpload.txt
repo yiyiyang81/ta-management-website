@@ -1,0 +1,4 @@
+santa.claus@mcgill.ca,Science,Computer Science,COMP307
+jack.frost@mcgill.ca,Science,Computer Science,COMP360
+saint.nicholas@mcgill.ca,Science,Mathematics,MATH323
+jingle.bell@mcgill.ca,Science,Computer Science,COMP424
