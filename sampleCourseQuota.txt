@@ -1,0 +1,4 @@
+Fall 2022,COMP307,regular,Principles of Web Development,Santa Claus,200,50
+Fall 2022,COMP360,regular,Algorithm Design,Jack Frost,400,4
+Fall 2022,MATH323,regular,Probability,Saint Nicholas,150,2
+Fall 2022,COMP424,regular,Artificial Intelligence,Jingle Bell,100,4

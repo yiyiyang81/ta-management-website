@@ -1,0 +1,4 @@
+Fall 2022,Rudolph Reindeer,260912233,Rudolph Ryan Reindeer,rudolph.reindeer@mail.mcgill.ca,ugrad,Santa Claus,yes,90,2022-09-01,montreal,5140001234,Bachelor,COMP307,yes,Good leader.
+Fall 2022,January Snow,260912244,January Cold Snow,january.snow@mail.mcgill.ca,grad,Jack Frost,yes,90,2022-09-02,montreal,5143211234,Master,COMP424,yes,Previous experience as TA.
+
+

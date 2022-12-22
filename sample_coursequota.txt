@@ -1,2 +1,0 @@
-Fall2022,COMP307,regular,Principle of Web Development,Joseph Vybihal,200,50
-Fall2023,COMP308,regular,Some Lab,Some Prof,300,10

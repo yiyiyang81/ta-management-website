@@ -1,0 +1,11 @@
+Marlene,Liang,marlene.liang@mail.mcgill.ca,mliang,stud
+Yiyi,Yang,yiyi.yang@mail.mcgill.ca,yyang,stud
+Jennifer,Tran,jennifer.tran@mail.mcgill.ca,jtran,stud
+Rudolph,Reindeer,rudolph.reindeer@mail.mcgill.ca,rreindeer,stud/ta
+Santa,Claus,santa.claus@mcgill.ca,sclaus,prof
+Jack,Frost,jack.frost@mcgill.ca,jfrost,prof
+Jingle,Bell,jingle.bell@mcgill.ca,jbell,prof
+Saint,Nicholas,saint.nicholas@mcgill.ca,snicholas,prof
+Grinch,Greenwood,grinch.greenwood@mcgill.ca,ggreenwood,sysop
+Noelle,Present,noelle.present@mcgill.ca,npresent,admin
+January,Snow,january.snow@mail.mcgill.ca,jsnow,stud/ta
