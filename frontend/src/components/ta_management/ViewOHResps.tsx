@@ -4,7 +4,7 @@ import { Container } from "react-bootstrap";
 import LabeledInput from "../../common/LabeledInput";
 import Button from "../../common/Button";
 import ErrorBox from "../../common/ErrorBox";
-import { createBackendUrl, callBackend } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import { User } from "../../classes/User";
 import { OHResponsibilties } from "../../classes/OHResponsibilities";
 import OHRow from "./OHRow";
@@ -37,11 +37,9 @@ const ViewOHResps = (props: {
 
         // get instructor and TAs associated with the course
         const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
-        const urlProf = createBackendUrl("/api/course/1/prof?" + courseData);
-        const urlTA = createBackendUrl("/api/course/1/ta?" + courseData);
 
-        const resProf = await callBackend(urlProf);
-        const resTA = await callBackend(urlTA)
+        const resProf = await callBackend("/api/course/1/prof?" + courseData);
+        const resTA = await callBackend("/api/course/1/ta?" + courseData)
 
         const dataProf = await resProf.json();
         const dataTA = await resTA.json();

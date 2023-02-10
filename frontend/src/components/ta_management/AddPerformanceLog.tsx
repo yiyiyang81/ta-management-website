@@ -3,7 +3,7 @@ import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
 import Button from "../../common/Button";
-import { createBackendUrl, callBackend } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import ErrorBox from "../../common/ErrorBox";
 import TextArea from "../../common/TextArea";
 import CheckIcon from "../../assets/images/check-icon.png";
@@ -35,8 +35,7 @@ const AddPerformanceLog = (props: {
     const fetchTAData = async () => {
         try {
             const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
-            const url = createBackendUrl("/api/course/1/ta?" + courseData);
-            const res = await callBackend(url);
+            const res = await callBackend("/api/course/1/ta?" + courseData);
 
             let courseTAs = [];
             const data = await res.json();
