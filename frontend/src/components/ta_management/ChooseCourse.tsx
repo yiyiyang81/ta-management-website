@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "../../style/userTable.css";
 import { Container } from "react-bootstrap";
 import Select from "../../common/Select";
-import { createBackendUrl, callBackend } from "../../apiConfig";
+import { callBackend } from "../../apiConfig";
 import { UserTypes } from "../../enums/UserTypes";
 
 const ChooseCourse = (props: {
@@ -35,9 +35,9 @@ const ChooseCourse = (props: {
 
             let url = "";
             if (props.isInstructor) {
-              url = createBackendUrl("/api/course/prof/1?" + courseData);
+              url = "/api/course/prof/1?" + courseData;
             } else {
-              url = createBackendUrl("/api/course/ta/1?" + courseData);
+              url = "/api/course/ta/1?" + courseData;
             }
 
             const res = await callBackend(url);

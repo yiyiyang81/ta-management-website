@@ -47,8 +47,7 @@ const UseChannel = (props: {
         });
 
         const courseData = "course_number=" + props.courseName.split(" ")[0].toString();
-        const url = createBackendUrl("/api/channel/allposts?" + courseData);
-        const res = await callBackend(url);
+        const res = await callBackend("/api/channel/allposts?" + courseData);
         const data = await res.json();
 
         let coursePosts = [];
