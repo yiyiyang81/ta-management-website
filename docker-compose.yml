@@ -1,0 +1,44 @@
+version: '3.1'
+
+services:
+  mongodb:
+    image: mongo
+    restart: always
+    # expose:
+    #   - "27017"
+    environment:
+      # - MONGO_INITDB_ROOT_USERNAME=app_user
+      # - MONGO_INITDB_ROOT_PASSWORD=app_password
+      - MONGO_INITDB_DATABASE=comp307
+    networks:
+      - node-webapp-network
+  backend:
+    build: backend/
+    ports:
+      - 3003:3003
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - node-webapp-network
+    environment:
+      WAIT_HOSTS: mongodb:27017
+      DB_HOST: mongodb
+      DB_PORT: 27017
+      # DB_USER: app_user
+      # DB_PASS: app_password
+      DB_NAME: comp307
+    # https://github.com/aditya1819/node-mongo-docker-project/blob/main/docker-compose.yml
+  frontend:
+    build: frontend/
+    ports:
+      - 3000:3000
+    depends_on:
+      - backend
+    networks:
+      - node-webapp-network
+
+networks:
+  node-webapp-network:
+    driver: bridge
