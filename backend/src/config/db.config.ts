@@ -7,11 +7,16 @@
 import mongoose from 'mongoose';
 import { ConnectionOptions } from 'tls';
 
+const { DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER } = process.env;
+
+
 const connectDB = async () => {
     try {
-        const connect = await mongoose.connect("mongodb://127.0.0.1:27017/comp307" as string, {
+        // requires database to up
+        const connect = await mongoose.connect(`mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}` as string, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            family: 4,
         } as ConnectionOptions);
         console.log("Database is connected!");
     } catch (error: any) {
@@ -20,3 +25,7 @@ const connectDB = async () => {
 }
 
 export default connectDB;
+
+// node container
+// mongo container
+// node <---> mongo

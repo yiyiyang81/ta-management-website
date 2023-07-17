@@ -12,7 +12,7 @@ import taRoutes from './routes/taRoutes';
 import ratingRoutes from './routes/ratingRoutes';
 
 const app = express();
-const port = 3001;
+const port = 3003;
 
 // Basic express setup
 app.use(cors());
